@@ -646,6 +646,10 @@ public class MainDialog extends Application
 				webcamBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
 				final Label webMonitoringLabel = JavaFxHelper.createLabel("", Color.WHITE);
 				webMonitoringLabel.textProperty().bind(webMonitoringString);
+				webMonitoringLabel.setAlignment(Pos.TOP_LEFT);
+				webMonitoringLabel.setMinHeight(64);
+				webMonitoringLabel.setMaxHeight(64);
+				webMonitoringLabel.setPrefHeight(64);
 				webcamBox.getChildren().add(webMonitoringLabel);
 			}
 			else
@@ -1733,7 +1737,7 @@ public class MainDialog extends Application
 			String socketString = sockets.length + " active web sockets";
 			for (int i = 0; i < sockets.length; i++)
 			{
-				socketString += (i == 0 ? ":\n" : i % 3 == 0 ? "\n" : "  ") + sockets[i].connectionIP;
+				socketString += (i == 0 ? ":\n" : i % 3 == 0 ? "\n" : "   ") + sockets[i].connectionIP;
 			}
 			webMonitoringString.set(socketString);
 			try

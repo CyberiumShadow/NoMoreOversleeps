@@ -80,7 +80,7 @@ public class WebcamWebSocketHandler implements Runnable
 			}
 			try
 			{
-				Thread.sleep(100);
+				Thread.sleep(60);
 			}
 			catch (InterruptedException e)
 			{

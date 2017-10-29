@@ -25,7 +25,7 @@ public class CustomEventAction implements Comparable<CustomEventAction>
 
 	public void updateNextTriggerTime()
 	{
-		long currentTime = System.currentTimeMillis();
+		long currentTime = MainDialog.now;
 		this.nextTriggerTime = Long.MAX_VALUE;
 
 		for (Weekday weekday : this.days)
@@ -33,6 +33,7 @@ public class CustomEventAction implements Comparable<CustomEventAction>
 			for (int time : this.times)
 			{
 				Calendar calendar2 = Calendar.getInstance();
+				calendar2.setTimeInMillis(currentTime);
 				calendar2.set(Calendar.DAY_OF_WEEK, weekday.ordinal() + 1);
 				calendar2.set(Calendar.HOUR_OF_DAY, time / 60);
 				calendar2.set(Calendar.MINUTE, time % 60);
@@ -41,7 +42,13 @@ public class CustomEventAction implements Comparable<CustomEventAction>
 				long m = calendar2.getTimeInMillis();
 				if (m < currentTime)
 				{
-					m += 604800000L;
+					Calendar pre = Calendar.getInstance();
+					pre.setTimeInMillis(m);
+					long preo = pre.get(Calendar.DST_OFFSET);
+					Calendar post = Calendar.getInstance();
+					post.setTimeInMillis(m + 604800000L);
+					long posto = post.get(Calendar.DST_OFFSET);
+					m += 604800000L + (preo - posto);
 				}
 				if (m < this.nextTriggerTime)
 				{

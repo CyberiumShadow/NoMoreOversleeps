@@ -44,7 +44,7 @@ public class IntegrationTPLink extends Integration
 				@Override
 				public String getDescription()
 				{
-					return "Turns on TP-Link device `" + entry.name + "`.\n" + entry.description;
+					return "Turns on TP-Link device '" + entry.name + "'.\n" + entry.description;
 				}
 
 				@Override
@@ -82,7 +82,7 @@ public class IntegrationTPLink extends Integration
 				@Override
 				public String getDescription()
 				{
-					return "Turns off TP-Link device `" + entry.name + "`.\n" + entry.description;
+					return "Turns off TP-Link device '" + entry.name + "'.\n" + entry.description;
 				}
 
 				@Override

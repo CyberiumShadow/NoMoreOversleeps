@@ -50,7 +50,7 @@ public class IntegrationNoise extends Integration
 				@Override
 				public String getDescription()
 				{
-					return "Plays the audio clip `" + noise.name + "`.\n\n" + noise.description;
+					return "Plays the audio clip '" + noise.name + "'.\n\n" + noise.description;
 				}
 
 				@Override

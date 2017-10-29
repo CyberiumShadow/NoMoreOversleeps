@@ -304,7 +304,7 @@ public class WebServlet extends HttpServlet
 
 	private String buttonFormHTML(String colour_name, String action_key, String name, String description)
 	{
-		String encoded_description = description.replace("'", "\\'");
+		String encoded_description = description.replace("&", "&amp;").replace("'", "&apos;");
 		return "<form method='POST' data-js-ajax-form='true' action='/ui" + action_key + "'>" + "<button type='submit' class='btn btn-" + colour_name + " nmo-action-button' title='" + encoded_description + "'>" + name + "</button></form>";
 	}
 }

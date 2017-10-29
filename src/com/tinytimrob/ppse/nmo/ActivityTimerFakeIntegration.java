@@ -70,7 +70,7 @@ public class ActivityTimerFakeIntegration extends Integration
 					@Override
 					public String getDescription()
 					{
-						return "Sets the active timer to `" + timer.name + "`.\nFirst warning after " + timer.secondsForFirstWarning + "s and subsequent warnings every " + timer.secondsForSubsequentWarnings + "s.";
+						return "Sets the active timer to '" + timer.name + "'.\nFirst warning after " + timer.secondsForFirstWarning + "s and subsequent warnings every " + timer.secondsForSubsequentWarnings + "s.";
 					}
 				});
 			}

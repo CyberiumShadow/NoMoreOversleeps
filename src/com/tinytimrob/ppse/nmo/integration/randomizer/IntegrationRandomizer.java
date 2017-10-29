@@ -3,6 +3,7 @@ package com.tinytimrob.ppse.nmo.integration.randomizer;
 import java.util.concurrent.ThreadLocalRandom;
 import com.tinytimrob.ppse.nmo.Action;
 import com.tinytimrob.ppse.nmo.Integration;
+import com.tinytimrob.ppse.nmo.Main;
 import com.tinytimrob.ppse.nmo.MainDialog;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
 
@@ -29,6 +30,8 @@ public class IntegrationRandomizer extends Integration
 			final RandomizerEntry randomizer = NMOConfiguration.INSTANCE.integrations.randomizer.randomizers[i];
 			this.actions.put("/randomizer/" + i, new Action()
 			{
+				String description = null;
+				
 				@Override
 				public void onAction() throws Exception
 				{
@@ -46,7 +49,25 @@ public class IntegrationRandomizer extends Integration
 				@Override
 				public String getDescription()
 				{
-					return randomizer.description;
+					if (description == null)
+					{
+						description = "";
+						for (int j = 0; j < randomizer.actions.length; j++)
+						{
+							String desc = null;
+							for (Integration integration : Main.integrations)
+							{
+								Action action = integration.getActions().get(randomizer.actions[j]);
+								if (action != null)
+								{
+									desc = action.getName();
+									break;
+								}
+							}
+							description += "\n* " + (desc == null ? randomizer.actions[j] : desc);
+						}
+					}
+					return "Randomly selects one of the following actions:" + description;
 				}
 
 				@Override

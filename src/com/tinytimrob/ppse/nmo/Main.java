@@ -71,11 +71,11 @@ public class Main
 		integrations.add(IntegrationCommandLine.INSTANCE);
 		integrations.add(IntegrationFileWriter.INSTANCE);
 		integrations.add(IntegrationDiscord.INSTANCE);
-		integrations.add(IntegrationRandomizer.INSTANCE);
 		integrations.add(ActivityTimerFakeIntegration.INSTANCE);
 		integrations.add(ScheduleFakeIntegration.INSTANCE);
 		integrations.add(PauseFakeIntegration.INSTANCE);
 		integrations.add(IntegrationWebUI.INSTANCE);
+		integrations.add(IntegrationRandomizer.INSTANCE);
 	}
 
 	//-------------------------------------------

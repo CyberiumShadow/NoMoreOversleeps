@@ -39,13 +39,12 @@ public class IntegrationPavlok extends Integration
 			{
 				return "FLASH PAVLOK LED";
 			}
-			
+
 			@Override
 			public String getDescription()
 			{
-				return "Will make the Pavlok wearable shock bracelet flash it's LED light.";
+				return "Makes the Pavlok wearable shock bracelet flash its LED light.";
 			}
-
 
 			@Override
 			public boolean isHiddenFromFrontend()
@@ -78,13 +77,12 @@ public class IntegrationPavlok extends Integration
 			{
 				return "BEEP PAVLOK";
 			}
-			
+
 			@Override
 			public String getDescription()
 			{
-				return "Will make the Pavlok wearable shock bracelet beep loudly.";
+				return "Makes the Pavlok wearable shock bracelet beep loudly.";
 			}
-
 
 			@Override
 			public boolean isHiddenFromFrontend()
@@ -117,13 +115,12 @@ public class IntegrationPavlok extends Integration
 			{
 				return "VIBRATE PAVLOK";
 			}
-			
+
 			@Override
 			public String getDescription()
 			{
-				return "Will make thePavlok wearable shock bracelet vibrate.";
+				return "Makes the Pavlok wearable shock bracelet vibrate.";
 			}
-
 
 			@Override
 			public boolean isHiddenFromFrontend()
@@ -156,11 +153,11 @@ public class IntegrationPavlok extends Integration
 			{
 				return "SHOCK PAVLOK";
 			}
-			
+
 			@Override
 			public String getDescription()
 			{
-				return "Will give the subject a large electrical shock using the Pavlok wearable shock bracelet.";
+				return "Makes the Pavlok wearable shock bracelet send an electric shock to the wearer.";
 			}
 
 			@Override

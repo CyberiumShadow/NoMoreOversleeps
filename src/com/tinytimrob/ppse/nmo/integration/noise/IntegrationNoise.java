@@ -46,7 +46,8 @@ public class IntegrationNoise extends Integration
 				{
 					return "PLAY " + noise.name;
 				}
-				
+
+				@Override
 				public String getDescription()
 				{
 					return "Plays the audio clip `" + noise.name + "`.\n\n" + noise.description;
@@ -88,7 +89,7 @@ public class IntegrationNoise extends Integration
 			{
 				return "STOP ALL NOISES";
 			}
-			
+
 			@Override
 			public String getDescription()
 			{

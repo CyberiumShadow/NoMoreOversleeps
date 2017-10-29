@@ -6,7 +6,7 @@ public class TPLinkDeviceEntry
 {
 	@Expose
 	public String name = "";
-	
+
 	@Expose
 	public String description = "";
 

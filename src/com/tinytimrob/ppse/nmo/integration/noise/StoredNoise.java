@@ -5,13 +5,13 @@ import com.google.gson.annotations.Expose;
 public class StoredNoise
 {
 	@Expose
-	public String name;
-	
+	public String name = "";
+
 	@Expose
 	public String description = "";
 
 	@Expose
-	public String path;
+	public String path = "";
 
 	@Expose
 	public boolean hidden;

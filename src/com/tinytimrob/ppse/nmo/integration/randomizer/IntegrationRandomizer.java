@@ -42,8 +42,7 @@ public class IntegrationRandomizer extends Integration
 				{
 					return "RANDOM " + randomizer.name;
 				}
-				
-				
+
 				@Override
 				public String getDescription()
 				{

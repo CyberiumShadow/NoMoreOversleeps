@@ -61,6 +61,12 @@ public class ScheduleFakeIntegration extends Integration
 				{
 					return true;
 				}
+
+				@Override
+				public String getDescription()
+				{
+					return "Resets time since last oversleep.";
+				}
 			});
 		}
 	}

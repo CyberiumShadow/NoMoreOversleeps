@@ -64,6 +64,12 @@ public class PauseFakeIntegration extends Integration
 			{
 				return "TRIGGERED UNPAUSE";
 			}
+
+			@Override
+			public String getDescription()
+			{
+				return "Unpause";
+			}
 		});
 
 		for (int i = 1; i <= 720; i++)
@@ -108,6 +114,12 @@ public class PauseFakeIntegration extends Integration
 				public String getName()
 				{
 					return "TRIGGERED " + j + " MINUTE PAUSE";
+				}
+
+				@Override
+				public String getDescription()
+				{
+					return "Pause for " + j + " minutes";
 				}
 			});
 		}

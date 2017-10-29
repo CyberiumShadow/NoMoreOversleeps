@@ -63,6 +63,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -326,7 +327,7 @@ public class MainDialog extends Application
 			jfxButton.setMaxWidth(256);
 			jfxButton.setAlignment(Pos.BASELINE_LEFT);
 			jfxButton.setContentDisplay(ContentDisplay.RIGHT);
-			//jfxButton.setTooltip(new Tooltip(buttonKey)); // I tried it, but it looks a bit janky
+			jfxButton.setTooltip(new Tooltip(buttonKey + "\n" + clickableButton.getDescription())); // I tried it, but it looks a bit janky
 			jfxButton.setOnAction(new EventHandler<ActionEvent>()
 			{
 				@Override

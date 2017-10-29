@@ -62,12 +62,11 @@ public class IntegrationPhilipsHue extends Integration
 				{
 					return "TURN ON " + bulbName;
 				}
-				
-				
+
 				@Override
 				public String getDescription()
 				{
-					return "Will turn the light called" + bulbName + " on.";
+					return "Turns on Philips Hue light source `" + bulbName + "`.";
 				}
 
 				@Override
@@ -101,11 +100,11 @@ public class IntegrationPhilipsHue extends Integration
 				{
 					return "TURN OFF " + bulbName;
 				}
-				
+
 				@Override
 				public String getDescription()
 				{
-					return "Will turn the light called" + bulbName + " off.";
+					return "Turns off Philips Hue light source `" + bulbName + "`.";
 				}
 
 				@Override
@@ -139,13 +138,12 @@ public class IntegrationPhilipsHue extends Integration
 				{
 					return "TOGGLE " + bulbName;
 				}
-				
+
 				@Override
 				public String getDescription()
 				{
-					return "Will toggle the state (on/off) of the light called" + bulbName + ".";
+					return "Toggles the state (on/off) of the Philips Hue light source `" + bulbName + "`.";
 				}
-
 
 				@Override
 				public boolean isHiddenFromFrontend()

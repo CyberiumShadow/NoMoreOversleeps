@@ -46,11 +46,11 @@ public class IntegrationWemo extends Integration
 				{
 					return "TURN ON " + entry.name;
 				}
-				
+
 				@Override
 				public String getDescription()
 				{
-					return "Turns on the WEMO device "+ entry.name +".\n\n" + entry.description;
+					return "Turns on WeMo Insight device `" + entry.name + "`.\n" + entry.description;
 				}
 
 				@Override
@@ -84,12 +84,11 @@ public class IntegrationWemo extends Integration
 				{
 					return "TURN OFF " + entry.name;
 				}
-				
-				
+
 				@Override
 				public String getDescription()
 				{
-					return "Turns off the WEMO device "+ entry.name +".\n\n" + entry.description;
+					return "Turns off WeMo Insight device `" + entry.name + "`.\n" + entry.description;
 				}
 
 				@Override

@@ -60,12 +60,11 @@ public class IntegrationTwilio extends Integration
 				{
 					IntegrationTwilio.this.call(number);
 				}
-				
-				
+
 				@Override
 				public String getDescription()
 				{
-					return "Will start an automated phone call to connect to " + number.name + ", calling the phone number: " + number.number;
+					return "Makes an automated phone call to " + number.name + " (" + number.number + ").";
 				}
 
 				@Override

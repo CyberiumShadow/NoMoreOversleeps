@@ -5,16 +5,16 @@ import com.google.gson.annotations.Expose;
 public class StoredCommand
 {
 	@Expose
-	public String name;
-	
-	@Expose
-	public String description;
+	public String name = "";
 
 	@Expose
-	public String[] command;
+	public String description = "";
 
 	@Expose
-	public String workingDir;
+	public String[] command = new String[0];
+
+	@Expose
+	public String workingDir = "";
 
 	@Expose
 	public boolean hidden;

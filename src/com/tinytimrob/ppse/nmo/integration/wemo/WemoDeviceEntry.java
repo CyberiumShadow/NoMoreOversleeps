@@ -6,7 +6,7 @@ public class WemoDeviceEntry
 {
 	@Expose
 	public String name = "";
-	
+
 	@Expose
 	public String description = "";
 

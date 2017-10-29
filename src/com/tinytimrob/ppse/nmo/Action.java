@@ -1,27 +1,21 @@
 package com.tinytimrob.ppse.nmo;
 
-public abstract class Action
+public interface Action
 {
 	/** 
 	 * Runs this action
 	 * 
 	 * @throws Exception
 	 */
-	public abstract void onAction() throws Exception;
+	public void onAction() throws Exception;
 
-	public abstract String getName();
-	
-	/**
-	 * 
-	 * @return Description that shows more info about this action.
-	 */
-	public String getDescription() {
-		return "FOO";
-	}
+	public String getName();
 
-	public abstract boolean isHiddenFromFrontend();
+	public String getDescription();
 
-	public abstract boolean isHiddenFromWebUI();
+	public boolean isHiddenFromFrontend();
 
-	public abstract boolean isBlockedFromWebUI();
+	public boolean isHiddenFromWebUI();
+
+	public boolean isBlockedFromWebUI();
 }

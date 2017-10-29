@@ -5,17 +5,17 @@ import com.google.gson.annotations.Expose;
 public class SendableMessage
 {
 	@Expose
-	public String name;
-	
-	@Expose
-	public String description;
+	public String name = "";
 
 	@Expose
-	public DiscordTargetType targetType;
+	public String description = "";
+
+	@Expose
+	public DiscordTargetType targetType = DiscordTargetType.SERVER;
 
 	@Expose
 	public long targetID;
 
 	@Expose
-	public String message;
+	public String message = "";
 }

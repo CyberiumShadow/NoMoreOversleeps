@@ -39,7 +39,8 @@ public class IntegrationCommandLine extends Integration
 				{
 					return command.name;
 				}
-				
+
+				@Override
 				public String getDescription()
 				{
 					return command.description;

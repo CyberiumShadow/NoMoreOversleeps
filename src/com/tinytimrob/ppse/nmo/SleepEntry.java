@@ -31,7 +31,7 @@ public class SleepEntry implements Comparable<SleepEntry>
 	public int end;
 
 	@Expose
-	public String name;
+	public String name = "";
 
 	@Expose
 	public int approachWarning;

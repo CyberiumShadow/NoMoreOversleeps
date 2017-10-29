@@ -56,7 +56,8 @@ public class IntegrationDiscord extends Integration
 				{
 					return "SEND " + message.name;
 				}
-				
+
+				@Override
 				public String getDescription()
 				{
 					return message.description;

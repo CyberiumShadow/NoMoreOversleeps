@@ -18,6 +18,7 @@ import com.tinytimrob.ppse.nmo.config.NMOStatistics;
 import com.tinytimrob.ppse.nmo.integration.cmd.IntegrationCommandLine;
 import com.tinytimrob.ppse.nmo.integration.discord.IntegrationDiscord;
 import com.tinytimrob.ppse.nmo.integration.filewriter.IntegrationFileWriter;
+import com.tinytimrob.ppse.nmo.integration.input.GlobalHookFakeIntegration;
 import com.tinytimrob.ppse.nmo.integration.input.IntegrationKeyboard;
 import com.tinytimrob.ppse.nmo.integration.input.IntegrationMidiTransmitter;
 import com.tinytimrob.ppse.nmo.integration.input.IntegrationMouse;
@@ -56,6 +57,7 @@ public class Main
 	public static final ArrayList<Integration> integrations = new ArrayList<Integration>();
 	static
 	{
+		integrations.add(GlobalHookFakeIntegration.INSTANCE);
 		integrations.add(IntegrationKeyboard.INSTANCE);
 		integrations.add(IntegrationMouse.INSTANCE);
 		integrations.add(IntegrationXboxController.INSTANCE);

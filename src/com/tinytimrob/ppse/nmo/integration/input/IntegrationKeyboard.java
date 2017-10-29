@@ -1,9 +1,6 @@
 package com.tinytimrob.ppse.nmo.integration.input;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jnativehook.GlobalScreen;
-import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 import com.tinytimrob.ppse.nmo.Integration;
@@ -29,16 +26,6 @@ public class IntegrationKeyboard extends Integration
 	@Override
 	public void init()
 	{
-		Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
-		logger.setLevel(Level.OFF);
-		try
-		{
-			GlobalScreen.registerNativeHook();
-		}
-		catch (NativeHookException e)
-		{
-			throw new RuntimeException(e);
-		}
 		this.keyboardHook = new NativeKeyListener()
 		{
 			@Override
@@ -74,14 +61,6 @@ public class IntegrationKeyboard extends Integration
 		if (this.keyboardHook != null)
 		{
 			GlobalScreen.removeNativeKeyListener(this.keyboardHook);
-		}
-		try
-		{
-			GlobalScreen.unregisterNativeHook();
-		}
-		catch (NativeHookException e)
-		{
-			throw new RuntimeException(e);
 		}
 	}
 }

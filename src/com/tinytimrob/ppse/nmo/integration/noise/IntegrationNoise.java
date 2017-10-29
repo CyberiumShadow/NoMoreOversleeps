@@ -149,7 +149,7 @@ public class IntegrationNoise extends Integration
 	public void play(StoredNoise noise)
 	{
 		Media media;
-		if (noise.path.startsWith("http"))
+		if (noise.path.startsWith("http://") || noise.path.startsWith("https://"))
 		{
 			media = new Media(noise.path);
 		}

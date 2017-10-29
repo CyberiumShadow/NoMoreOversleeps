@@ -87,6 +87,8 @@ Some ideas I've had include:
 * Food tracker so you can monitor what you're eating in case this affects your sleep schedule
 * Productivity tracker so you can input what you're doing in each sleep block to avoid wasting time
 * Integration with EEG to track SWS/REM acquisition
+* Ability to play an MP3 file from a remote location from the Web UI so that people can send you audio that your zombie doesn't recognize
+* Text to speech integration module
 
 I probably won't implement most of these, but we will see.
 
@@ -124,11 +126,15 @@ To update the code to the newest release, the procedure is simply to `hg pull` a
 
 ### Known issues ###
 
+#### Pavlok ####
 * Occasionally logging in to Pavlok just results in a 404 screen. I have no idea why. Just keep restarting the app and retrying until it works.
 * When your login key to Pavlok API expires it isn't renewed. This doesn't seem to make any difference because it doesn't appear to matter that it's expired and is accepted by the API anyway :/
 * The Pavlok integration is not very useful due to the glitchy and unreliable nature of the Pavlok's bluetooth connection and push notifications.
-* The log in the web UI flashes because it was implemented as a refreshing iframe. It should eventually be replaced with Ajax.
+
+#### Web UI ####
 * Currently the webcam feed has to be uploaded separately to every person watching your feed and does not include any form of automated frame skip. This means if you have slow upload the webcam feed can fall behind.
+
+#### Home Automation ####
 * TP-LINK switches, WeMo switches and Philips Hue bridges are connected via IP address which means that the config must be updated if the IP of the switch/bridge changes. It would be better to use name-based device detection over UPnP instead.
 
 ### Contribution guidelines ###

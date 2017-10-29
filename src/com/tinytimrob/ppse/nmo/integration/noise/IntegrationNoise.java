@@ -148,8 +148,16 @@ public class IntegrationNoise extends Integration
 
 	public void play(StoredNoise noise)
 	{
-		File file = CommonUtils.redirectRelativePathToAppDirectory(noise.path);
-		Media media = new Media(file.getAbsoluteFile().toURI().toString());
+		Media media;
+		if (noise.path.startsWith("http"))
+		{
+			media = new Media(noise.path);
+		}
+		else
+		{
+			File file = CommonUtils.redirectRelativePathToAppDirectory(noise.path);
+			media = new Media(file.getAbsoluteFile().toURI().toString());
+		}
 		final PlayingNoise playingNoise = new PlayingNoise(new MediaPlayer(media), noise.name);
 		Runnable endHook = new Runnable()
 		{

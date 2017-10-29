@@ -129,10 +129,7 @@ To update the code to the newest release, the procedure is simply to `hg pull` a
 #### Pavlok ####
 * Occasionally logging in to Pavlok just results in a 404 screen. I have no idea why. Just keep restarting the app and retrying until it works.
 * When your login key to Pavlok API expires it isn't renewed. This doesn't seem to make any difference because it doesn't appear to matter that it's expired and is accepted by the API anyway :/
-* The Pavlok integration is not very useful due to the glitchy and unreliable nature of the Pavlok's bluetooth connection and push notifications.
-
-#### Web UI ####
-* Currently the webcam feed has to be uploaded separately to every person watching your feed and does not include any form of automated frame skip. This means if you have slow upload the webcam feed can fall behind.
+* The Pavlok integration is not very useful due to the glitchy and unreliable nature of the Pavlok's bluetooth connection and push notifications along with the fact that Pavlok's Heroku server seems to frequently be offline.
 
 #### Home Automation ####
 * TP-LINK switches, WeMo switches and Philips Hue bridges are connected via IP address which means that the config must be updated if the IP of the switch/bridge changes. It would be better to use name-based device detection over UPnP instead.

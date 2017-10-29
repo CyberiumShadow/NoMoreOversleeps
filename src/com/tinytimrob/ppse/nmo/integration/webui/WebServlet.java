@@ -238,7 +238,7 @@ public class WebServlet extends HttpServlet
 			{
 				state += (!state.isEmpty() ? "<br/>" : "");
 				int val = IntegrationPhilipsHue.INSTANCE.lightStates.get(key);
-				state += "<b>" + key + "</b>:  " + (val > -1 ? "ON, LIGHT LEVEL " + val : "OFF");
+				state += "<b>" + key + "</b>:  " + (val > -1 ? "ON (" + String.format("%,.0f", val / 2.54f) + "%)" : "OFF");
 			}
 		}
 		if (IntegrationTPLink.INSTANCE.isEnabled())

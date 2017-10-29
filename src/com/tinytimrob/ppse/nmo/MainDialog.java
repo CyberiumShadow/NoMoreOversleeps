@@ -1714,7 +1714,7 @@ public class MainDialog extends Application
 			{
 				state += (!state.isEmpty() ? "\n" : "");
 				int val = IntegrationPhilipsHue.INSTANCE.lightStates.get(key);
-				state += key + ":  " + (val > -1 ? "ON, LIGHT LEVEL " + val : "OFF");
+				state += key + ":  " + (val > -1 ? "ON (" + String.format("%,.0f", val / 2.54f) + "%)" : "OFF");
 			}
 			lightingStateString.set(state);
 		}

@@ -1547,7 +1547,7 @@ public class MainDialog extends Application
 			if (nextSleepBlockDetected.containsTimeValue(now))
 			{
 				long tims = nextSleepBlockDetected.nextEndTime;
-				if (!scheduleStatus.startsWith("SLEEPING"))
+				if (!scheduleStatus.startsWith(nextSleepBlockDetected.type + " "))
 				{
 					triggerEvent("Entering " + nextSleepBlockDetected.type + ": " + nextSleepBlockDetected.name, nextSleepBlockDetected.type == ScheduleEntryType.AFK ? NMOConfiguration.INSTANCE.events.afkStarted : nextSleepBlockDetected.type == ScheduleEntryType.CORE ? NMOConfiguration.INSTANCE.events.coreStarted : NMOConfiguration.INSTANCE.events.napStarted);
 				}
@@ -1559,20 +1559,20 @@ public class MainDialog extends Application
 				// determine minute value
 				long minutesRemaining = (((tims + 59999) - now) / 60000);
 				// determine status
-				String pros = "SLEEPING";
+				String pros = nextSleepBlockDetected.type.name();
 				// populate the display fields
 				scheduleStatusString.set(pros);
 				scheduleNextBlockString.set("Active block: " + nextSleepBlockDetected.name);
-				scheduleCountdownString.set("WAKE IN " + StringUtils.leftPad("" + hoursCounter, 2, "0") + ":" + StringUtils.leftPad("" + minutesCounter, 2, "0") + ":" + StringUtils.leftPad("" + secondsCounter, 2, "0"));
-				scheduleStatus = "SLEEPING (" + nextSleepBlockDetected.name + ") -- WAKING IN " + minutesRemaining + " MINUTE" + (minutesRemaining == 1 ? "" : "S");
-				scheduleStatusShort = "SLEEPING [" + minutesRemaining + "m LEFT]";
+				scheduleCountdownString.set(nextSleepBlockDetected.type + " ENDS IN " + StringUtils.leftPad("" + hoursCounter, 2, "0") + ":" + StringUtils.leftPad("" + minutesCounter, 2, "0") + ":" + StringUtils.leftPad("" + secondsCounter, 2, "0"));
+				scheduleStatus = nextSleepBlockDetected.type + " (" + nextSleepBlockDetected.name + ") -- ENDS IN " + minutesRemaining + " MINUTE" + (minutesRemaining == 1 ? "" : "S");
+				scheduleStatusShort = nextSleepBlockDetected.type + " [" + minutesRemaining + "m LEFT]";
 				nextSleepBlock = nextSleepBlockDetected;
 				if (!paused)
 				{
 					triggerEvent("Automatically pausing until " + CommonUtils.convertTimestamp(tims) + " due to sleep block '" + nextSleepBlockDetected.name + "' having started", null);
 					paused = true;
 					pausedUntil = tims;
-					pauseReason = "Sleep block: " + nextSleepBlockDetected.name;
+					pauseReason = (nextSleepBlockDetected.type == ScheduleEntryType.AFK ? "AFK block: " : "Sleep block: ") + nextSleepBlockDetected.name;
 				}
 			}
 			else
@@ -1590,7 +1590,7 @@ public class MainDialog extends Application
 				// populate the display fields
 				scheduleStatusString.set(pros);
 				scheduleNextBlockString.set("Next block: " + nextSleepBlockDetected.name);
-				scheduleCountdownString.set("SLEEPING IN " + StringUtils.leftPad("" + hoursCounter, 2, "0") + ":" + StringUtils.leftPad("" + minutesCounter, 2, "0") + ":" + StringUtils.leftPad("" + secondsCounter, 2, "0"));
+				scheduleCountdownString.set(nextSleepBlockDetected.type + " IN " + StringUtils.leftPad("" + hoursCounter, 2, "0") + ":" + StringUtils.leftPad("" + minutesCounter, 2, "0") + ":" + StringUtils.leftPad("" + secondsCounter, 2, "0"));
 				scheduleStatus = pros + " -- " + nextSleepBlockDetected.name + " STARTS IN " + minutesRemaining + " MINUTE" + (minutesRemaining == 1 ? "" : "S");
 				scheduleStatusShort = pros.equals("AWAKE") ? pros + " [" + minutesRemaining + "m LEFT]" : pros;
 				if (minutesRemaining <= nextSleepBlockDetected.approachWarning && lastSleepBlockWarning != nextSleepBlockDetected)
@@ -1630,7 +1630,7 @@ public class MainDialog extends Application
 		}
 		if (paused)
 		{
-			if (!(scheduleStatusShort.startsWith("SLEEPING ") && pauseReason.startsWith("Sleep block: ")))
+			if (!((MainDialog.scheduleStatusShort.startsWith("CORE ") || MainDialog.scheduleStatusShort.startsWith("NAP ")) && pauseReason.startsWith("Sleep block: ")))
 			{
 				long minutesRemaining = (((pausedUntil + 59999) - now) / 60000);
 				scheduleStatusShort = "\"" + pauseReason + "\" [" + minutesRemaining + "m LEFT]";

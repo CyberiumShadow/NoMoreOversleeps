@@ -1558,7 +1558,7 @@ public class MainDialog extends Application
 				scheduleStatusString.set(pros);
 				scheduleNextBlockString.set("Active block: " + nextSleepBlockDetected.name);
 				scheduleCountdownString.set("WAKE IN " + StringUtils.leftPad("" + hoursCounter, 2, "0") + ":" + StringUtils.leftPad("" + minutesCounter, 2, "0") + ":" + StringUtils.leftPad("" + secondsCounter, 2, "0"));
-				scheduleStatus = "SLEEPING (" + nextSleepBlockDetected.name + ") -- WAKING IN " + minutesRemaining + " MINUTES";
+				scheduleStatus = "SLEEPING (" + nextSleepBlockDetected.name + ") -- WAKING IN " + minutesRemaining + " MINUTE" + (minutesRemaining == 1 ? "" : "S");
 				scheduleStatusShort = "SLEEPING [" + minutesRemaining + "m LEFT]";
 				nextSleepBlock = nextSleepBlockDetected;
 				if (!paused)

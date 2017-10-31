@@ -1650,9 +1650,6 @@ public class MainDialog extends Application
 		{
 			resetActivityTimer("pause");
 		}
-		long lastActivityTime_ = lastActivityTime;
-		String lastActivitySource_ = lastActivitySource;
-		long timeDiff = paused ? 0 : (now - lastActivityTime_);
 		if (pendingTimer != null)
 		{
 			if (pendingTimer != MainDialog.timer)
@@ -1662,6 +1659,9 @@ public class MainDialog extends Application
 			}
 			pendingTimer = null;
 		}
+		long lastActivityTime_ = lastActivityTime;
+		String lastActivitySource_ = lastActivitySource;
+		long timeDiff = paused ? 0 : (now - lastActivityTime_);
 		if (paused)
 		{
 			lastActivityTimeString.set("PAUSED for \"" + pauseReason + "\"");

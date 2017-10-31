@@ -142,7 +142,7 @@ public class MainDialog extends Application
 		Collections.sort(NMOConfiguration.INSTANCE.schedule);
 		for (SleepEntry entry : NMOConfiguration.INSTANCE.schedule)
 		{
-			triggerEvent("Adding sleep block: " + entry.describe(), null);
+			triggerEvent("Adding schedule entry: " + entry.type + ": " + entry.describe(), null);
 			entry.updateNextTriggerTime();
 		}
 		for (ActivityTimer entry : NMOConfiguration.INSTANCE.timers)

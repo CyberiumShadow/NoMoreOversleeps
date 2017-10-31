@@ -1,5 +1,6 @@
 package com.tinytimrob.ppse.nmo.integration.webui;
 
+import java.util.LinkedHashMap;
 import com.google.gson.annotations.Expose;
 
 public class WebUIConfiguration
@@ -14,7 +15,7 @@ public class WebUIConfiguration
 	public int jettyPort = 19992;
 
 	@Expose
-	public String webcamName = "";
+	public LinkedHashMap<String, String> webcams = new LinkedHashMap<String, String>();
 
 	@Expose
 	public String webcamSecurityKey = "";

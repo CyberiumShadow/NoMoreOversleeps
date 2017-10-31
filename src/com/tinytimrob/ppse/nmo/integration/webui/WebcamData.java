@@ -3,9 +3,11 @@ package com.tinytimrob.ppse.nmo.integration.webui;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
 import javax.imageio.ImageIO;
 import org.apache.logging.log4j.Logger;
+import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamEvent;
 import com.github.sarxos.webcam.WebcamListener;
 import com.tinytimrob.common.LogWrapper;
@@ -13,22 +15,30 @@ import com.tinytimrob.common.LogWrapper;
 public class WebcamData implements WebcamListener
 {
 	private static final Logger log = LogWrapper.getLogger();
-	static volatile String imageBase64 = "";
+	public volatile String imageBase64 = "";
+	public final String cc;
+	public Webcam webcam;
+	BufferedImage image;
+
+	public WebcamData(String cc, Webcam webcam)
+	{
+		this.cc = cc;
+		this.webcam = webcam;
+	}
 
 	@Override
 	public void webcamImageObtained(WebcamEvent we)
 	{
-		BufferedImage image = WebcamCapture.getImage();
-		if (image == null)
+		if (this.image == null)
 		{
 			return;
 		}
 		try
 		{
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(image, "JPG", baos);
+			ImageIO.write(this.image, "JPG", baos);
 			byte[] data = baos.toByteArray();
-			imageBase64 = new String(Base64.getEncoder().encode(data), "UTF8");
+			this.imageBase64 = new String(Base64.getEncoder().encode(data), "UTF8");
 		}
 		catch (IOException e)
 		{
@@ -52,5 +62,17 @@ public class WebcamData implements WebcamListener
 	public void webcamDisposed(WebcamEvent we)
 	{
 		// TODO Auto-generated method stub
+	}
+
+	public final ArrayList<WebcamWebSocketHandler> socketHandlers = new ArrayList<WebcamWebSocketHandler>();
+
+	public synchronized WebcamWebSocketHandler[] getConnections()
+	{
+		return this.socketHandlers.toArray(new WebcamWebSocketHandler[0]);
+	}
+
+	public synchronized int count()
+	{
+		return this.socketHandlers.size();
 	}
 }

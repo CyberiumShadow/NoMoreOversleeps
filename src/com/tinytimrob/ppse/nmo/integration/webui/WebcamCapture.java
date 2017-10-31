@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import org.apache.logging.log4j.Logger;
 import com.github.sarxos.webcam.Webcam;
@@ -22,7 +23,7 @@ import com.tinytimrob.ppse.nmo.utils.FormattingHelper;
 public class WebcamCapture
 {
 	private static final Logger log = LogWrapper.getLogger();
-	private static WebcamData wd = new WebcamData();
+	public static WebcamData[] webcams;
 
 	public static class WebcamTransformer implements WebcamImageTransformer
 	{
@@ -66,34 +67,49 @@ public class WebcamCapture
 		}
 	}
 
-	static Webcam webcam = null;
-
 	public static void init()
 	{
+		LinkedHashMap<String, Webcam> detectedCameras = new LinkedHashMap<String, Webcam>();
 		List<Webcam> cams = Webcam.getWebcams();
 		for (Webcam cam : cams)
 		{
 			log.info("Found webcam: " + cam.getName());
-			if (cam.getName().equals(NMOConfiguration.INSTANCE.integrations.webUI.webcamName))
-			{
-				webcam = cam;
-			}
+			detectedCameras.put(cam.getName(), cam);
 		}
+		if (detectedCameras.size() == 0)
+		{
+			throw new RuntimeException("The WebUI module has been enabled but no webcams are connected to the machine");
+		}
+		if (NMOConfiguration.INSTANCE.integrations.webUI.webcams.size() == 0)
+		{
+			throw new RuntimeException("You must specify at least one webcam in the NMO config file if the WebUI module is enabled");
+		}
+		webcams = new WebcamData[NMOConfiguration.INSTANCE.integrations.webUI.webcams.size()];
+		int id = 0;
+		for (String cc : NMOConfiguration.INSTANCE.integrations.webUI.webcams.keySet())
+		{
+			String camName = NMOConfiguration.INSTANCE.integrations.webUI.webcams.get(cc);
+			initCamera(id, cc, camName);
+			id++;
+		}
+	}
+
+	static void initCamera(int id, String cc, String camName)
+	{
+		LinkedHashMap<String, Webcam> detectedCameras = new LinkedHashMap<String, Webcam>();
+		List<Webcam> cams = Webcam.getWebcams();
+		for (Webcam cam : cams)
+		{
+			detectedCameras.put(cam.getName(), cam);
+		}
+		Webcam webcam = detectedCameras.get(camName);
 		if (webcam == null)
 		{
-			webcam = Webcam.getDefault();
-			NMOConfiguration.INSTANCE.integrations.webUI.webcamName = webcam.getName();
-			try
-			{
-				NMOConfiguration.save();
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
+			throw new RuntimeException("Webcam listed in config was not found: " + camName);
 		}
-		log.info("Webcam selected: " + webcam.getName());
+		WebcamData data = new WebcamData(cc, webcam);
 		webcam.setImageTransformer(new WebcamTransformer());
+		log.info("Initializing webcam: " + camName);
 		Dimension[] sizes = webcam.getViewSizes();
 		Dimension dimension = null;
 		for (Dimension d : sizes)
@@ -111,76 +127,65 @@ public class WebcamCapture
 		log.info("Selected image dimension: " + dimension.getWidth() + "x" + dimension.getHeight());
 		webcam.setViewSize(dimension);
 		webcam.open(true);
-		webcam.addWebcamListener(wd);
+		webcam.addWebcamListener(data);
 		System.out.println(webcam.getViewSize());
-		WebcamDefaultDevice.FAULTY = false;
-	}
-
-	private static BufferedImage image;
-	public static final ArrayList<WebcamWebSocketHandler> socketHandlers = new ArrayList<WebcamWebSocketHandler>();
-
-	public static synchronized WebcamWebSocketHandler[] getConnections()
-	{
-		return socketHandlers.toArray(new WebcamWebSocketHandler[0]);
-	}
-
-	public static synchronized int count()
-	{
-		return socketHandlers.size();
+		((WebcamDefaultDevice) webcam.getDevice()).FAULTY = false;
+		webcams[id] = data;
 	}
 
 	public static synchronized void update()
 	{
-		BufferedImage img = webcam.getImage();
-		if (img == null || WebcamDefaultDevice.FAULTY)
+		for (int i = 0; i < webcams.length; i++)
 		{
-			webcam.close();
-			ArrayList<WebcamWebSocketHandler> handlers = (ArrayList<WebcamWebSocketHandler>) socketHandlers.clone();
-			for (WebcamWebSocketHandler handler : handlers)
+			WebcamData data = webcams[i];
+			BufferedImage img = data.webcam.getImage();
+			if (img == null || ((WebcamDefaultDevice) data.webcam.getDevice()).FAULTY)
 			{
-				removeSocketHandler(handler);
+				String camName = data.webcam.getName();
+				data.webcam.removeWebcamListener(data);
+				data.webcam.close();
+				ArrayList<WebcamWebSocketHandler> handlers = (ArrayList<WebcamWebSocketHandler>) data.socketHandlers.clone();
+				for (WebcamWebSocketHandler handler : handlers)
+				{
+					data.socketHandlers.remove(handler);
+				}
+				data.webcam = null;
+				initCamera(i, data.cc, camName);
+				webcams[i].image = data.image;
+				webcams[i].imageBase64 = data.imageBase64;
+				for (WebcamWebSocketHandler handler : handlers)
+				{
+					webcams[i].socketHandlers.add(handler);
+				}
 			}
-			webcam = null;
-			init();
-			for (WebcamWebSocketHandler handler : handlers)
+			else
 			{
-				addSocketHandler(handler);
+				data.image = img;
 			}
-		}
-		else
-		{
-			image = img;
 		}
 	}
 
 	public static BufferedImage getImage()
 	{
-		return image;
+		return webcams[0].image;
 	}
 
 	public static String getCameraName()
 	{
-		return webcam == null ? "null" : webcam.getName();
+		return webcams[0].webcam == null ? "null" : webcams[0].webcam.getName();
 	}
 
 	public static void shutdown()
 	{
-		webcam.removeWebcamListener(wd);
-		webcam.close();
-		ArrayList<WebcamWebSocketHandler> handlers = (ArrayList<WebcamWebSocketHandler>) socketHandlers.clone();
-		for (WebcamWebSocketHandler handler : handlers)
+		for (WebcamData data : webcams)
 		{
-			removeSocketHandler(handler);
+			data.webcam.removeWebcamListener(data);
+			data.webcam.close();
+			ArrayList<WebcamWebSocketHandler> handlers = (ArrayList<WebcamWebSocketHandler>) data.socketHandlers.clone();
+			for (WebcamWebSocketHandler handler : handlers)
+			{
+				data.socketHandlers.remove(handler);
+			}
 		}
-	}
-
-	public static synchronized void addSocketHandler(WebcamWebSocketHandler handler)
-	{
-		socketHandlers.add(handler);
-	}
-
-	public static synchronized void removeSocketHandler(WebcamWebSocketHandler handler)
-	{
-		socketHandlers.remove(handler);
 	}
 }

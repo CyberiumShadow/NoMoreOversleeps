@@ -236,8 +236,10 @@ fieldset[disabled] .btn-nmo-purp.active {
     </tbody>
   </table>
   <div class="nmo-rhs-pane">
-  	<h4>Webcam</h4>
-  	<img id="webcamImage" height=320/>
+  	<#list webcams as cam>
+  	<h4>${cam}</h4>
+  	<img id="webcamImage_${cam?index}" height=320/>
+  	</#list>
   </div>
   <#if integration_pause>
   <div class="nmo-rhs-pane" style="margin-top: 10px">
@@ -368,33 +370,35 @@ fieldset[disabled] .btn-nmo-purp.active {
 		{
 			socket_security = 'wss';
 		}
-		var webcam_websocket = new ReconnectingWebSocket(socket_security + "://" + window.location.hostname + ":" + window.location.port + "/swc?key=${webcamKey}");
-		webcam_websocket.onopen = function(e) {
-			if (typeof console !== 'undefined') {
-				console.info('webcam_websocket open');
-			}
-		};
-		webcam_websocket.onmessage = function (e) {
-			var data = JSON.parse(e.data), type = data.type, i = 0, $webcams = $('#webcams'), $img = null;
-			if (typeof console !== 'undefined') {
-				console.info('webcam_websocket message', type);
-			}
-			$img = $('#webcamImage');
-			$img.attr("src", "data:image/jpeg;base64," + data.image).addClass('shadow').trigger("change");
-			setTimeout(function() {
-				$img.removeClass('shadow').trigger("change");
-			}, 1000);
-		};
-		webcam_websocket.onclose = function() {
-			if (typeof console !== 'undefined') {
-				console.info('webcam_websocket close');
-			}
-		};
-		webcam_websocket.onerror = function(err) {
-			if (typeof console !== 'undefined') {
-				console.info('webcam_websocket error ' + err.data + ' ' + err.code + ' ' + err.message + ' ' + err + ' ' + err.detail + ' ' + err.originalEvent);
-			}
-		};
+		<#list 0..(camTotal-1) as camID>
+			var webcam_websocket_${camID} = new ReconnectingWebSocket(socket_security + "://" + window.location.hostname + ":" + window.location.port + "/swc?key=${webcamKey}&camID=${camID}");
+			webcam_websocket_${camID}.onopen = function(e) {
+				if (typeof console !== 'undefined') {
+					console.info('webcam_websocket_${camID} open');
+				}
+			};
+			webcam_websocket_${camID}.onmessage = function (e) {
+				var data = JSON.parse(e.data), type = data.type, i = 0, $webcams = $('#webcams'), $img = null;
+				if (typeof console !== 'undefined') {
+					console.info('webcam_websocket_${camID} message', type);
+				}
+				$img = $('#webcamImage_${camID}');
+				$img.attr("src", "data:image/jpeg;base64," + data.image).addClass('shadow').trigger("change");
+				setTimeout(function() {
+					$img.removeClass('shadow').trigger("change");
+				}, 1000);
+			};
+			webcam_websocket_${camID}.onclose = function() {
+				if (typeof console !== 'undefined') {
+					console.info('webcam_websocket_${camID} close');
+				}
+			};
+			webcam_websocket_${camID}.onerror = function(err) {
+				if (typeof console !== 'undefined') {
+					console.info('webcam_websocket_${camID} error ' + err.data + ' ' + err.code + ' ' + err.message + ' ' + err + ' ' + err.detail + ' ' + err.originalEvent);
+				}
+			};
+		</#list>
 	});
 </script>
 </body>

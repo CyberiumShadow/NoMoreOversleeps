@@ -1733,7 +1733,7 @@ public class MainDialog extends Application
 
 		if (NMOConfiguration.INSTANCE.integrations.webUI.enabled)
 		{
-			WebcamWebSocketHandler[] sockets = WebcamCapture.getConnections();
+			WebcamWebSocketHandler[] sockets = WebcamCapture.webcams[0].getConnections();
 			String socketString = sockets.length + " active web sockets";
 			for (int i = 0; i < sockets.length; i++)
 			{

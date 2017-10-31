@@ -41,7 +41,7 @@ public class WebcamDefaultDevice implements WebcamDevice, BufferAccess, Runnable
 	private static final int DEVICE_BUFFER_SIZE = 5;
 
 	/** is it faulty? */
-	public static boolean FAULTY = false;
+	public boolean FAULTY = false;
 
 	/**
 	 * Artificial view sizes. I'm really not sure if will fit into other webcams but hope that
@@ -568,7 +568,7 @@ public class WebcamDefaultDevice implements WebcamDevice, BufferAccess, Runnable
 
 			if (!this.updateFrameBuffer())
 			{
-				FAULTY = true;
+				this.FAULTY = true;
 			}
 
 		}

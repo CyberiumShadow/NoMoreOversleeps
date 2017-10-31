@@ -21,6 +21,7 @@ public class WebcamWebSocketHandler implements Runnable
 {
 	private static final Logger log = LogWrapper.getLogger();
 	private Session session;
+	private int camID = -1;
 	public String connectionIP;
 
 	private void teardown()
@@ -41,7 +42,10 @@ public class WebcamWebSocketHandler implements Runnable
 				//
 			}
 		}
-		WebcamCapture.removeSocketHandler(this);
+		if (this.camID != -1)
+		{
+			WebcamCapture.webcams[this.camID].socketHandlers.remove(this);
+		}
 	}
 
 	@OnWebSocketConnect
@@ -53,10 +57,33 @@ public class WebcamWebSocketHandler implements Runnable
 		{
 			throw new AuthenticationException("Not authorized");
 		}
+		int camIDval;
+		List<String> camID = params.get("camID");
+		if (camID == null || camID.size() != 1)
+		{
+			// legacy
+			camIDval = 0;
+		}
+		else
+		{
+			try
+			{
+				camIDval = Integer.parseInt(camID.get(0));
+			}
+			catch (NumberFormatException e)
+			{
+				throw new AuthenticationException("Bad camID");
+			}
+		}
+		if (camIDval < 0 || camIDval >= WebcamCapture.webcams.length)
+		{
+			throw new AuthenticationException("Bad camID");
+		}
+		this.camID = camIDval;
 		this.session = session;
 		this.connectionIP = session.getRemoteAddress().getAddress().toString();
 		log.info("WebSocket connect from " + this.connectionIP);
-		WebcamCapture.addSocketHandler(this);
+		WebcamCapture.webcams[this.camID].socketHandlers.add(this);
 		new Thread(this).start();
 	}
 
@@ -68,7 +95,7 @@ public class WebcamWebSocketHandler implements Runnable
 		message.put("type", "image");
 		while (this.session != null)
 		{
-			message.put("image", WebcamData.imageBase64);
+			message.put("image", WebcamCapture.webcams[this.camID].imageBase64);
 			try
 			{
 				this.send(message);

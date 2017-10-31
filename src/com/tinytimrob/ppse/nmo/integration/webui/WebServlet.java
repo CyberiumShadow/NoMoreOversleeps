@@ -54,7 +54,7 @@ public class WebServlet extends HttpServlet
 		public String pause_state;
 
 		@Expose
-		public int conn_count;
+		public String conn_count;
 
 		@Expose
 		public String noise_state;
@@ -153,6 +153,13 @@ public class WebServlet extends HttpServlet
 		model.put("system", PlatformData.computerName);
 		model.put("actionButtons", this.determineWebUIButtons());
 		model.put("webcamKey", NMOConfiguration.INSTANCE.integrations.webUI.webcamSecurityKey);
+		model.put("camTotal", WebcamCapture.webcams.length);
+		String[] cc = new String[WebcamCapture.webcams.length];
+		for (int i = 0; i < WebcamCapture.webcams.length; i++)
+		{
+			cc[i] = WebcamCapture.webcams[i].cc;
+		}
+		model.put("webcams", cc);
 		for (Integration integration : Main.integrations)
 		{
 			model.put("integration_" + integration.id, integration.isEnabled());
@@ -229,7 +236,11 @@ public class WebServlet extends HttpServlet
 		{
 			data.pause_state = "RUNNING";
 		}
-		data.conn_count = WebcamCapture.count();
+		data.conn_count = "";
+		for (WebcamData wd : WebcamCapture.webcams)
+		{
+			data.conn_count += (data.conn_count.isEmpty() ? "" : "<br/>") + "<b>" + wd.cc + "</b>: " + wd.count();
+		}
 		data.noise_state = IntegrationNoise.INSTANCE.getNoiseList();
 		String state = "";
 		if (IntegrationPhilipsHue.INSTANCE.isEnabled())

@@ -430,7 +430,7 @@ public class MainDialog extends Application
 
 			for (SleepEntry entry : NMOConfiguration.INSTANCE.schedule)
 			{
-				statusBox.getChildren().add(JavaFxHelper.createLabel(entry.name, Color.WHITE, "-fx-font-weight: bold;"));
+				statusBox.getChildren().add(JavaFxHelper.createLabel(entry.type + " -- " + entry.name, Color.WHITE, "-fx-font-weight: bold;"));
 				statusBox.getChildren().add(JavaFxHelper.createLabel(entry.describeTime() + "    (" + entry.approachWarning + "m approach warning)", Color.WHITE, "", new Insets(0, 0, 0, 8)));
 			}
 
@@ -898,9 +898,15 @@ public class MainDialog extends Application
 			hbox.getChildren().add(statusBox);
 			HBox.setHgrow(statusBox, Priority.ALWAYS);
 
-			this.addEventSummaryToStatusBox(statusBox, "When sleep block is approaching", NMOConfiguration.INSTANCE.events.sleepBlockApproaching);
-			this.addEventSummaryToStatusBox(statusBox, "When sleep block starts", NMOConfiguration.INSTANCE.events.sleepBlockStarted);
-			this.addEventSummaryToStatusBox(statusBox, "When sleep block ends", NMOConfiguration.INSTANCE.events.sleepBlockEnded);
+			this.addEventSummaryToStatusBox(statusBox, "When core is approaching", NMOConfiguration.INSTANCE.events.coreApproaching);
+			this.addEventSummaryToStatusBox(statusBox, "When core starts", NMOConfiguration.INSTANCE.events.coreStarted);
+			this.addEventSummaryToStatusBox(statusBox, "When core ends", NMOConfiguration.INSTANCE.events.coreEnded);
+			this.addEventSummaryToStatusBox(statusBox, "When nap is approaching", NMOConfiguration.INSTANCE.events.napApproaching);
+			this.addEventSummaryToStatusBox(statusBox, "When nap starts", NMOConfiguration.INSTANCE.events.napStarted);
+			this.addEventSummaryToStatusBox(statusBox, "When nap ends", NMOConfiguration.INSTANCE.events.napEnded);
+			this.addEventSummaryToStatusBox(statusBox, "When AFK block is approaching", NMOConfiguration.INSTANCE.events.afkApproaching);
+			this.addEventSummaryToStatusBox(statusBox, "When AFK block starts", NMOConfiguration.INSTANCE.events.afkStarted);
+			this.addEventSummaryToStatusBox(statusBox, "When AFK block ends", NMOConfiguration.INSTANCE.events.afkEnded);
 			this.addEventSummaryToStatusBox(statusBox, "On first activity warning", NMOConfiguration.INSTANCE.events.activityWarning1);
 			this.addEventSummaryToStatusBox(statusBox, "On oversleep warning (activity warning " + NMOConfiguration.INSTANCE.oversleepWarningThreshold + ")", NMOConfiguration.INSTANCE.events.oversleepWarning);
 			this.addEventSummaryToStatusBox(statusBox, "On all other warnings", NMOConfiguration.INSTANCE.events.activityWarning2);
@@ -1543,7 +1549,7 @@ public class MainDialog extends Application
 				long tims = nextSleepBlockDetected.nextEndTime;
 				if (!scheduleStatus.startsWith("SLEEPING"))
 				{
-					triggerEvent("Entering sleep block: " + nextSleepBlockDetected.name, NMOConfiguration.INSTANCE.events.sleepBlockStarted);
+					triggerEvent("Entering " + nextSleepBlockDetected.type + ": " + nextSleepBlockDetected.name, nextSleepBlockDetected.type == ScheduleEntryType.AFK ? NMOConfiguration.INSTANCE.events.afkStarted : nextSleepBlockDetected.type == ScheduleEntryType.CORE ? NMOConfiguration.INSTANCE.events.coreStarted : NMOConfiguration.INSTANCE.events.napStarted);
 				}
 				// determine second value
 				long secondsRemaining = (((tims + 999) - now) / 1000);
@@ -1591,7 +1597,7 @@ public class MainDialog extends Application
 				{
 					if (nextSleepBlockDetected.approachWarning != -1)
 					{
-						triggerEvent(minutesRemaining + " minute" + (minutesRemaining == 1 ? "" : "s") + " until next sleep block", NMOConfiguration.INSTANCE.events.sleepBlockApproaching);
+						triggerEvent(minutesRemaining + " minute" + (minutesRemaining == 1 ? "" : "s") + " until " + nextSleepBlockDetected.type + ": " + nextSleepBlockDetected.name, nextSleepBlockDetected.type == ScheduleEntryType.AFK ? NMOConfiguration.INSTANCE.events.afkApproaching : nextSleepBlockDetected.type == ScheduleEntryType.CORE ? NMOConfiguration.INSTANCE.events.coreApproaching : NMOConfiguration.INSTANCE.events.napApproaching);
 					}
 					lastSleepBlockWarning = nextSleepBlockDetected;
 				}
@@ -1603,7 +1609,7 @@ public class MainDialog extends Application
 		}
 		if (nextSleepBlock != null && nextSleepBlock != nextSleepBlockDetected)
 		{
-			triggerEvent("Exiting sleep block: " + nextSleepBlock.name, NMOConfiguration.INSTANCE.events.sleepBlockEnded);
+			triggerEvent("Exiting " + nextSleepBlock.type + ": " + nextSleepBlock.name, nextSleepBlock.type == ScheduleEntryType.AFK ? NMOConfiguration.INSTANCE.events.afkEnded : nextSleepBlock.type == ScheduleEntryType.CORE ? NMOConfiguration.INSTANCE.events.coreEnded : NMOConfiguration.INSTANCE.events.napEnded);
 		}
 		boolean wasPaused = isCurrentlyPaused.get();
 		isCurrentlyPaused.set(paused);

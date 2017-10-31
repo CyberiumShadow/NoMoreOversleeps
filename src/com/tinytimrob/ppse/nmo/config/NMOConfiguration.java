@@ -57,13 +57,31 @@ public class NMOConfiguration
 	public static class EventConfiguration
 	{
 		@Expose
-		public String[] sleepBlockApproaching = new String[0];
+		public String[] coreApproaching = new String[0];
 
 		@Expose
-		public String[] sleepBlockStarted = new String[0];
+		public String[] coreStarted = new String[0];
 
 		@Expose
-		public String[] sleepBlockEnded = new String[0];
+		public String[] coreEnded = new String[0];
+
+		@Expose
+		public String[] napApproaching = new String[0];
+
+		@Expose
+		public String[] napStarted = new String[0];
+
+		@Expose
+		public String[] napEnded = new String[0];
+
+		@Expose
+		public String[] afkApproaching = new String[0];
+
+		@Expose
+		public String[] afkStarted = new String[0];
+
+		@Expose
+		public String[] afkEnded = new String[0];
 
 		@Expose
 		public String[] activityWarning1 = new String[0];

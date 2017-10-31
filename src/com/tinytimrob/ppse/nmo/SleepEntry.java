@@ -34,6 +34,9 @@ public class SleepEntry implements Comparable<SleepEntry>
 	public String name = "";
 
 	@Expose
+	public ScheduleEntryType type = ScheduleEntryType.NAP;
+
+	@Expose
 	public int approachWarning;
 
 	@Override

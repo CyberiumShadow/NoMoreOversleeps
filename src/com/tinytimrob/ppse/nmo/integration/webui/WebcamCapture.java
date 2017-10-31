@@ -55,11 +55,10 @@ public class WebcamCapture
 			}
 			else
 			{
-				String pros = MainDialog.nextActivityWarningID >= NMOConfiguration.INSTANCE.oversleepWarningThreshold ? "OVERSLEEPING" : MainDialog.nextActivityWarningID > 0 ? "MISSING" : "AWAKE";
 				graphics.setColor(Color.BLACK);
 				graphics.fillRect(0, 220, 320, 20);
 				graphics.setColor(Color.WHITE);
-				graphics.drawString(pros + (MainDialog.nextActivityWarningID > 0 ? " (" + MainDialog.nextActivityWarningID + ")" : ""), 4, 234);
+				graphics.drawString(MainDialog.scheduleStatus, 4, 234);
 			}
 			image.flush();
 			graphics.dispose();

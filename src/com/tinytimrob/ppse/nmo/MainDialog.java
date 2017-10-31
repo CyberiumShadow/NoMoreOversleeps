@@ -1550,7 +1550,7 @@ public class MainDialog extends Application
 				long secondsCounter = secondsRemaining % 60;
 				long minutesCounter = (secondsRemaining / 60) % 60;
 				long hoursCounter = (secondsRemaining / 60) / 60;
-				// determine minute value				
+				// determine minute value
 				long minutesRemaining = (((tims + 59999) - now) / 60000);
 				// determine status
 				String pros = "SLEEPING";
@@ -1558,7 +1558,7 @@ public class MainDialog extends Application
 				scheduleStatusString.set(pros);
 				scheduleNextBlockString.set("Active block: " + nextSleepBlockDetected.name);
 				scheduleCountdownString.set("WAKE IN " + StringUtils.leftPad("" + hoursCounter, 2, "0") + ":" + StringUtils.leftPad("" + minutesCounter, 2, "0") + ":" + StringUtils.leftPad("" + secondsCounter, 2, "0"));
-				scheduleStatus = "SLEEPING [" + nextSleepBlockDetected.name + "] UNTIL " + CommonUtils.convertTimestamp(tims);
+				scheduleStatus = "SLEEPING (" + nextSleepBlockDetected.name + ") -- WAKING IN " + minutesRemaining + " MINUTES";
 				scheduleStatusShort = "SLEEPING [" + minutesRemaining + "m LEFT]";
 				nextSleepBlock = nextSleepBlockDetected;
 				if (!paused)
@@ -1585,7 +1585,7 @@ public class MainDialog extends Application
 				scheduleStatusString.set(pros);
 				scheduleNextBlockString.set("Next block: " + nextSleepBlockDetected.name);
 				scheduleCountdownString.set("SLEEPING IN " + StringUtils.leftPad("" + hoursCounter, 2, "0") + ":" + StringUtils.leftPad("" + minutesCounter, 2, "0") + ":" + StringUtils.leftPad("" + secondsCounter, 2, "0"));
-				scheduleStatus = pros + " [" + nextSleepBlockDetected.name + " STARTS IN " + minutesRemaining + " MINUTE" + (minutesRemaining == 1 ? "" : "S") + "]";
+				scheduleStatus = pros + " -- " + nextSleepBlockDetected.name + " STARTS IN " + minutesRemaining + " MINUTE" + (minutesRemaining == 1 ? "" : "S");
 				scheduleStatusShort = pros.equals("AWAKE") ? pros + " [" + minutesRemaining + "m LEFT]" : pros;
 				if (minutesRemaining <= nextSleepBlockDetected.approachWarning && lastSleepBlockWarning != nextSleepBlockDetected)
 				{

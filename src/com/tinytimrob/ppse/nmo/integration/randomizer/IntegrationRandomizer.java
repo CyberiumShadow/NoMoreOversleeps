@@ -31,7 +31,7 @@ public class IntegrationRandomizer extends Integration
 			this.actions.put("/randomizer/" + i, new Action()
 			{
 				String description = null;
-				
+
 				@Override
 				public void onAction() throws Exception
 				{
@@ -49,9 +49,9 @@ public class IntegrationRandomizer extends Integration
 				@Override
 				public String getDescription()
 				{
-					if (description == null)
+					if (this.description == null)
 					{
-						description = "";
+						this.description = "";
 						for (int j = 0; j < randomizer.actions.length; j++)
 						{
 							String desc = null;
@@ -64,10 +64,10 @@ public class IntegrationRandomizer extends Integration
 									break;
 								}
 							}
-							description += "\n* " + (desc == null ? randomizer.actions[j] : desc);
+							this.description += "\n* " + (desc == null ? randomizer.actions[j] : desc);
 						}
 					}
-					return "Randomly selects one of the following actions:" + description;
+					return "Randomly selects one of the following actions:" + this.description;
 				}
 
 				@Override

@@ -49,7 +49,7 @@ public class IntegrationPhilipsHue extends Integration
 		{
 			final String bulbName = NMOConfiguration.INSTANCE.integrations.philipsHue.lights[i];
 			this.lightStates.put(bulbName, -1);
-			this.actions.put("/philipshue/" + i + "/on", new Action()
+			this.actions.put("/philipsHue/" + i + "/on", new Action()
 			{
 				@Override
 				public void onAction() throws Exception
@@ -87,7 +87,7 @@ public class IntegrationPhilipsHue extends Integration
 					return false;
 				}
 			});
-			this.actions.put("/philipshue/" + i + "/off", new Action()
+			this.actions.put("/philipsHue/" + i + "/off", new Action()
 			{
 				@Override
 				public void onAction() throws Exception
@@ -125,7 +125,7 @@ public class IntegrationPhilipsHue extends Integration
 					return false;
 				}
 			});
-			this.actions.put("/philipshue/" + i + "/toggle", new Action()
+			this.actions.put("/philipsHue/" + i + "/toggle", new Action()
 			{
 				@Override
 				public void onAction() throws Exception

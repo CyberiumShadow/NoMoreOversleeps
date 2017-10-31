@@ -45,7 +45,7 @@ public class WebcamCapture
 				str = str + "   " + FormattingHelper.formatTimeElapsedWithDays(NMOStatistics.INSTANCE.scheduleStartedOn == 0 ? 0 : now, NMOStatistics.INSTANCE.scheduleStartedOn) + "   " + FormattingHelper.formatTimeElapsedWithDays(NMOStatistics.INSTANCE.scheduleStartedOn == 0 ? 0 : now, NMOStatistics.INSTANCE.scheduleLastOversleep);
 			}
 			graphics.drawString(str, 4, 14);
-			if (MainDialog.isCurrentlyPaused.get())
+			if (MainDialog.isCurrentlyPaused.get() && !(MainDialog.scheduleStatusShort.startsWith("SLEEPING ") && MainDialog.pauseReason.startsWith("Sleep block: ")))
 			{
 				graphics.setColor(Color.BLACK);
 				graphics.fillRect(0, 204, 320, 36);

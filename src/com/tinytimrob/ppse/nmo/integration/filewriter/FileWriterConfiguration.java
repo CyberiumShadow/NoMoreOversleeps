@@ -5,17 +5,17 @@ import com.google.gson.annotations.Expose;
 public class FileWriterConfiguration
 {
 	@Expose
-	public boolean scheduleName;
+	public boolean scheduleName = false;
 
 	@Expose
-	public boolean scheduleStartedOn;
+	public boolean scheduleStartedOn = false;
 
 	@Expose
-	public boolean scheduleLastOversleep;
+	public boolean scheduleLastOversleep = false;
 
 	@Expose
-	public boolean schedulePersonalBest;
+	public boolean schedulePersonalBest = false;
 
 	@Expose
-	public boolean timeToNextSleepBlock;
+	public boolean timeToNextSleepBlock = false;
 }

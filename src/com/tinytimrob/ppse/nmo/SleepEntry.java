@@ -70,6 +70,7 @@ public class SleepEntry implements Comparable<SleepEntry>
 
 	public void updateNextTriggerTime()
 	{
+		int newEnd = this.end < this.start ? this.end + 1440 : this.start;
 		long currentTime = MainDialog.now;
 		Calendar calendar2 = Calendar.getInstance();
 		calendar2.setTimeInMillis(currentTime);
@@ -78,7 +79,7 @@ public class SleepEntry implements Comparable<SleepEntry>
 		calendar2.set(Calendar.SECOND, 0);
 		calendar2.set(Calendar.MILLISECOND, 0);
 		long m = calendar2.getTimeInMillis();
-		long n = m + ((this.end - this.start) * 60000L);
+		long n = m + ((newEnd - this.start) * 60000L);
 		if (n < currentTime)
 		{
 			calendar2 = Calendar.getInstance();
@@ -88,7 +89,7 @@ public class SleepEntry implements Comparable<SleepEntry>
 			calendar2.set(Calendar.SECOND, 0);
 			calendar2.set(Calendar.MILLISECOND, 0);
 			m = calendar2.getTimeInMillis();
-			n = m + ((this.end - this.start) * 60000L);
+			n = m + ((newEnd - this.start) * 60000L);
 		}
 		else if ((n - currentTime) >= 604800000L)
 		{
@@ -99,9 +100,23 @@ public class SleepEntry implements Comparable<SleepEntry>
 			calendar2.set(Calendar.SECOND, 0);
 			calendar2.set(Calendar.MILLISECOND, 0);
 			m = calendar2.getTimeInMillis();
-			n = m + ((this.end - this.start) * 60000L);
+			n = m + ((newEnd - this.start) * 60000L);
 		}
 		this.nextStartTime = m;
 		this.nextEndTime = n;
+	}
+
+	public void fixTimes()
+	{
+		this.start = this.start % 1440;
+		if (this.start < 0)
+		{
+			this.start += 1440;
+		}
+		this.end = this.end % 1440;
+		if (this.end < 0)
+		{
+			this.end += 1440;
+		}
 	}
 }

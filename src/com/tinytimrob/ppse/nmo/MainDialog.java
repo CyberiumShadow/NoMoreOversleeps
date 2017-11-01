@@ -139,6 +139,10 @@ public class MainDialog extends Application
 		nextActivityWarningID = 0;
 		oversleepWarningTriggered = false;
 
+		for (SleepEntry entry : NMOConfiguration.INSTANCE.schedule)
+		{
+			entry.fixTimes();
+		}
 		Collections.sort(NMOConfiguration.INSTANCE.schedule);
 		for (SleepEntry entry : NMOConfiguration.INSTANCE.schedule)
 		{

@@ -1624,7 +1624,7 @@ public class MainDialog extends Application
 		{
 			scheduleStatusShort = "UNCONFIGURED";
 		}
-		if (nextSleepBlock != null && (nextSleepBlock != nextSleepBlockDetected || currentSleepState != lastSleepState))
+		if (nextSleepBlock != null && (nextSleepBlock != nextSleepBlockDetected || (nextSleepBlock == nextSleepBlockDetected && currentSleepState == null && lastSleepState != null)))
 		{
 			triggerEvent("Exiting " + nextSleepBlock.type + ": " + nextSleepBlock.name, nextSleepBlock.type == ScheduleEntryType.AFK ? NMOConfiguration.INSTANCE.events.afkEnded : nextSleepBlock.type == ScheduleEntryType.CORE ? NMOConfiguration.INSTANCE.events.coreEnded : NMOConfiguration.INSTANCE.events.napEnded);
 		}

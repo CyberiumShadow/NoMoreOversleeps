@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.gson.annotations.Expose;
 import com.tinytimrob.ppse.nmo.integration.discord.Weekday;
 
-public class CustomEventAction implements Comparable<CustomEventAction>
+public class CustomEvent implements Comparable<CustomEvent>
 {
 	@Expose
 	public String name = "";
@@ -59,7 +59,7 @@ public class CustomEventAction implements Comparable<CustomEventAction>
 	}
 
 	@Override
-	public int compareTo(CustomEventAction o)
+	public int compareTo(CustomEvent o)
 	{
 		int comp = Long.compare(this.nextTriggerTime, o.nextTriggerTime);
 		return comp == 0 ? Integer.compare(this.originalOrder, o.originalOrder) : comp;

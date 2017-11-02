@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import com.google.gson.annotations.Expose;
 import com.tinytimrob.common.Configuration;
 import com.tinytimrob.ppse.nmo.ActivityTimer;
-import com.tinytimrob.ppse.nmo.CustomEventAction;
+import com.tinytimrob.ppse.nmo.CustomEvent;
 import com.tinytimrob.ppse.nmo.SleepEntry;
 import com.tinytimrob.ppse.nmo.integration.cmd.CommandLineConfiguration;
 import com.tinytimrob.ppse.nmo.integration.discord.DiscordConfiguration;
@@ -102,7 +102,7 @@ public class NMOConfiguration
 		public String[] pauseExpired = new String[0];
 
 		@Expose
-		public CustomEventAction[] custom = new CustomEventAction[0];
+		public CustomEvent[] custom = new CustomEvent[0];
 	}
 
 	@Expose

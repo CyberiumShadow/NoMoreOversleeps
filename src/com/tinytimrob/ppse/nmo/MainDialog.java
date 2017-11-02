@@ -126,7 +126,7 @@ public class MainDialog extends Application
 	public static volatile SimpleStringProperty scheduleCountdownString = new SimpleStringProperty("");
 	public static volatile WritableImage writableImage = null;
 	public static ObservableList<String> events = FXCollections.observableArrayList();
-	public static ArrayList<CustomEventAction> customActions = new ArrayList<CustomEventAction>();
+	public static ArrayList<CustomEvent> customEvents = new ArrayList<CustomEvent>();
 	public static volatile int tick = 0;
 	public static volatile long now = System.currentTimeMillis();
 
@@ -154,15 +154,15 @@ public class MainDialog extends Application
 			triggerEvent("Adding activity timer: " + entry.name + " " + entry.secondsForFirstWarning + "s/" + entry.secondsForSubsequentWarnings + "s", null);
 		}
 		int q = 0;
-		for (CustomEventAction action : NMOConfiguration.INSTANCE.events.custom)
+		for (CustomEvent action : NMOConfiguration.INSTANCE.events.custom)
 		{
 			action.originalOrder = q;
 			q++;
 			action.updateNextTriggerTime();
 			triggerEvent("Adding custom event trigger " + action.name + " triggering " + action.describe() + " and next on " + CommonUtils.convertTimestamp(action.nextTriggerTime), null);
-			customActions.add(action);
+			customEvents.add(action);
 		}
-		Collections.sort(customActions);
+		Collections.sort(customEvents);
 
 		if (NMOConfiguration.INSTANCE.integrations.pavlok.enabled)
 		{
@@ -917,7 +917,7 @@ public class MainDialog extends Application
 			this.addEventSummaryToStatusBox(statusBox, "When manually pausing", NMOConfiguration.INSTANCE.events.pauseInitiated);
 			this.addEventSummaryToStatusBox(statusBox, "When manually unpausing", NMOConfiguration.INSTANCE.events.pauseCancelled);
 			this.addEventSummaryToStatusBox(statusBox, "When pause auto-expires", NMOConfiguration.INSTANCE.events.pauseExpired);
-			for (CustomEventAction action : NMOConfiguration.INSTANCE.events.custom)
+			for (CustomEvent action : NMOConfiguration.INSTANCE.events.custom)
 			{
 				this.addEventSummaryToStatusBox(statusBox, action.name + " (" + action.describe() + ")", action.actions);
 			}
@@ -1767,17 +1767,17 @@ public class MainDialog extends Application
 			}
 		}
 
-		// trigger custom actions
-		if (!customActions.isEmpty())
+		// trigger custom events
+		if (!customEvents.isEmpty())
 		{
-			CustomEventAction cea = customActions.get(0);
-			while (cea.nextTriggerTime < now)
+			CustomEvent event = customEvents.get(0);
+			while (event.nextTriggerTime < now)
 			{
-				triggerEvent("Custom action: " + cea.name, cea.actions);
-				cea.updateNextTriggerTime();
-				triggerEvent("Action will next occur on " + CommonUtils.convertTimestamp(cea.nextTriggerTime), null);
-				Collections.sort(customActions);
-				cea = customActions.get(0);
+				triggerEvent("Custom event: " + event.name, event.actions);
+				event.updateNextTriggerTime();
+				triggerEvent(event.name + " will next occur on " + CommonUtils.convertTimestamp(event.nextTriggerTime), null);
+				Collections.sort(customEvents);
+				event = customEvents.get(0);
 			}
 		}
 	}

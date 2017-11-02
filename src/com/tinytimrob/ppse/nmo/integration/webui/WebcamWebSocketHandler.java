@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.WebSocketException;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
@@ -101,6 +102,11 @@ public class WebcamWebSocketHandler implements Runnable
 				this.send(message);
 			}
 			catch (IOException e)
+			{
+				e.printStackTrace();
+				break;
+			}
+			catch (WebSocketException e)
 			{
 				e.printStackTrace();
 				break;

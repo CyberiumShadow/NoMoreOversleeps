@@ -682,7 +682,7 @@ public class MainDialog extends Application
 				{
 					try
 					{
-						String hostname = NMOConfiguration.INSTANCE.integrations.webUI.hostname.isEmpty() ? PortForwarding.getExternalIP() : NMOConfiguration.INSTANCE.integrations.webUI.hostname;
+						String hostname = NMOConfiguration.INSTANCE.integrations.webUI.openUiLocally ? "127.0.0.1" : NMOConfiguration.INSTANCE.integrations.webUI.ddns.enabled ? NMOConfiguration.INSTANCE.integrations.webUI.ddns.domain : PortForwarding.getExternalIP();
 						DesktopHelper.browse("http://" + hostname + ":" + NMOConfiguration.INSTANCE.integrations.webUI.jettyPort + "/");
 					}
 					catch (Throwable e)

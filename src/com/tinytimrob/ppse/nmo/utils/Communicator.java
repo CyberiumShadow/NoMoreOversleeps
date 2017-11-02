@@ -34,7 +34,7 @@ public class Communicator
 
 	private static final Logger log = LogWrapper.getLogger();
 
-	public static <T> T basicJsonMessage(String humanDesc, String path, Object constructable, Class<T> clazz, boolean returnGineverFailureData, String bearer) throws Exception
+	public static <T> T basicJsonMessage(String humanDesc, String path, Object constructable, Class<T> clazz, boolean returnGineverFailureData, String authorization) throws Exception
 	{
 		HttpURLConnection connection = null;
 		OutputStream out = null;
@@ -42,14 +42,15 @@ public class Communicator
 
 		try
 		{
+			System.out.println("try connection to " + path);
 			connection = (HttpURLConnection) new URL(path).openConnection();
 			connection.setConnectTimeout(15000);
 			connection.setReadTimeout(15000);
 			connection.setUseCaches(false);
 			connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36"); //"NoMoreOversleeps/" + Main.VERSION.replace(" ", ""));
-			if (bearer != null)
+			if (authorization != null)
 			{
-				connection.setRequestProperty("Authorization", "Bearer " + bearer);
+				connection.setRequestProperty("Authorization", authorization);
 			}
 			if (constructable != null)
 			{
@@ -78,6 +79,10 @@ public class Communicator
 					return null;
 				String REPLY = IOUtils.toString(in, CommonUtils.charsetUTF8);
 				System.out.println(REPLY);
+				if (clazz == String.class)
+				{
+					return (T) REPLY;
+				}
 				T response = CommonUtils.GSON.fromJson(REPLY, clazz);
 				if (response == null)
 					throw new BlankResponseException("Server sent back no data");

@@ -9,7 +9,7 @@ public class WebUIConfiguration
 	public boolean enabled = false;
 
 	@Expose
-	public String hostname = "";
+	public boolean openUiLocally = false;
 
 	@Expose
 	public int jettyPort = 19992;
@@ -22,4 +22,28 @@ public class WebUIConfiguration
 
 	@Expose
 	public boolean allowRemotePauseControl = false;
+
+	@Expose
+	public DynDnsUpdateConfiguration ddns = new DynDnsUpdateConfiguration();
+
+	public static class DynDnsUpdateConfiguration
+	{
+		@Expose
+		public boolean enabled = false;
+
+		@Expose
+		public String provider = "https://domains.google.com/";
+
+		@Expose
+		public String domain = "";
+
+		@Expose
+		public String username = "";
+
+		@Expose
+		public String password = "";
+
+		@Expose
+		public int updateFrequency = 300;
+	}
 }

@@ -118,6 +118,7 @@ public class MainDialog extends Application
 	public static volatile SimpleBooleanProperty isCurrentlyPaused = new SimpleBooleanProperty(false);
 	public static volatile SimpleObjectProperty<Image> lastWebcamImage = new SimpleObjectProperty<Image>();
 	public static volatile SleepEntry lastSleepBlockWarning = null;
+	public static volatile ScheduleEntryType lastSleepState = null;
 	public static volatile SleepEntry nextSleepBlock = null;
 	public static volatile String scheduleStatus = "No schedule configured";
 	public static volatile String scheduleStatusShort = "UNCONFIGURED";
@@ -1506,6 +1507,7 @@ public class MainDialog extends Application
 
 		now = System.currentTimeMillis();
 		boolean paused = pausedUntil > now;
+		ScheduleEntryType currentSleepState = null;
 
 		// Update next trigger time for all sleep blocks
 		for (SleepEntry entry : NMOConfiguration.INSTANCE.schedule)
@@ -1571,6 +1573,7 @@ public class MainDialog extends Application
 				scheduleStatus = nextSleepBlockDetected.type + " (" + nextSleepBlockDetected.name + ") -- ENDS IN " + minutesRemaining + " MINUTE" + (minutesRemaining == 1 ? "" : "S");
 				scheduleStatusShort = nextSleepBlockDetected.type + " [" + minutesRemaining + "m LEFT]";
 				nextSleepBlock = nextSleepBlockDetected;
+				currentSleepState = nextSleepBlockDetected.type;
 				if (!paused)
 				{
 					triggerEvent("Automatically pausing until " + CommonUtils.convertTimestamp(tims) + " due to sleep block '" + nextSleepBlockDetected.name + "' having started", null);
@@ -1597,6 +1600,7 @@ public class MainDialog extends Application
 				scheduleCountdownString.set(nextSleepBlockDetected.type + " IN " + StringUtils.leftPad("" + hoursCounter, 2, "0") + ":" + StringUtils.leftPad("" + minutesCounter, 2, "0") + ":" + StringUtils.leftPad("" + secondsCounter, 2, "0"));
 				scheduleStatus = pros + " -- " + nextSleepBlockDetected.name + " STARTS IN " + minutesRemaining + " MINUTE" + (minutesRemaining == 1 ? "" : "S");
 				scheduleStatusShort = pros.equals("AWAKE") ? pros + " [" + minutesRemaining + "m LEFT]" : pros;
+				currentSleepState = null;
 				if (minutesRemaining <= nextSleepBlockDetected.approachWarning && lastSleepBlockWarning != nextSleepBlockDetected)
 				{
 					if (nextSleepBlockDetected.approachWarning != -1)
@@ -1611,10 +1615,15 @@ public class MainDialog extends Application
 		{
 			scheduleStatusShort = "UNCONFIGURED";
 		}
-		if (nextSleepBlock != null && nextSleepBlock != nextSleepBlockDetected)
+		if (nextSleepBlock != null && (nextSleepBlock != nextSleepBlockDetected || currentSleepState != lastSleepState))
 		{
 			triggerEvent("Exiting " + nextSleepBlock.type + ": " + nextSleepBlock.name, nextSleepBlock.type == ScheduleEntryType.AFK ? NMOConfiguration.INSTANCE.events.afkEnded : nextSleepBlock.type == ScheduleEntryType.CORE ? NMOConfiguration.INSTANCE.events.coreEnded : NMOConfiguration.INSTANCE.events.napEnded);
 		}
+		if (lastSleepState != null && currentSleepState == null && lastSleepBlockWarning == nextSleepBlock && NMOConfiguration.INSTANCE.schedule.size() == 1)
+		{
+			lastSleepBlockWarning = null; // allows for only 1 sleep block
+		}
+		lastSleepState = currentSleepState;
 		boolean wasPaused = isCurrentlyPaused.get();
 		isCurrentlyPaused.set(paused);
 		if (!paused && wasPaused)

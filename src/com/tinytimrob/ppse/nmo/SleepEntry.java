@@ -70,7 +70,7 @@ public class SleepEntry implements Comparable<SleepEntry>
 
 	public void updateNextTriggerTime()
 	{
-		int newEnd = this.end < this.start ? this.end + 1440 : this.start;
+		int newEnd = this.end < this.start ? this.end + 1440 : this.end;
 		long currentTime = MainDialog.now;
 		Calendar calendar2 = Calendar.getInstance();
 		calendar2.setTimeInMillis(currentTime);

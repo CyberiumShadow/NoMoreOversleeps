@@ -26,6 +26,7 @@ import com.tinytimrob.ppse.nmo.integration.randomizer.IntegrationRandomizer;
 import com.tinytimrob.ppse.nmo.integration.tplink.IntegrationTPLink;
 import com.tinytimrob.ppse.nmo.integration.tplink.TPLinkDeviceEntry;
 import com.tinytimrob.ppse.nmo.integration.twilio.IntegrationTwilio;
+import com.tinytimrob.ppse.nmo.integration.webui.IntegrationWebUI;
 import com.tinytimrob.ppse.nmo.integration.webui.PortForwarding;
 import com.tinytimrob.ppse.nmo.integration.webui.WebcamCapture;
 import com.tinytimrob.ppse.nmo.integration.webui.WebcamWebSocketHandler;
@@ -648,6 +649,8 @@ public class MainDialog extends Application
 				webcamImageView.imageProperty().bind(lastWebcamImage);
 				webcamImageView.setPreserveRatio(true);
 				webcamBox.getChildren().add(webcamImageView);
+				webcamBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
+				this.addIntegrationButtonsToVbox(IntegrationWebUI.INSTANCE, webcamBox);
 				webcamBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
 				final Label webMonitoringLabel = JavaFxHelper.createLabel("", Color.WHITE);
 				webMonitoringLabel.textProperty().bind(webMonitoringString);

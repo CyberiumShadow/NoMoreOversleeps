@@ -24,6 +24,7 @@ public class WebcamCapture
 {
 	private static final Logger log = LogWrapper.getLogger();
 	public static WebcamData[] webcams;
+	public static volatile boolean privacyMode = false;
 
 	public static class WebcamTransformer implements WebcamImageTransformer
 	{
@@ -35,6 +36,11 @@ public class WebcamCapture
 			image = GRAY.filter(image, null);
 			Graphics2D graphics = image.createGraphics();
 			Font font = new Font("ARIAL", Font.PLAIN, 11);
+			if (privacyMode)
+			{
+				graphics.setColor(Color.DARK_GRAY);
+				graphics.fillRect(0, 0, 320, 240);
+			}
 			graphics.setFont(font);
 			graphics.setColor(Color.BLACK);
 			graphics.fillRect(0, 0, 320, 20);

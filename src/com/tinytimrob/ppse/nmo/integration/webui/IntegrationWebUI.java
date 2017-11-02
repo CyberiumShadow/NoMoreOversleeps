@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import org.apache.logging.log4j.Logger;
 import com.tinytimrob.common.CommonUtils;
 import com.tinytimrob.common.LogWrapper;
+import com.tinytimrob.ppse.nmo.Action;
 import com.tinytimrob.ppse.nmo.Integration;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
 import com.tinytimrob.ppse.nmo.utils.Communicator;
@@ -49,6 +50,82 @@ public class IntegrationWebUI extends Integration
 			}
 			log.info("DDNS Last IP:  " + this.ddnsLastIP);
 		}
+		this.actions.put("/webUI/cameraprivacy/on", new Action()
+		{
+			@Override
+			public void onAction() throws Exception
+			{
+				WebcamCapture.privacyMode = true;
+			}
+
+			@Override
+			public boolean isHiddenFromWebUI()
+			{
+				return true;
+			}
+
+			@Override
+			public boolean isHiddenFromFrontend()
+			{
+				return false;
+			}
+
+			@Override
+			public boolean isBlockedFromWebUI()
+			{
+				return true;
+			}
+
+			@Override
+			public String getName()
+			{
+				return "TURN ON CAMERA PRIVACY";
+			}
+
+			@Override
+			public String getDescription()
+			{
+				return "Enables camera privacy mode. (Greys out the webcam image)";
+			}
+		});
+		this.actions.put("/webUI/cameraprivacy/off", new Action()
+		{
+			@Override
+			public void onAction() throws Exception
+			{
+				WebcamCapture.privacyMode = false;
+			}
+
+			@Override
+			public boolean isHiddenFromWebUI()
+			{
+				return true;
+			}
+
+			@Override
+			public boolean isHiddenFromFrontend()
+			{
+				return false;
+			}
+
+			@Override
+			public boolean isBlockedFromWebUI()
+			{
+				return true;
+			}
+
+			@Override
+			public String getName()
+			{
+				return "TURN OFF CAMERA PRIVACY";
+			}
+
+			@Override
+			public String getDescription()
+			{
+				return "Disables camera privacy mode.";
+			}
+		});
 	}
 
 	@Override

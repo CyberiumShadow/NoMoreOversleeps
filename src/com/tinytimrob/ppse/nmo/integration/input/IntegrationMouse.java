@@ -1,5 +1,8 @@
 package com.tinytimrob.ppse.nmo.integration.input;
 
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.PointerInfo;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseInputListener;
@@ -15,6 +18,7 @@ public class IntegrationMouse extends Integration
 	}
 
 	public static final IntegrationMouse INSTANCE = new IntegrationMouse();
+	public static volatile Point lastCursorPoint = MouseInfo.getPointerInfo().getLocation();
 	NativeMouseInputListener mouseHook;
 
 	@Override
@@ -65,7 +69,13 @@ public class IntegrationMouse extends Integration
 	@Override
 	public void update() throws Exception
 	{
-
+		PointerInfo pi = MouseInfo.getPointerInfo();
+		Point epoint = pi == null ? lastCursorPoint : pi.getLocation();
+		if (!epoint.equals(lastCursorPoint))
+		{
+			lastCursorPoint = epoint;
+			MainDialog.resetActivityTimer(this.id);
+		}
 	}
 
 	@Override

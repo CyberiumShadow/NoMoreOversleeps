@@ -25,6 +25,8 @@ import com.tinytimrob.ppse.nmo.integration.noise.IntegrationNoise;
 import com.tinytimrob.ppse.nmo.integration.philipshue.IntegrationPhilipsHue;
 import com.tinytimrob.ppse.nmo.integration.tplink.IntegrationTPLink;
 import com.tinytimrob.ppse.nmo.integration.tplink.TPLinkDeviceEntry;
+import com.tinytimrob.ppse.nmo.integration.wemo.IntegrationWemo;
+import com.tinytimrob.ppse.nmo.integration.wemo.WemoDeviceEntry;
 import com.tinytimrob.ppse.nmo.utils.FormattingHelper;
 import freemarker.core.ParseException;
 import freemarker.template.MalformedTemplateNameException;
@@ -259,6 +261,15 @@ public class WebServlet extends HttpServlet
 				TPLinkDeviceEntry tpde = NMOConfiguration.INSTANCE.integrations.tplink.devices[i];
 				state += (!state.isEmpty() ? "<br/>" : "");
 				state += "<b>" + tpde.name + "</b>:  " + (tpde.isSwitchedOn ? "ON" : "OFF");
+			}
+		}
+		if (IntegrationWemo.INSTANCE.isEnabled())
+		{
+			for (int i = 0; i < NMOConfiguration.INSTANCE.integrations.wemo.devices.length; i++)
+			{
+				WemoDeviceEntry wemodevice = NMOConfiguration.INSTANCE.integrations.wemo.devices[i];
+				state += (!state.isEmpty() ? "<br/>" : "");
+				state += "<b>" + wemodevice.name + "</b>:  " + (wemodevice.isSwitchedOn ? "ON" : "OFF");
 			}
 		}
 		data.ha_state = state;

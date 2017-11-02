@@ -227,7 +227,7 @@ fieldset[disabled] .btn-nmo-purp.active {
         <td id="nmo_noise_state">?</td>
       </tr>
       </#if>
-      <#if integration_philipsHue || integration_tplink>
+      <#if integration_philipsHue || integration_tplink || integration_wemo>
       <tr>
         <td><strong>Devices</strong></td>
         <td id="nmo_ha_state">?</td>

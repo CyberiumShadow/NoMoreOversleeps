@@ -18,4 +18,6 @@ public class WemoDeviceEntry
 
 	@Expose
 	public boolean secret;
+
+	public transient boolean isSwitchedOn;
 }

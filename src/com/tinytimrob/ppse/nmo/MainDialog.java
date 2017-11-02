@@ -31,6 +31,7 @@ import com.tinytimrob.ppse.nmo.integration.webui.PortForwarding;
 import com.tinytimrob.ppse.nmo.integration.webui.WebcamCapture;
 import com.tinytimrob.ppse.nmo.integration.webui.WebcamWebSocketHandler;
 import com.tinytimrob.ppse.nmo.integration.wemo.IntegrationWemo;
+import com.tinytimrob.ppse.nmo.integration.wemo.WemoDeviceEntry;
 import com.tinytimrob.ppse.nmo.utils.DesktopHelper;
 import com.tinytimrob.ppse.nmo.utils.FormattingHelper;
 import com.tinytimrob.ppse.nmo.utils.JavaFxHelper;
@@ -111,6 +112,7 @@ public class MainDialog extends Application
 	public static volatile SimpleStringProperty webcamName = new SimpleStringProperty("");
 	public static volatile SimpleStringProperty lightingStateString = new SimpleStringProperty("");
 	public static volatile SimpleStringProperty tplinkStateString = new SimpleStringProperty("");
+	public static volatile SimpleStringProperty wemoStateString = new SimpleStringProperty("");
 	public static volatile SimpleStringProperty startedString = new SimpleStringProperty("");
 	public static volatile SimpleStringProperty startedString2 = new SimpleStringProperty("");
 	public static volatile SimpleStringProperty lastOversleepString = new SimpleStringProperty("");
@@ -820,6 +822,10 @@ public class MainDialog extends Application
 				}
 				if (IntegrationWemo.INSTANCE.isEnabled())
 				{
+					final Label wemoStateLabel = JavaFxHelper.createLabel("", Color.WHITE, "-fx-font-weight: bold;");
+					wemoStateLabel.textProperty().bind(wemoStateString);
+					statusBox.getChildren().add(wemoStateLabel);
+					statusBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
 					this.addIntegrationButtonsToVbox(IntegrationWemo.INSTANCE, statusBox);
 				}
 			}
@@ -1751,6 +1757,18 @@ public class MainDialog extends Application
 				state += tpde.name + ":  " + (tpde.isSwitchedOn ? "ON" : "OFF");
 			}
 			tplinkStateString.set(state);
+		}
+
+		if (NMOConfiguration.INSTANCE.integrations.wemo.enabled)
+		{
+			String state = "";
+			for (int i = 0; i < NMOConfiguration.INSTANCE.integrations.wemo.devices.length; i++)
+			{
+				WemoDeviceEntry wemodevice = NMOConfiguration.INSTANCE.integrations.wemo.devices[i];
+				state += (!state.isEmpty() ? "\n" : "");
+				state += wemodevice.name + ":  " + (wemodevice.isSwitchedOn ? "ON" : "OFF");
+			}
+			wemoStateString.set(state);
 		}
 
 		if (NMOConfiguration.INSTANCE.integrations.webUI.enabled)

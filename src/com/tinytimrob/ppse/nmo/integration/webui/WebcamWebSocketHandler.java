@@ -88,7 +88,7 @@ public class WebcamWebSocketHandler implements Runnable
 			String xff = session.getUpgradeRequest().getHeader("X-Forwarded-For");
 			if (!xff.isEmpty())
 			{
-				this.connectionIP = xff.split("\\Q, \\E")[0];
+				this.connectionIP = "/" + xff.split("\\Q, \\E")[0];
 			}
 		}
 		log.info("WebSocket connect from " + this.connectionIP);

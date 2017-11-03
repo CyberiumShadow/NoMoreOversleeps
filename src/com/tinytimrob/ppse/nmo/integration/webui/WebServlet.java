@@ -301,7 +301,16 @@ public class WebServlet extends HttpServlet
 					if (button != null && !button.isBlockedFromWebUI())
 					{
 						button.onAction();
-						MainDialog.triggerEvent("<" + button.getName() + "> from /" + request.getRemoteAddr(), null);
+						String requestIP = request.getRemoteAddr();
+						if (NMOConfiguration.INSTANCE.integrations.webUI.readProxyForwardingHeaders)
+						{
+							String xff = request.getHeader("X-Forwarded-For");
+							if (!xff.isEmpty())
+							{
+								requestIP = xff.split("\\Q, \\E")[0];
+							}
+						}
+						MainDialog.triggerEvent("<" + button.getName() + "> from /" + requestIP, null);
 
 						// When calling through AJAX, no response HTML necessary
 						if (request.getParameter("ajax_form") != null)

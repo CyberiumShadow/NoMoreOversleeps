@@ -1514,7 +1514,12 @@ public class MainDialog extends Application
 			return;
 		}
 
-		now = System.currentTimeMillis();
+		long noww = System.currentTimeMillis();
+		if (now > noww)
+		{
+			triggerEvent("Clock went backwards by " + (now - noww) + "ms!", null);
+		}
+		now = noww;
 		boolean paused = pausedUntil > now;
 		ScheduleEntryType currentSleepState = null;
 

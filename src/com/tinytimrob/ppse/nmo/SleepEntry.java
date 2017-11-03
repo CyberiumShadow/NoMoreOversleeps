@@ -91,7 +91,7 @@ public class SleepEntry implements Comparable<SleepEntry>
 			m = calendar2.getTimeInMillis();
 			n = m + ((newEnd - this.start) * 60000L);
 		}
-		else if ((n - currentTime) >= 604800000L)
+		else if ((n - currentTime) >= 86400000L)
 		{
 			calendar2 = Calendar.getInstance();
 			calendar2.setTimeInMillis(currentTime - 86400000L);

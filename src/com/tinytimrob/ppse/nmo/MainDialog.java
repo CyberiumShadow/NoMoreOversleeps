@@ -1518,12 +1518,6 @@ public class MainDialog extends Application
 		boolean paused = pausedUntil > now;
 		ScheduleEntryType currentSleepState = null;
 
-		// Update next trigger time for all sleep blocks
-		for (SleepEntry entry : NMOConfiguration.INSTANCE.schedule)
-		{
-			entry.updateNextTriggerTime();
-		}
-
 		if (NMOStatistics.INSTANCE.scheduleStartedOn > 0)
 		{
 			startedString.set(CommonUtils.dateFormatter2.format(NMOStatistics.INSTANCE.scheduleStartedOn));
@@ -1537,7 +1531,15 @@ public class MainDialog extends Application
 			personalBestString.set(FormattingHelper.formatTimeElapsedWithDays(NMOStatistics.INSTANCE.schedulePersonalBest, 0));
 		}
 
-		// update next trigger time for next sleep block
+		// Update next trigger time for all sleep blocks except the next sleep block
+		for (SleepEntry entry : NMOConfiguration.INSTANCE.schedule)
+		{
+			if (entry != nextSleepBlock)
+			{
+				entry.updateNextTriggerTime();
+			}
+		}
+		// Update next trigger time for the next sleep block but ONLY IF the end time is in the past
 		if (nextSleepBlock != null && nextSleepBlock.nextEndTime <= now)
 		{
 			nextSleepBlock.updateNextTriggerTime();

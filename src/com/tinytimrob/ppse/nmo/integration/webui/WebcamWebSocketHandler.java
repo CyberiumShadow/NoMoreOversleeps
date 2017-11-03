@@ -83,6 +83,14 @@ public class WebcamWebSocketHandler implements Runnable
 		this.camID = camIDval;
 		this.session = session;
 		this.connectionIP = session.getRemoteAddress().getAddress().toString();
+		if (NMOConfiguration.INSTANCE.integrations.webUI.readProxyForwardingHeaders)
+		{
+			String xff = session.getUpgradeRequest().getHeader("X-Forwarded-For");
+			if (!xff.isEmpty())
+			{
+				this.connectionIP = xff.split("\\Q, \\E")[0];
+			}
+		}
 		log.info("WebSocket connect from " + this.connectionIP);
 		WebcamCapture.webcams[this.camID].socketHandlers.add(this);
 		new Thread(this).start();

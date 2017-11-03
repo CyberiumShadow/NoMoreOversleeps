@@ -24,6 +24,9 @@ public class WebUIConfiguration
 	public boolean allowRemotePauseControl = false;
 
 	@Expose
+	public boolean readProxyForwardingHeaders = false;
+
+	@Expose
 	public DynDnsUpdateConfiguration ddns = new DynDnsUpdateConfiguration();
 
 	public static class DynDnsUpdateConfiguration

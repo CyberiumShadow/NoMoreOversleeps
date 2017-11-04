@@ -1586,7 +1586,7 @@ public class MainDialog extends Application
 				scheduleStatusString.set(pros);
 				scheduleNextBlockString.set("Active block: " + nextSleepBlockDetected.name);
 				scheduleCountdownString.set(nextSleepBlockDetected.type + " ENDS IN " + StringUtils.leftPad("" + hoursCounter, 2, "0") + ":" + StringUtils.leftPad("" + minutesCounter, 2, "0") + ":" + StringUtils.leftPad("" + secondsCounter, 2, "0"));
-				scheduleStatus = nextSleepBlockDetected.type + " (" + nextSleepBlockDetected.name + ") -- ENDS IN " + minutesRemaining + " MINUTE" + (minutesRemaining == 1 ? "" : "S");
+				scheduleStatus = nextSleepBlockDetected.type + " (" + nextSleepBlockDetected.name + ") -- ENDS IN " + StringUtils.leftPad("" + hoursCounter, 2, "0") + ":" + StringUtils.leftPad("" + minutesCounter, 2, "0") + ":" + StringUtils.leftPad("" + secondsCounter, 2, "0");
 				scheduleStatusShort = nextSleepBlockDetected.type + " [" + minutesRemaining + "m LEFT]";
 				nextSleepBlock = nextSleepBlockDetected;
 				currentSleepState = nextSleepBlockDetected.type;
@@ -1614,7 +1614,7 @@ public class MainDialog extends Application
 				scheduleStatusString.set(pros);
 				scheduleNextBlockString.set("Next block: " + nextSleepBlockDetected.name);
 				scheduleCountdownString.set(nextSleepBlockDetected.type + " IN " + StringUtils.leftPad("" + hoursCounter, 2, "0") + ":" + StringUtils.leftPad("" + minutesCounter, 2, "0") + ":" + StringUtils.leftPad("" + secondsCounter, 2, "0"));
-				scheduleStatus = pros + " -- " + nextSleepBlockDetected.name + " STARTS IN " + minutesRemaining + " MINUTE" + (minutesRemaining == 1 ? "" : "S");
+				scheduleStatus = pros + " -- " + nextSleepBlockDetected.name + " STARTS IN " + StringUtils.leftPad("" + hoursCounter, 2, "0") + ":" + StringUtils.leftPad("" + minutesCounter, 2, "0") + ":" + StringUtils.leftPad("" + secondsCounter, 2, "0");
 				scheduleStatusShort = pros.equals("AWAKE") ? pros + " [" + minutesRemaining + "m LEFT]" : pros;
 				currentSleepState = null;
 				if (minutesRemaining <= nextSleepBlockDetected.approachWarning && lastSleepBlockWarning != nextSleepBlockDetected)

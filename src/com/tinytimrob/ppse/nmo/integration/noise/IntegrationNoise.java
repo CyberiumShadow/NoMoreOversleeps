@@ -4,12 +4,20 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import org.apache.commons.lang3.StringUtils;
 import com.tinytimrob.common.CommonUtils;
 import com.tinytimrob.ppse.nmo.Action;
 import com.tinytimrob.ppse.nmo.Integration;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 
 public class IntegrationNoise extends Integration
 {
@@ -33,6 +41,40 @@ public class IntegrationNoise extends Integration
 		for (int i = 0; i < NMOConfiguration.INSTANCE.integrations.noise.noises.length; i++)
 		{
 			final StoredNoise noise = NMOConfiguration.INSTANCE.integrations.noise.noises[i];
+			try
+			{
+				if (noise.path.toLowerCase(Locale.ENGLISH).startsWith("http:") || noise.path.toLowerCase(Locale.ENGLISH).startsWith("https:"))
+				{
+					// format unsupported
+					noise.duration = -1;
+				}
+				else if (noise.path.toLowerCase(Locale.ENGLISH).endsWith(".wav"))
+				{
+					AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(noise.path));
+					AudioFormat format = audioInputStream.getFormat();
+					long frameLen = audioInputStream.getFrameLength();
+					long duration = (long) ((frameLen + 0.0D) / format.getFrameRate() + 0.99D);
+					noise.duration = duration;
+				}
+				else if (noise.path.toLowerCase(Locale.ENGLISH).endsWith(".mp3"))
+				{
+					File file = new File(noise.path);
+					AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(file);
+					Map properties = baseFileFormat.properties();
+					long duration = (Long) properties.get("duration") / 1000000L;
+					noise.duration = duration;
+				}
+				else
+				{
+					// format unsupported
+					noise.duration = -1;
+				}
+			}
+			catch (Throwable t)
+			{
+				t.printStackTrace();
+				// unknown;
+			}
 			this.actions.put("/noise/" + i, new Action()
 			{
 				@Override
@@ -50,7 +92,8 @@ public class IntegrationNoise extends Integration
 				@Override
 				public String getDescription()
 				{
-					return "Plays the audio clip '" + noise.name + "'.\n" + noise.description;
+					String durationString = noise.duration == -1 ? "" : " (" + (noise.duration / 60) + ":" + StringUtils.leftPad("" + noise.duration % 60, 2, "0") + ")";
+					return "Plays the audio clip '" + noise.name + "'" + durationString + ".\n" + noise.description;
 				}
 
 				@Override

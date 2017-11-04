@@ -18,4 +18,6 @@ public class StoredNoise
 
 	@Expose
 	public boolean secret;
+
+	public transient long duration = -1;
 }

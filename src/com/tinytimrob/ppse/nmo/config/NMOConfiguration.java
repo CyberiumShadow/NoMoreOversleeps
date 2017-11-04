@@ -75,6 +75,15 @@ public class NMOConfiguration
 		public String[] napEnded = new String[0];
 
 		@Expose
+		public String[] siestaApproaching = new String[0];
+
+		@Expose
+		public String[] siestaStarted = new String[0];
+
+		@Expose
+		public String[] siestaEnded = new String[0];
+
+		@Expose
 		public String[] afkApproaching = new String[0];
 
 		@Expose

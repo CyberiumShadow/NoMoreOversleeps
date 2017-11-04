@@ -918,6 +918,9 @@ public class MainDialog extends Application
 			this.addEventSummaryToStatusBox(statusBox, "When nap is approaching", NMOConfiguration.INSTANCE.events.napApproaching);
 			this.addEventSummaryToStatusBox(statusBox, "When nap starts", NMOConfiguration.INSTANCE.events.napStarted);
 			this.addEventSummaryToStatusBox(statusBox, "When nap ends", NMOConfiguration.INSTANCE.events.napEnded);
+			this.addEventSummaryToStatusBox(statusBox, "When siesta is approaching", NMOConfiguration.INSTANCE.events.siestaApproaching);
+			this.addEventSummaryToStatusBox(statusBox, "When siesta starts", NMOConfiguration.INSTANCE.events.siestaStarted);
+			this.addEventSummaryToStatusBox(statusBox, "When siesta ends", NMOConfiguration.INSTANCE.events.siestaEnded);
 			this.addEventSummaryToStatusBox(statusBox, "When AFK block is approaching", NMOConfiguration.INSTANCE.events.afkApproaching);
 			this.addEventSummaryToStatusBox(statusBox, "When AFK block starts", NMOConfiguration.INSTANCE.events.afkStarted);
 			this.addEventSummaryToStatusBox(statusBox, "When AFK block ends", NMOConfiguration.INSTANCE.events.afkEnded);
@@ -1571,7 +1574,23 @@ public class MainDialog extends Application
 				long tims = nextSleepBlockDetected.nextEndTime;
 				if (!scheduleStatus.startsWith(nextSleepBlockDetected.type + " "))
 				{
-					triggerEvent("Entering " + nextSleepBlockDetected.type + ": " + nextSleepBlockDetected.name, nextSleepBlockDetected.type == ScheduleEntryType.AFK ? NMOConfiguration.INSTANCE.events.afkStarted : nextSleepBlockDetected.type == ScheduleEntryType.CORE ? NMOConfiguration.INSTANCE.events.coreStarted : NMOConfiguration.INSTANCE.events.napStarted);
+					String[] triggerArray = null;
+					switch (nextSleepBlockDetected.type)
+					{
+					case CORE:
+						triggerArray = NMOConfiguration.INSTANCE.events.coreStarted;
+						break;
+					case NAP:
+						triggerArray = NMOConfiguration.INSTANCE.events.napStarted;
+						break;
+					case SIESTA:
+						triggerArray = NMOConfiguration.INSTANCE.events.siestaStarted;
+						break;
+					case AFK:
+						triggerArray = NMOConfiguration.INSTANCE.events.afkStarted;
+						break;
+					}
+					triggerEvent("Entering " + nextSleepBlockDetected.type + ": " + nextSleepBlockDetected.name, triggerArray);
 				}
 				// determine second value
 				long secondsRemaining = (((tims + 999) - now) / 1000);
@@ -1621,7 +1640,23 @@ public class MainDialog extends Application
 				{
 					if (nextSleepBlockDetected.approachWarning != -1)
 					{
-						triggerEvent(minutesRemaining + " minute" + (minutesRemaining == 1 ? "" : "s") + " until " + nextSleepBlockDetected.type + ": " + nextSleepBlockDetected.name, nextSleepBlockDetected.type == ScheduleEntryType.AFK ? NMOConfiguration.INSTANCE.events.afkApproaching : nextSleepBlockDetected.type == ScheduleEntryType.CORE ? NMOConfiguration.INSTANCE.events.coreApproaching : NMOConfiguration.INSTANCE.events.napApproaching);
+						String[] triggerArray = null;
+						switch (nextSleepBlockDetected.type)
+						{
+						case CORE:
+							triggerArray = NMOConfiguration.INSTANCE.events.coreApproaching;
+							break;
+						case NAP:
+							triggerArray = NMOConfiguration.INSTANCE.events.napApproaching;
+							break;
+						case SIESTA:
+							triggerArray = NMOConfiguration.INSTANCE.events.siestaApproaching;
+							break;
+						case AFK:
+							triggerArray = NMOConfiguration.INSTANCE.events.afkApproaching;
+							break;
+						}
+						triggerEvent(minutesRemaining + " minute" + (minutesRemaining == 1 ? "" : "s") + " until " + nextSleepBlockDetected.type + ": " + nextSleepBlockDetected.name, triggerArray);
 					}
 					lastSleepBlockWarning = nextSleepBlockDetected;
 				}
@@ -1633,7 +1668,23 @@ public class MainDialog extends Application
 		}
 		if (nextSleepBlock != null && (nextSleepBlock != nextSleepBlockDetected || (nextSleepBlock == nextSleepBlockDetected && currentSleepState == null && lastSleepState != null)))
 		{
-			triggerEvent("Exiting " + nextSleepBlock.type + ": " + nextSleepBlock.name, nextSleepBlock.type == ScheduleEntryType.AFK ? NMOConfiguration.INSTANCE.events.afkEnded : nextSleepBlock.type == ScheduleEntryType.CORE ? NMOConfiguration.INSTANCE.events.coreEnded : NMOConfiguration.INSTANCE.events.napEnded);
+			String[] triggerArray = null;
+			switch (nextSleepBlock.type)
+			{
+			case CORE:
+				triggerArray = NMOConfiguration.INSTANCE.events.coreEnded;
+				break;
+			case NAP:
+				triggerArray = NMOConfiguration.INSTANCE.events.napEnded;
+				break;
+			case SIESTA:
+				triggerArray = NMOConfiguration.INSTANCE.events.siestaEnded;
+				break;
+			case AFK:
+				triggerArray = NMOConfiguration.INSTANCE.events.afkEnded;
+				break;
+			}
+			triggerEvent("Exiting " + nextSleepBlock.type + ": " + nextSleepBlock.name, triggerArray);
 		}
 		if (lastSleepState != null && currentSleepState == null && lastSleepBlockWarning == nextSleepBlock && NMOConfiguration.INSTANCE.schedule.size() == 1)
 		{
@@ -1659,7 +1710,7 @@ public class MainDialog extends Application
 		}
 		if (paused)
 		{
-			if (!((MainDialog.scheduleStatusShort.startsWith("CORE ") || MainDialog.scheduleStatusShort.startsWith("NAP ")) && pauseReason.startsWith("Sleep block: ")))
+			if (!((MainDialog.scheduleStatusShort.startsWith("CORE ") || MainDialog.scheduleStatusShort.startsWith("NAP ") || MainDialog.scheduleStatusShort.startsWith("SIESTA ")) && pauseReason.startsWith("Sleep block: ")))
 			{
 				long minutesRemaining = (((pausedUntil + 59999) - now) / 60000);
 				scheduleStatusShort = "\"" + pauseReason + "\" [" + minutesRemaining + "m LEFT]";

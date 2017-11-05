@@ -103,6 +103,44 @@ public class IntegrationTPLink extends Integration
 					return entry.secret;
 				}
 			});
+			this.actions.put("/tplink/" + i + "/toggle", new Action()
+			{
+				@Override
+				public void onAction() throws Exception
+				{
+					device.toggle(!device.isOn());
+				}
+
+				@Override
+				public String getName()
+				{
+					return "TOGGLE " + entry.name;
+				}
+
+				@Override
+				public String getDescription()
+				{
+					return "Toggles the state (on/off) of the TP-Link device '" + entry.name + "'.\n" + entry.description;
+				}
+
+				@Override
+				public boolean isHiddenFromFrontend()
+				{
+					return false;
+				}
+
+				@Override
+				public boolean isHiddenFromWebUI()
+				{
+					return true;
+				}
+
+				@Override
+				public boolean isBlockedFromWebUI()
+				{
+					return true;
+				}
+			});
 		}
 	}
 

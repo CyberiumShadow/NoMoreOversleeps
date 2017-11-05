@@ -49,4 +49,19 @@ public class WebUIConfiguration
 		@Expose
 		public int updateFrequency = 300;
 	}
+
+	@Expose
+	public UltiwakerConfiguration ultiwakerAPI = new UltiwakerConfiguration();
+
+	public static class UltiwakerConfiguration
+	{
+		@Expose
+		public boolean enabled = false;
+
+		@Expose
+		public int framesToAverage = 20;
+
+		@Expose
+		public int matchPercentageToResetTimer = 75;
+	}
 }

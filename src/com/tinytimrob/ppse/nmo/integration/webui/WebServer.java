@@ -41,6 +41,9 @@ public class WebServer
 		statsHandler.setHandler(handlerCollection);
 		SERVER.setStopTimeout(5000);
 		SERVER.setHandler(statsHandler);
+		ServletContextHandler contextHandler = new ServletContextHandler();
+		contextHandler.setSecurityHandler(basicAuth("NoMoreOversleeps"));
+		contextHandler.setContextPath("/");
 		WebSocketServlet websocketServlet = new WebSocketServlet()
 		{
 			private static final long serialVersionUID = -4394403163936790144L;
@@ -51,11 +54,21 @@ public class WebServer
 				factory.register(WebcamWebSocketHandler.class);
 			}
 		};
-		ServletContextHandler contextHandler = new ServletContextHandler();
-		contextHandler.setSecurityHandler(basicAuth("NoMoreOversleeps"));
-		contextHandler.setContextPath("/");
 		ServletHolder webcamServletHolder = new ServletHolder("swc", websocketServlet);
 		contextHandler.addServlet(webcamServletHolder, "/swc");
+		if (NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.enabled)
+		{
+			WebSocketServlet websocketServlet1 = new WebSocketServlet()
+			{
+				@Override
+				public void configure(WebSocketServletFactory factory)
+				{
+					factory.register(UltiwakerWebSocketHandler.class);
+				}
+			};
+			ServletHolder ultiwakerServletHolder = new ServletHolder("uwapi", websocketServlet1);
+			contextHandler.addServlet(ultiwakerServletHolder, "/uwapi");
+		}
 		ServletHolder napchartServlet = new ServletHolder("default", new WebServlet());
 		contextHandler.addServlet(napchartServlet, "/*");
 		handlerCollection.addHandler(contextHandler);

@@ -28,6 +28,7 @@ import com.tinytimrob.ppse.nmo.integration.tplink.TPLinkDeviceEntry;
 import com.tinytimrob.ppse.nmo.integration.twilio.IntegrationTwilio;
 import com.tinytimrob.ppse.nmo.integration.webui.IntegrationWebUI;
 import com.tinytimrob.ppse.nmo.integration.webui.PortForwarding;
+import com.tinytimrob.ppse.nmo.integration.webui.UltiwakerWebSocketHandler;
 import com.tinytimrob.ppse.nmo.integration.webui.WebcamCapture;
 import com.tinytimrob.ppse.nmo.integration.webui.WebcamWebSocketHandler;
 import com.tinytimrob.ppse.nmo.integration.wemo.IntegrationWemo;
@@ -128,6 +129,8 @@ public class MainDialog extends Application
 	public static volatile SimpleStringProperty scheduleStatusString = new SimpleStringProperty("");
 	public static volatile SimpleStringProperty scheduleNextBlockString = new SimpleStringProperty("");
 	public static volatile SimpleStringProperty scheduleCountdownString = new SimpleStringProperty("");
+	public static volatile Label ultiwakerConnectivityLabel;
+	public static volatile SimpleStringProperty ultiwakerConnectivityString = new SimpleStringProperty("");
 	public static volatile WritableImage writableImage = null;
 	public static ObservableList<String> events = FXCollections.observableArrayList();
 	public static ArrayList<CustomEvent> customEvents = new ArrayList<CustomEvent>();
@@ -549,9 +552,29 @@ public class MainDialog extends Application
 			{
 				for (String transmitter : NMOConfiguration.INSTANCE.integrations.midiTransmitter.transmitters)
 				{
-					final Label transmitterlabel = JavaFxHelper.createLabel("> " + transmitter, Color.YELLOW, "", new Insets(0, 0, 0, 8));
+					final Label transmitterlabel = JavaFxHelper.createLabel(transmitter, Color.YELLOW, "", new Insets(0, 0, 0, 16));
 					statusBox.getChildren().add(transmitterlabel);
 				}
+			}
+
+			final Label ultiwaker = JavaFxHelper.createLabel("Ultiwaker API: ", Color.WHITE, "-fx-font-weight: bold;");
+			boolean ultiwakerEnabled = IntegrationWebUI.INSTANCE.isEnabled() && NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.enabled;
+			if (ultiwakerEnabled)
+			{
+				ultiwaker.setGraphic(JavaFxHelper.createLabel("ENABLED", Color.LIME));
+				ultiwaker.setContentDisplay(ContentDisplay.RIGHT);
+			}
+			else
+			{
+				ultiwaker.setGraphic(JavaFxHelper.createLabel("DISABLED", Color.RED));
+				ultiwaker.setContentDisplay(ContentDisplay.RIGHT);
+			}
+			statusBox.getChildren().add(ultiwaker);
+			if (ultiwakerEnabled)
+			{
+				ultiwakerConnectivityLabel = JavaFxHelper.createLabel("", Color.ORANGE, "", new Insets(0, 0, 0, 16));
+				ultiwakerConnectivityLabel.textProperty().bind(ultiwakerConnectivityString);
+				statusBox.getChildren().add(ultiwakerConnectivityLabel);
 			}
 
 			statusBox.getChildren().add(s = new Separator(Orientation.HORIZONTAL));
@@ -1866,6 +1889,21 @@ public class MainDialog extends Application
 				triggerEvent(event.name + " will next occur on " + CommonUtils.convertTimestamp(event.nextTriggerTime), null);
 				Collections.sort(customEvents);
 				event = customEvents.get(0);
+			}
+		}
+
+		if (ultiwakerConnectivityLabel != null)
+		{
+			int connectionCount = UltiwakerWebSocketHandler.connections.size();
+			if (connectionCount > 0)
+			{
+				ultiwakerConnectivityLabel.setTextFill(Color.LIME);
+				ultiwakerConnectivityString.set("Ultiwaker is connected (" + connectionCount + ")");
+			}
+			else
+			{
+				ultiwakerConnectivityLabel.setTextFill(Color.GREY);
+				ultiwakerConnectivityString.set("Ultiwaker is NOT connected");
 			}
 		}
 	}

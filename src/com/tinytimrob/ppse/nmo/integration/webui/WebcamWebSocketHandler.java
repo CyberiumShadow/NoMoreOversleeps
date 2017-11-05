@@ -15,6 +15,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import com.tinytimrob.common.CommonUtils;
 import com.tinytimrob.common.LogWrapper;
+import com.tinytimrob.ppse.nmo.MainDialog;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
 
 @WebSocket
@@ -105,6 +106,7 @@ public class WebcamWebSocketHandler implements Runnable
 		while (this.session != null)
 		{
 			message.put("image", WebcamCapture.webcams[this.camID].imageBase64);
+			message.put("time", MainDialog.now);
 			try
 			{
 				this.send(message);

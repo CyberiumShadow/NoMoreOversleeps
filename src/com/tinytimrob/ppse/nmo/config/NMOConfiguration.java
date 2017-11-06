@@ -97,10 +97,10 @@ public class NMOConfiguration
 		public String[] activityWarning1 = new String[0];
 
 		@Expose
-		public String[] oversleepWarning = new String[0];
+		public String[] activityWarning2 = new String[0];
 
 		@Expose
-		public String[] activityWarning2 = new String[0];
+		public String[] oversleepWarning = new String[0];
 
 		@Expose
 		public String[] pauseInitiated = new String[0];

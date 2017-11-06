@@ -19,11 +19,14 @@ public class WebcamData implements WebcamListener
 	public final String cc;
 	public Webcam webcam;
 	BufferedImage image;
+	public int faultyCameraCorrection = 0;
+	public String name;
 
 	public WebcamData(String cc, Webcam webcam)
 	{
 		this.cc = cc;
 		this.webcam = webcam;
+		this.name = this.webcam.getName();
 	}
 
 	@Override

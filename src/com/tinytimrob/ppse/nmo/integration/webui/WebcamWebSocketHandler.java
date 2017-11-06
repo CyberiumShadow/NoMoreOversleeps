@@ -100,7 +100,7 @@ public class WebcamWebSocketHandler implements Runnable
 	@Override
 	public void run()
 	{
-		log.info(">> Started sending cam" + camID + " data to " + this.connectionIP);
+		log.info(">> Started sending cam" + this.camID + " data to " + this.connectionIP);
 		Map<String, Object> message = new HashMap<String, Object>();
 		message.put("type", "image");
 		while (this.session != null)
@@ -130,7 +130,7 @@ public class WebcamWebSocketHandler implements Runnable
 				e.printStackTrace();
 			}
 		}
-		log.info(">> Stopped sending cam" + camID + " data to " + this.connectionIP);
+		log.info(">> Stopped sending cam" + this.camID + " data to " + this.connectionIP);
 	}
 
 	@OnWebSocketMessage

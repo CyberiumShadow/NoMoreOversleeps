@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,6 +25,7 @@ public class WebcamCapture
 {
 	private static final Logger log = LogWrapper.getLogger();
 	public static WebcamData[] webcams;
+	public static String[] webcamNames;
 	public static volatile boolean privacyMode = false;
 
 	public static class WebcamTransformer implements WebcamImageTransformer
@@ -91,27 +93,33 @@ public class WebcamCapture
 			throw new RuntimeException("You must specify at least one webcam in the NMO config file if the WebUI module is enabled");
 		}
 		webcams = new WebcamData[NMOConfiguration.INSTANCE.integrations.webUI.webcams.size()];
+		webcamNames = new String[NMOConfiguration.INSTANCE.integrations.webUI.webcams.size()];
 		int id = 0;
 		for (String cc : NMOConfiguration.INSTANCE.integrations.webUI.webcams.keySet())
 		{
 			String camName = NMOConfiguration.INSTANCE.integrations.webUI.webcams.get(cc);
-			initCamera(id, cc, camName);
+			webcams[id] = initCamera(cc, camName);
+			webcamNames[id] = camName;
 			id++;
 		}
 	}
 
-	static void initCamera(int id, String cc, String camName)
+	static WebcamData initCamera(String cc, String camName)
 	{
 		LinkedHashMap<String, Webcam> detectedCameras = new LinkedHashMap<String, Webcam>();
 		List<Webcam> cams = Webcam.getWebcams();
+		Webcam webcam = null;
 		for (Webcam cam : cams)
 		{
 			detectedCameras.put(cam.getName(), cam);
+			if (cam.getName().startsWith(camName))
+			{
+				webcam = cam;
+			}
 		}
-		Webcam webcam = detectedCameras.get(camName);
 		if (webcam == null)
 		{
-			throw new RuntimeException("Webcam listed in config was not found: " + camName);
+			throw new WebcamInitException("Webcam listed in config was not found: " + camName);
 		}
 		WebcamData data = new WebcamData(cc, webcam);
 		webcam.setImageTransformer(new WebcamTransformer());
@@ -131,37 +139,63 @@ public class WebcamCapture
 			dimension = sizes[0];
 		}
 		log.info("Selected image dimension: " + dimension.getWidth() + "x" + dimension.getHeight());
-		webcam.setViewSize(dimension);
+		if (!webcam.getViewSize().equals(dimension))
+		{
+			webcam.setViewSize(dimension);
+		}
 		webcam.open(true);
 		webcam.addWebcamListener(data);
 		System.out.println(webcam.getViewSize());
 		((WebcamDefaultDevice) webcam.getDevice()).FAULTY = false;
-		webcams[id] = data;
+		return data;
 	}
 
-	public static synchronized void update()
+	public static synchronized void update() throws InterruptedException
 	{
 		for (int i = 0; i < webcams.length; i++)
 		{
 			WebcamData data = webcams[i];
-			BufferedImage img = data.webcam.getImage();
+			BufferedImage img = data.webcam == null ? null : data.webcam.getImage();
 			if (img == null || ((WebcamDefaultDevice) data.webcam.getDevice()).FAULTY)
 			{
-				String camName = data.webcam.getName();
-				data.webcam.removeWebcamListener(data);
-				data.webcam.close();
-				ArrayList<WebcamWebSocketHandler> handlers = (ArrayList<WebcamWebSocketHandler>) data.socketHandlers.clone();
-				for (WebcamWebSocketHandler handler : handlers)
+				if (data.faultyCameraCorrection > 0)
 				{
-					data.socketHandlers.remove(handler);
+					data.faultyCameraCorrection--;
 				}
-				data.webcam = null;
-				initCamera(i, data.cc, camName);
-				webcams[i].image = data.image;
-				webcams[i].imageBase64 = data.imageBase64;
-				for (WebcamWebSocketHandler handler : handlers)
+				else
 				{
-					webcams[i].socketHandlers.add(handler);
+					log.error("Webcam " + webcamNames[i] + " is faulty. Re-initializing...");
+					if (data.webcam != null)
+					{
+						data.webcam.removeWebcamListener(data);
+						data.webcam.close();
+						data.webcam = null;
+						// unlock the webcam if it was previously locked and the lock removal fucked up
+						File lockFile = new File(System.getProperty("java.io.tmpdir"), String.format(".webcam-lock-%d", Math.abs(data.name.hashCode())));
+						if (lockFile.exists())
+						{
+							lockFile.delete();
+						}
+					}
+					try
+					{
+						WebcamData newData = initCamera(data.cc, webcamNames[i]);
+						newData.image = data.image;
+						newData.imageBase64 = data.imageBase64;
+						@SuppressWarnings("unchecked")
+						ArrayList<WebcamWebSocketHandler> wwsh = (ArrayList<WebcamWebSocketHandler>) data.socketHandlers.clone();
+						for (WebcamWebSocketHandler handler : wwsh)
+						{
+							data.socketHandlers.remove(handler);
+							newData.socketHandlers.add(handler);
+						}
+						webcams[i] = newData;
+					}
+					catch (Throwable t)
+					{
+						log.error("Failed to re-initialize webcam " + webcamNames[i] + " because " + t.getMessage());
+						data.faultyCameraCorrection = 60;
+					}
 				}
 			}
 			else

@@ -63,8 +63,8 @@ public class Main
 		integrations.add(IntegrationMouse.INSTANCE);
 		integrations.add(IntegrationXboxController.INSTANCE);
 		integrations.add(IntegrationMidiTransmitter.INSTANCE);
-		integrations.add(IntegrationPavlok.INSTANCE);
 		integrations.add(IntegrationNoise.INSTANCE);
+		integrations.add(IntegrationPavlok.INSTANCE);
 		integrations.add(IntegrationPhilipsHue.INSTANCE);
 		integrations.add(IntegrationTPLink.INSTANCE);
 		integrations.add(IntegrationWemo.INSTANCE);

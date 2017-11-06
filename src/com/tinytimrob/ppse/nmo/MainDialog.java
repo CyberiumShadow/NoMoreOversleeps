@@ -466,7 +466,7 @@ public class MainDialog extends Application
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #26DE42; -fx-background-color: #333;");
 			pane.add(frame, 0, 0, 1, 1);
-			GridPane.setVgrow(pane, Priority.ALWAYS);
+			GridPane.setVgrow(pane, Priority.SOMETIMES);
 		}
 
 		// monitoring control
@@ -763,7 +763,7 @@ public class MainDialog extends Application
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #6D81A3; -fx-background-color: #333;");
 			pane.add(frame, 1, 0, 3, 1);
-			GridPane.setVgrow(pane, Priority.ALWAYS);
+			GridPane.setVgrow(pane, Priority.SOMETIMES);
 		}
 
 		// PAVLOK
@@ -810,7 +810,7 @@ public class MainDialog extends Application
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #DEB026; -fx-background-color: #333;");
 			pane.add(frame, 0, 1, 1, 1);
-			GridPane.setVgrow(pane, Priority.ALWAYS);
+			GridPane.setVgrow(pane, Priority.SOMETIMES);
 		}
 
 		// HOME AUTOMATION
@@ -878,7 +878,7 @@ public class MainDialog extends Application
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #839CA0; -fx-background-color: #333;");
 			pane.add(frame, 1, 1, 1, 2);
-			GridPane.setVgrow(pane, Priority.ALWAYS);
+			GridPane.setVgrow(pane, Priority.SOMETIMES);
 		}
 
 		// ALARM SOUNDS
@@ -921,7 +921,7 @@ public class MainDialog extends Application
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #B649C6; -fx-background-color: #333;");
 			pane.add(frame, 2, 1, 1, 5);
-			GridPane.setVgrow(pane, Priority.ALWAYS);
+			GridPane.setVgrow(pane, Priority.SOMETIMES);
 		}
 
 		// EVENT CONTROL
@@ -979,7 +979,7 @@ public class MainDialog extends Application
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #6BA4A5; -fx-background-color: #333;");
 			pane.add(frame, 3, 1, 1, 5);
-			GridPane.setVgrow(pane, Priority.ALWAYS);
+			GridPane.setVgrow(pane, Priority.SOMETIMES);
 		}
 
 		// TWILIO
@@ -1022,7 +1022,7 @@ public class MainDialog extends Application
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #A36E6D; -fx-background-color: #333;");
 			pane.add(frame, 0, 2, 1, 1);
-			GridPane.setVgrow(pane, Priority.ALWAYS);
+			GridPane.setVgrow(pane, Priority.SOMETIMES);
 		}
 
 		// CUSTOM COMMANDS
@@ -1065,7 +1065,7 @@ public class MainDialog extends Application
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #7BAD58; -fx-background-color: #333;");
 			pane.add(frame, 1, 3, 1, 1);
-			GridPane.setVgrow(pane, Priority.ALWAYS);
+			GridPane.setVgrow(pane, Priority.SOMETIMES);
 		}
 
 		// DISCORD
@@ -1108,7 +1108,7 @@ public class MainDialog extends Application
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #7289DA; -fx-background-color: #333;");
 			pane.add(frame, 0, 3, 1, 1);
-			GridPane.setVgrow(pane, Priority.ALWAYS);
+			GridPane.setVgrow(pane, Priority.SOMETIMES);
 		}
 
 		// FILEWRITER
@@ -1214,7 +1214,7 @@ public class MainDialog extends Application
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #AA3456; -fx-background-color: #333;");
 			pane.add(frame, 0, 4, 1, 2);
-			GridPane.setVgrow(pane, Priority.ALWAYS);
+			GridPane.setVgrow(pane, Priority.SOMETIMES);
 		}
 
 		// ITERATOR
@@ -1257,7 +1257,7 @@ public class MainDialog extends Application
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #D8C743; -fx-background-color: #333;");
 			pane.add(frame, 1, 4, 1, 1);
-			GridPane.setVgrow(pane, Priority.ALWAYS);
+			GridPane.setVgrow(pane, Priority.SOMETIMES);
 		}
 
 		// RANDOMIZER
@@ -1300,7 +1300,7 @@ public class MainDialog extends Application
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #D88B43; -fx-background-color: #333;");
 			pane.add(frame, 1, 5, 1, 1);
-			GridPane.setVgrow(pane, Priority.ALWAYS);
+			GridPane.setVgrow(pane, Priority.SOMETIMES);
 		}
 
 		// build the log frame

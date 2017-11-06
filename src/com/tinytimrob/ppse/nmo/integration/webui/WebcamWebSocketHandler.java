@@ -32,7 +32,7 @@ public class WebcamWebSocketHandler implements Runnable
 		{
 			if (this.connectionIP != null)
 			{
-				log.info("WebSocket disconnect from " + this.connectionIP);
+				log.info("WebSocket for cam" + this.camID + " disconnected from " + this.connectionIP);
 			}
 			try
 			{
@@ -92,7 +92,7 @@ public class WebcamWebSocketHandler implements Runnable
 				this.connectionIP = "/" + xff.split("\\Q, \\E")[0];
 			}
 		}
-		log.info("WebSocket connect from " + this.connectionIP);
+		log.info("WebSocket for cam" + this.camID + " connected from " + this.connectionIP);
 		WebcamCapture.webcams[this.camID].socketHandlers.add(this);
 		new Thread(this).start();
 	}
@@ -100,7 +100,7 @@ public class WebcamWebSocketHandler implements Runnable
 	@Override
 	public void run()
 	{
-		log.info(">> Started sending data to " + this.connectionIP);
+		log.info(">> Started sending cam" + camID + " data to " + this.connectionIP);
 		Map<String, Object> message = new HashMap<String, Object>();
 		message.put("type", "image");
 		while (this.session != null)
@@ -130,7 +130,7 @@ public class WebcamWebSocketHandler implements Runnable
 				e.printStackTrace();
 			}
 		}
-		log.info(">> Stopped sending data to " + this.connectionIP);
+		log.info(">> Stopped sending cam" + camID + " data to " + this.connectionIP);
 	}
 
 	@OnWebSocketMessage

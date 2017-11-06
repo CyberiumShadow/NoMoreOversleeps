@@ -42,7 +42,7 @@ public class IntegrationIterator extends Integration
 				@Override
 				public String getName()
 				{
-					return "ITERATOR: " + iterator.name;
+					return "ITERATE " + iterator.name;
 				}
 
 				@Override

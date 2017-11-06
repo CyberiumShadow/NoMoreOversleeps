@@ -377,7 +377,7 @@ public class MainDialog extends Application
 		rcSometimes.setVgrow(Priority.NEVER);
 		RowConstraints rcAlways = new RowConstraints();
 		rcAlways.setVgrow(Priority.ALWAYS);
-		pane.getRowConstraints().addAll(rcSometimes, rcSometimes, rcSometimes, rcSometimes, rcAlways);
+		pane.getRowConstraints().addAll(rcSometimes, rcSometimes, rcSometimes, rcSometimes, rcSometimes, rcAlways);
 		innerPane.setCenter(pane);
 
 		// schedule

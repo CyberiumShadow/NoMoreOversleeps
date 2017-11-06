@@ -19,6 +19,7 @@ import com.tinytimrob.ppse.nmo.integration.input.IntegrationKeyboard;
 import com.tinytimrob.ppse.nmo.integration.input.IntegrationMidiTransmitter;
 import com.tinytimrob.ppse.nmo.integration.input.IntegrationMouse;
 import com.tinytimrob.ppse.nmo.integration.input.IntegrationXboxController;
+import com.tinytimrob.ppse.nmo.integration.iterator.IntegrationIterator;
 import com.tinytimrob.ppse.nmo.integration.noise.IntegrationNoise;
 import com.tinytimrob.ppse.nmo.integration.pavlok.IntegrationPavlok;
 import com.tinytimrob.ppse.nmo.integration.philipshue.IntegrationPhilipsHue;
@@ -919,7 +920,7 @@ public class MainDialog extends Application
 			frame.setTop(heading);
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #B649C6; -fx-background-color: #333;");
-			pane.add(frame, 2, 1, 1, 4);
+			pane.add(frame, 2, 1, 1, 5);
 			GridPane.setVgrow(pane, Priority.ALWAYS);
 		}
 
@@ -977,7 +978,7 @@ public class MainDialog extends Application
 			frame.setTop(heading);
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #6BA4A5; -fx-background-color: #333;");
-			pane.add(frame, 3, 1, 1, 4);
+			pane.add(frame, 3, 1, 1, 5);
 			GridPane.setVgrow(pane, Priority.ALWAYS);
 		}
 
@@ -1212,7 +1213,50 @@ public class MainDialog extends Application
 			frame.setTop(heading);
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #AA3456; -fx-background-color: #333;");
-			pane.add(frame, 0, 4, 1, 1);
+			pane.add(frame, 0, 4, 1, 2);
+			GridPane.setVgrow(pane, Priority.ALWAYS);
+		}
+
+		// ITERATOR
+		{
+			HBox hbox = new HBox(4);
+			hbox.setPadding(new Insets(4));
+			hbox.setAlignment(Pos.TOP_CENTER);
+
+			VBox statusBox = new VBox(4);
+			statusBox.setAlignment(Pos.TOP_LEFT);
+			hbox.getChildren().add(statusBox);
+			HBox.setHgrow(statusBox, Priority.ALWAYS);
+
+			if (IntegrationIterator.INSTANCE.isEnabled())
+			{
+				this.addIntegrationButtonsToVbox(IntegrationIterator.INSTANCE, statusBox);
+			}
+			else
+			{
+				statusBox.getChildren().add(JavaFxHelper.createLabel("Integration disabled", Color.GRAY, "-fx-font-weight: bold;"));
+			}
+
+			final HBox heading = JavaFxHelper.createHorizontalBox(Control.USE_COMPUTED_SIZE, 24);
+			heading.setStyle("-fx-background-color: #D8C743;");
+			heading.setPadding(new Insets(2));
+			heading.setSpacing(2);
+			final Label label = JavaFxHelper.createLabel("Iterator", Color.BLACK, "-fx-font-size: 11pt;");
+			heading.getChildren().add(label);
+			final StackPane spt = new StackPane();
+			heading.getChildren().add(spt);
+			HBox.setHgrow(spt, Priority.ALWAYS);
+			heading.setAlignment(Pos.TOP_LEFT);
+			final Button jfxButtonConfigure = JavaFxHelper.createButton("Configure", JavaFxHelper.createIcon(FontAwesomeIcon.COGS, "11", Color.BLACK));
+			jfxButtonConfigure.setPadding(new Insets(2, 4, 2, 4));
+			jfxButtonConfigure.setDisable(true); // temporary
+			heading.getChildren().add(jfxButtonConfigure);
+
+			final BorderPane frame = new BorderPane();
+			frame.setTop(heading);
+			frame.setCenter(hbox);
+			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #D8C743; -fx-background-color: #333;");
+			pane.add(frame, 1, 4, 1, 1);
 			GridPane.setVgrow(pane, Priority.ALWAYS);
 		}
 
@@ -1255,7 +1299,7 @@ public class MainDialog extends Application
 			frame.setTop(heading);
 			frame.setCenter(hbox);
 			frame.setStyle("-fx-border-width: 1px; -fx-border-color: #D88B43; -fx-background-color: #333;");
-			pane.add(frame, 1, 4, 1, 1);
+			pane.add(frame, 1, 5, 1, 1);
 			GridPane.setVgrow(pane, Priority.ALWAYS);
 		}
 

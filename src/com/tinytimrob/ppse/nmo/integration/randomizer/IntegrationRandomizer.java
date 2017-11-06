@@ -43,7 +43,7 @@ public class IntegrationRandomizer extends Integration
 				@Override
 				public String getName()
 				{
-					return "RANDOM " + randomizer.name;
+					return "RANDOMIZER: " + randomizer.name;
 				}
 
 				@Override

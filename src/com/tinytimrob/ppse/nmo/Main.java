@@ -23,6 +23,7 @@ import com.tinytimrob.ppse.nmo.integration.input.IntegrationKeyboard;
 import com.tinytimrob.ppse.nmo.integration.input.IntegrationMidiTransmitter;
 import com.tinytimrob.ppse.nmo.integration.input.IntegrationMouse;
 import com.tinytimrob.ppse.nmo.integration.input.IntegrationXboxController;
+import com.tinytimrob.ppse.nmo.integration.iterator.IntegrationIterator;
 import com.tinytimrob.ppse.nmo.integration.noise.IntegrationNoise;
 import com.tinytimrob.ppse.nmo.integration.pavlok.IntegrationPavlok;
 import com.tinytimrob.ppse.nmo.integration.philipshue.IntegrationPhilipsHue;
@@ -75,6 +76,7 @@ public class Main
 		integrations.add(ScheduleFakeIntegration.INSTANCE);
 		integrations.add(PauseFakeIntegration.INSTANCE);
 		integrations.add(IntegrationWebUI.INSTANCE);
+		integrations.add(IntegrationIterator.INSTANCE);
 		integrations.add(IntegrationRandomizer.INSTANCE);
 	}
 

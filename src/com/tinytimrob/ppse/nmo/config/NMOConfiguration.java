@@ -13,6 +13,7 @@ import com.tinytimrob.ppse.nmo.integration.input.KeyboardConfiguration;
 import com.tinytimrob.ppse.nmo.integration.input.MidiConfiguration;
 import com.tinytimrob.ppse.nmo.integration.input.MouseConfiguration;
 import com.tinytimrob.ppse.nmo.integration.input.XboxControllerConfiguration;
+import com.tinytimrob.ppse.nmo.integration.iterator.IteratorConfiguration;
 import com.tinytimrob.ppse.nmo.integration.noise.NoiseConfiguration;
 import com.tinytimrob.ppse.nmo.integration.pavlok.PavlokConfiguration;
 import com.tinytimrob.ppse.nmo.integration.philipshue.PhilipsHueConfiguration;
@@ -160,6 +161,9 @@ public class NMOConfiguration
 
 		@Expose
 		public DiscordConfiguration discord = new DiscordConfiguration();
+
+		@Expose
+		public IteratorConfiguration iterator = new IteratorConfiguration();
 
 		@Expose
 		public RandomizerConfiguration randomizer = new RandomizerConfiguration();

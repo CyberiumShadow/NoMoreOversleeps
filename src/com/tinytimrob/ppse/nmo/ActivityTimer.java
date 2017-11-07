@@ -14,14 +14,14 @@ public class ActivityTimer
 	public long secondsForSubsequentWarnings = 10;
 
 	@Expose
-	public long zombiePenaltyForFirstWarning = 120;
+	public long zombiePenaltyForFirstWarning = 0;
 	
 	@Expose
-	public long zombiePenaltyForOversleepWarning = 10;
+	public long zombiePenaltyForOversleepWarning = 0;
 
 	@Expose
-	public long zombiePenaltyForOtherWarnings = 10;
+	public long zombiePenaltyForOtherWarnings = 0;
 
 	@Expose
-	public long zombiePenaltyLimit = 300;
+	public long zombiePenaltyLimit = 0;
 }

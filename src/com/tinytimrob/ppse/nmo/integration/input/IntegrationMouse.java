@@ -6,6 +6,7 @@ import java.awt.PointerInfo;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseInputListener;
+import com.tinytimrob.ppse.nmo.ActivitySource;
 import com.tinytimrob.ppse.nmo.Integration;
 import com.tinytimrob.ppse.nmo.MainDialog;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
@@ -18,6 +19,12 @@ public class IntegrationMouse extends Integration
 	}
 
 	public static final IntegrationMouse INSTANCE = new IntegrationMouse();
+	public static final ActivitySource MOUSE_RELEASED = new ActivitySource("mouseReleased");
+	public static final ActivitySource MOUSE_PRESSED = new ActivitySource("mousePressed");
+	public static final ActivitySource MOUSE_CLICKED = new ActivitySource("mouseClicked");
+	public static final ActivitySource MOUSE_MOVED = new ActivitySource("mouseMoved");
+	public static final ActivitySource MOUSE_DRAGGED = new ActivitySource("mouseDragged");
+	public static final ActivitySource MOUSE_POINTER = new ActivitySource("mousePointer");
 	public static volatile Point lastCursorPoint = MouseInfo.getPointerInfo().getLocation();
 	NativeMouseInputListener mouseHook;
 
@@ -35,31 +42,31 @@ public class IntegrationMouse extends Integration
 			@Override
 			public void nativeMouseReleased(NativeMouseEvent nativeEvent)
 			{
-				MainDialog.resetActivityTimer(IntegrationMouse.this.id);
+				MainDialog.resetActivityTimer(MOUSE_RELEASED);
 			}
 
 			@Override
 			public void nativeMousePressed(NativeMouseEvent nativeEvent)
 			{
-				MainDialog.resetActivityTimer(IntegrationMouse.this.id);
+				MainDialog.resetActivityTimer(MOUSE_PRESSED);
 			}
 
 			@Override
 			public void nativeMouseClicked(NativeMouseEvent nativeEvent)
 			{
-				MainDialog.resetActivityTimer(IntegrationMouse.this.id);
+				MainDialog.resetActivityTimer(MOUSE_CLICKED);
 			}
 
 			@Override
 			public void nativeMouseMoved(NativeMouseEvent nativeEvent)
 			{
-				MainDialog.resetActivityTimer(IntegrationMouse.this.id);
+				MainDialog.resetActivityTimer(MOUSE_MOVED);
 			}
 
 			@Override
 			public void nativeMouseDragged(NativeMouseEvent nativeEvent)
 			{
-				MainDialog.resetActivityTimer(IntegrationMouse.this.id);
+				MainDialog.resetActivityTimer(MOUSE_DRAGGED);
 			}
 		};
 		GlobalScreen.addNativeMouseListener(this.mouseHook);
@@ -74,7 +81,7 @@ public class IntegrationMouse extends Integration
 		if (!epoint.equals(lastCursorPoint))
 		{
 			lastCursorPoint = epoint;
-			MainDialog.resetActivityTimer(this.id);
+			MainDialog.resetActivityTimer(MOUSE_POINTER);
 		}
 	}
 

@@ -98,14 +98,18 @@ public class MainDialog extends Application
 	private static final Logger log = LogWrapper.getLogger();
 	public static Scene scene;
 
+	public static final ActivitySource SYSTEM_ACTIVITY_SOURCE = new ActivitySource("system");
+	public static final ActivitySource PAUSE_ACTIVITY_SOURCE = new ActivitySource("pause");
+	public static final ActivitySource TIMER_ACTIVITY_SOURCE = new ActivitySource("pendingTimer");
 	public static volatile ActivityTimer pendingTimer = null;
 	public static volatile ActivityTimer timer = null;
 	public static volatile String pauseReason = "";
 	public static volatile long pausedUntil = 0;
 	public static volatile long nextActivityWarningID;
 	public static volatile boolean oversleepWarningTriggered;
-	public static volatile long lastActivityTime = System.currentTimeMillis();
-	public static volatile String lastActivitySource = "system";
+	public static volatile ActivitySource lastActivitySourceObject = SYSTEM_ACTIVITY_SOURCE;
+	//public static volatile long lastActivityTime = System.currentTimeMillis();
+	//public static volatile String lastActivitySource = "system";
 	public static volatile SimpleStringProperty loginTokenValidUntilString = new SimpleStringProperty("");
 	public static volatile SimpleStringProperty webMonitoringString = new SimpleStringProperty("");
 	public static volatile SimpleStringProperty activeTimerString = new SimpleStringProperty("");
@@ -135,6 +139,7 @@ public class MainDialog extends Application
 	public static volatile WritableImage writableImage = null;
 	public static ObservableList<String> events = FXCollections.observableArrayList();
 	public static ArrayList<CustomEvent> customEvents = new ArrayList<CustomEvent>();
+	public static volatile long zombieWeight = 0;
 	public static volatile int tick = 0;
 	public static volatile long now = System.currentTimeMillis();
 
@@ -1801,19 +1806,20 @@ public class MainDialog extends Application
 
 		if (paused)
 		{
-			resetActivityTimer("pause");
+			resetActivityTimer(PAUSE_ACTIVITY_SOURCE);
 		}
 		if (pendingTimer != null)
 		{
 			if (pendingTimer != MainDialog.timer)
 			{
-				resetActivityTimer("pendingTimer");
+				resetActivityTimer(TIMER_ACTIVITY_SOURCE);
 				this.setNextActivityWarningForTimer(pendingTimer, 0);
 			}
 			pendingTimer = null;
 		}
-		long lastActivityTime_ = lastActivityTime;
-		String lastActivitySource_ = lastActivitySource;
+		ActivitySource source = lastActivitySourceObject;
+		long lastActivityTime_ = source.time;
+		String lastActivitySource_ = source.type;
 		long timeDiff = paused ? 0 : (now - lastActivityTime_);
 		if (paused)
 		{
@@ -1962,7 +1968,7 @@ public class MainDialog extends Application
 		}
 		else if (timeDiff == -1)
 		{
-			timeDiff = now - lastActivityTime;
+			timeDiff = now - lastActivitySourceObject.time;
 		}
 		long awid = 0;
 		while (timeDiff > (1000 * getNextActivityWarningTimeDiff(awid))) // fixes shortening the gap in the middle of inactivity causing massive warning spam
@@ -1977,10 +1983,10 @@ public class MainDialog extends Application
 		return timer.secondsForFirstWarning + (awid * timer.secondsForSubsequentWarnings);
 	}
 
-	public static void resetActivityTimer(String source)
+	public static void resetActivityTimer(ActivitySource source)
 	{
-		lastActivityTime = now;
-		lastActivitySource = source;
+		source.time = now;
+		lastActivitySourceObject = source;
 		nextActivityWarningID = 0;
 		oversleepWarningTriggered = false;
 	}

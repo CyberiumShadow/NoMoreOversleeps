@@ -16,6 +16,7 @@ import com.google.gson.annotations.Expose;
 import com.tinytimrob.common.CommonUtils;
 import com.tinytimrob.common.PlatformData;
 import com.tinytimrob.ppse.nmo.Action;
+import com.tinytimrob.ppse.nmo.ActivitySource;
 import com.tinytimrob.ppse.nmo.Integration;
 import com.tinytimrob.ppse.nmo.Main;
 import com.tinytimrob.ppse.nmo.MainDialog;
@@ -228,7 +229,8 @@ public class WebServlet extends HttpServlet
 		long now = System.currentTimeMillis();
 		boolean isPaused = MainDialog.isCurrentlyPaused.get();
 		data.update = CommonUtils.convertTimestamp(now);
-		data.activity = isPaused ? "Disabled while paused" : CommonUtils.convertTimestamp(MainDialog.lastActivityTime) + " (" + String.format("%.3f", (now - MainDialog.lastActivityTime) / 1000.0) + "s ago from " + MainDialog.lastActivitySource + ")";
+		ActivitySource lastSource = MainDialog.lastActivitySourceObject;
+		data.activity = isPaused ? "Disabled while paused" : CommonUtils.convertTimestamp(lastSource.time) + " (" + String.format("%.3f", (now - lastSource.time) / 1000.0) + "s ago from " + lastSource.type + ")";
 		data.active_timer = MainDialog.timer == null ? "null" : MainDialog.timer.name + " (" + MainDialog.timer.secondsForFirstWarning + "s/" + MainDialog.timer.secondsForSubsequentWarnings + "s)";
 		if (isPaused)
 		{

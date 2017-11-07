@@ -3,6 +3,7 @@ package com.tinytimrob.ppse.nmo.integration.input;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
+import com.tinytimrob.ppse.nmo.ActivitySource;
 import com.tinytimrob.ppse.nmo.Integration;
 import com.tinytimrob.ppse.nmo.MainDialog;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
@@ -15,6 +16,9 @@ public class IntegrationKeyboard extends Integration
 	}
 
 	public static final IntegrationKeyboard INSTANCE = new IntegrationKeyboard();
+	public static final ActivitySource KEY_TYPED = new ActivitySource("keyTyped");
+	public static final ActivitySource KEY_PRESSED = new ActivitySource("keyPressed");
+	public static final ActivitySource KEY_RELEASED = new ActivitySource("keyReleased");
 	NativeKeyListener keyboardHook;
 
 	@Override
@@ -31,19 +35,19 @@ public class IntegrationKeyboard extends Integration
 			@Override
 			public void nativeKeyTyped(NativeKeyEvent nativeEvent)
 			{
-				MainDialog.resetActivityTimer(IntegrationKeyboard.this.id);
+				MainDialog.resetActivityTimer(KEY_TYPED);
 			}
 
 			@Override
 			public void nativeKeyPressed(NativeKeyEvent nativeEvent)
 			{
-				MainDialog.resetActivityTimer(IntegrationKeyboard.this.id);
+				MainDialog.resetActivityTimer(KEY_PRESSED);
 			}
 
 			@Override
 			public void nativeKeyReleased(NativeKeyEvent nativeEvent)
 			{
-				MainDialog.resetActivityTimer(IntegrationKeyboard.this.id);
+				MainDialog.resetActivityTimer(KEY_RELEASED);
 			}
 		};
 		GlobalScreen.addNativeKeyListener(this.keyboardHook);

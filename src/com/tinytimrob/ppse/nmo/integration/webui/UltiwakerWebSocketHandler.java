@@ -12,6 +12,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import com.tinytimrob.common.LogWrapper;
+import com.tinytimrob.ppse.nmo.ActivitySource;
 import com.tinytimrob.ppse.nmo.MainDialog;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
 
@@ -28,6 +29,7 @@ public class UltiwakerWebSocketHandler
 	}
 
 	public static final ArrayList<UltiwakerWebSocketHandler> connections = new ArrayList<UltiwakerWebSocketHandler>();
+	public static final ActivitySource ULTIWAKER_API = new ActivitySource("ultiwakerAPI");
 	private static final Logger log = LogWrapper.getLogger();
 	private Session session;
 	public String connectionIP;
@@ -133,7 +135,7 @@ public class UltiwakerWebSocketHandler
 			//log.info("Trend: " + positiveMatches + "/" + results + " eyes (" + perc + "%) were located");
 			if (perc >= NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.matchPercentageToResetTimer)
 			{
-				MainDialog.resetActivityTimer("ultiwaker");
+				MainDialog.resetActivityTimer(ULTIWAKER_API);
 			}
 		}
 	}

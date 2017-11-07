@@ -4,6 +4,7 @@ import com.ivan.xinput.XInputDevice;
 import com.ivan.xinput.enums.XInputButton;
 import com.ivan.xinput.exceptions.XInputNotLoadedException;
 import com.ivan.xinput.listener.XInputDeviceListener;
+import com.tinytimrob.ppse.nmo.ActivitySource;
 import com.tinytimrob.ppse.nmo.Integration;
 import com.tinytimrob.ppse.nmo.MainDialog;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
@@ -16,6 +17,7 @@ public class IntegrationXboxController extends Integration
 	}
 
 	public static final IntegrationXboxController INSTANCE = new IntegrationXboxController();
+	public static final ActivitySource XBOX_CONTROLLER = new ActivitySource("xboxController");
 	XInputDevice device;
 	XInputDeviceListener listener;
 
@@ -46,7 +48,7 @@ public class IntegrationXboxController extends Integration
 			@Override
 			public void buttonChanged(XInputButton arg0, boolean arg1)
 			{
-				MainDialog.resetActivityTimer(IntegrationXboxController.this.id);
+				MainDialog.resetActivityTimer(XBOX_CONTROLLER);
 			}
 		});
 	}

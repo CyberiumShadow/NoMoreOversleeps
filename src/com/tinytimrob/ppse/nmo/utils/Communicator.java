@@ -78,7 +78,7 @@ public class Communicator
 				if (clazz == null)
 					return null;
 				String REPLY = IOUtils.toString(in, CommonUtils.charsetUTF8);
-				System.out.println(REPLY);
+				System.out.println(responseCode + " " + REPLY);
 				if (clazz == String.class)
 				{
 					return (T) REPLY;
@@ -100,7 +100,7 @@ public class Communicator
 			else
 			{
 				in = connection.getErrorStream();
-				System.out.println(IOUtils.toString(in, CommonUtils.charsetUTF8));
+				System.out.println(responseCode + " " + IOUtils.toString(in, CommonUtils.charsetUTF8));
 			}
 			throw new BadResponseException(responseCode);
 		}

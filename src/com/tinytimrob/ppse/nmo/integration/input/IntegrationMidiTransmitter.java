@@ -6,6 +6,7 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Receiver;
 import org.apache.logging.log4j.Logger;
 import com.tinytimrob.common.LogWrapper;
+import com.tinytimrob.ppse.nmo.ActivitySource;
 import com.tinytimrob.ppse.nmo.Integration;
 import com.tinytimrob.ppse.nmo.MainDialog;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
@@ -18,6 +19,7 @@ public class IntegrationMidiTransmitter extends Integration
 	}
 
 	public static final IntegrationMidiTransmitter INSTANCE = new IntegrationMidiTransmitter();
+	public static final ActivitySource MIDI_TRANSMITTER = new ActivitySource("midiTransmitter");
 	private static final Logger log = LogWrapper.getLogger();
 	int transmitterLoop = -1;
 
@@ -54,7 +56,7 @@ public class IntegrationMidiTransmitter extends Integration
 							@Override
 							public void send(MidiMessage message, long timeStamp)
 							{
-								MainDialog.resetActivityTimer(IntegrationMidiTransmitter.this.id);
+								MainDialog.resetActivityTimer(MIDI_TRANSMITTER);
 							}
 
 							@Override

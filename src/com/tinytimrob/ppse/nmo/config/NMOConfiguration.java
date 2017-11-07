@@ -103,6 +103,9 @@ public class NMOConfiguration
 		public String[] oversleepWarning = new String[0];
 
 		@Expose
+		public String[] zombiePenaltyLimitReached = new String[0];
+
+		@Expose
 		public String[] pauseInitiated = new String[0];
 
 		@Expose

@@ -70,7 +70,7 @@ public class ActivityTimerFakeIntegration extends Integration
 					@Override
 					public String getDescription()
 					{
-						return "Sets the active timer to '" + timer.name + "'.\nFirst warning after " + timer.secondsForFirstWarning + "s and subsequent warnings every " + timer.secondsForSubsequentWarnings + "s.";
+						return "Sets the active timer to '" + timer.name + "'.\nFirst activity warning after " + timer.secondsForFirstWarning + "s and subsequent activity warnings every " + timer.secondsForSubsequentWarnings + "s.\n" + (timer.zombiePenaltyLimit == 0 ? "Zombie warning will not be triggered." : "Zombie penalty limit of " + timer.zombiePenaltyLimit + "s, increasing by " + timer.zombiePenaltyForFirstWarning + "s for first warning, " + timer.zombiePenaltyForOversleepWarning + "s for oversleep warning and " + timer.zombiePenaltyForOtherWarnings + "s for other warnings.");
 					}
 				});
 			}

@@ -108,8 +108,6 @@ public class MainDialog extends Application
 	public static volatile long nextActivityWarningID;
 	public static volatile boolean oversleepWarningTriggered;
 	public static volatile ActivitySource lastActivitySourceObject = SYSTEM_ACTIVITY_SOURCE;
-	//public static volatile long lastActivityTime = System.currentTimeMillis();
-	//public static volatile String lastActivitySource = "system";
 	public static volatile SimpleStringProperty loginTokenValidUntilString = new SimpleStringProperty("");
 	public static volatile SimpleStringProperty webMonitoringString = new SimpleStringProperty("");
 	public static volatile SimpleStringProperty activeTimerString = new SimpleStringProperty("");
@@ -136,10 +134,19 @@ public class MainDialog extends Application
 	public static volatile SimpleStringProperty scheduleCountdownString = new SimpleStringProperty("");
 	public static volatile Label ultiwakerConnectivityLabel;
 	public static volatile SimpleStringProperty ultiwakerConnectivityString = new SimpleStringProperty("");
+	public static volatile Label zombiePenaltyEnableLabel;
+	public static volatile SimpleStringProperty zombiePenaltyEnableString = new SimpleStringProperty("");
+	public static volatile SimpleStringProperty zombiePenaltyAccruedString = new SimpleStringProperty("");
+	public static volatile SimpleStringProperty zombiePenaltyAccruedString2 = new SimpleStringProperty("");
+	public static volatile SimpleStringProperty zombiePenaltyWaitString = new SimpleStringProperty("");
+	public static volatile SimpleStringProperty zombiePenaltyValString1 = new SimpleStringProperty("");
+	public static volatile SimpleStringProperty zombiePenaltyValString2 = new SimpleStringProperty("");
+	public static volatile SimpleStringProperty zombiePenaltyValString3 = new SimpleStringProperty("");
 	public static volatile WritableImage writableImage = null;
 	public static ObservableList<String> events = FXCollections.observableArrayList();
 	public static ArrayList<CustomEvent> customEvents = new ArrayList<CustomEvent>();
-	public static volatile long zombieWeight = 0;
+	public static volatile long zombieDetectionPenaltyWait = 0;
+	public static volatile long zombieDetectionPenalty = 0;
 	public static volatile int tick = 0;
 	public static volatile long now = System.currentTimeMillis();
 
@@ -663,6 +670,35 @@ public class MainDialog extends Application
 			});
 			unpauseButton.disableProperty().bind(isCurrentlyPaused.not());
 			pauseControlBox.getChildren().add(unpauseButton);
+			pauseControlBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
+			
+			VBox azhVbox = new VBox();
+			azhVbox.setSpacing(1);
+			final Label azhLabel1 = JavaFxHelper.createLabel("Zombie Trapper", Color.WHITE, "-fx-font-weight: bold; -fx-font-size: 12pt;");
+			azhVbox.getChildren().add(azhLabel1);
+			zombiePenaltyEnableLabel = JavaFxHelper.createLabel("", Color.ORANGE, "-fx-font-weight: bold; -fx-font-size: 10pt;", new Insets(0, 0, 0, 0));
+			zombiePenaltyEnableLabel.textProperty().bind(zombiePenaltyEnableString);
+			azhVbox.getChildren().add(zombiePenaltyEnableLabel);
+			final Label azhLabel2 = JavaFxHelper.createLabel("", Color.WHITE, "-fx-font-weight: bold;");
+			azhLabel2.textProperty().bind(zombiePenaltyAccruedString);
+			azhVbox.getChildren().add(azhLabel2);
+			final Label azhLabel2a = JavaFxHelper.createLabel("", Color.WHITE, "-fx-font-weight: bold;");
+			azhLabel2a.textProperty().bind(zombiePenaltyAccruedString2);
+			azhVbox.getChildren().add(azhLabel2a);
+			final Label azhLabel3 = JavaFxHelper.createLabel("", Color.WHITE, "-fx-font-weight: bold;");
+			azhLabel3.textProperty().bind(zombiePenaltyWaitString);
+			azhVbox.getChildren().add(azhLabel3);
+			pauseControlBox.getChildren().add(azhVbox);
+			final Label azhLabel4 = JavaFxHelper.createLabel("", Color.WHITE, "");
+			azhLabel4.textProperty().bind(zombiePenaltyValString1);
+			azhVbox.getChildren().add(azhLabel4);
+			final Label azhLabel5 = JavaFxHelper.createLabel("", Color.WHITE, "");
+			azhLabel5.textProperty().bind(zombiePenaltyValString2);
+			azhVbox.getChildren().add(azhLabel5);
+			final Label azhLabel6 = JavaFxHelper.createLabel("", Color.WHITE, "");
+			azhLabel6.textProperty().bind(zombiePenaltyValString3);
+			azhVbox.getChildren().add(azhLabel6);
+			
 			hbox.getChildren().add(pauseControlBox);
 
 			hbox.getChildren().add(new Separator(Orientation.VERTICAL));
@@ -954,8 +990,9 @@ public class MainDialog extends Application
 			this.addEventSummaryToStatusBox(statusBox, "When AFK block starts", NMOConfiguration.INSTANCE.events.afkStarted);
 			this.addEventSummaryToStatusBox(statusBox, "When AFK block ends", NMOConfiguration.INSTANCE.events.afkEnded);
 			this.addEventSummaryToStatusBox(statusBox, "On first activity warning", NMOConfiguration.INSTANCE.events.activityWarning1);
-			this.addEventSummaryToStatusBox(statusBox, "On oversleep warning (activity warning " + NMOConfiguration.INSTANCE.oversleepWarningThreshold + ")", NMOConfiguration.INSTANCE.events.oversleepWarning);
-			this.addEventSummaryToStatusBox(statusBox, "On all other warnings", NMOConfiguration.INSTANCE.events.activityWarning2);
+			this.addEventSummaryToStatusBox(statusBox, "On oversleep activity warning (#" + NMOConfiguration.INSTANCE.oversleepWarningThreshold + ")", NMOConfiguration.INSTANCE.events.oversleepWarning);
+			this.addEventSummaryToStatusBox(statusBox, "On all other activity warnings", NMOConfiguration.INSTANCE.events.activityWarning2);
+			this.addEventSummaryToStatusBox(statusBox, "When zombie penalty limit is reached", NMOConfiguration.INSTANCE.events.zombiePenaltyLimitReached);
 			this.addEventSummaryToStatusBox(statusBox, "When manually pausing", NMOConfiguration.INSTANCE.events.pauseInitiated);
 			this.addEventSummaryToStatusBox(statusBox, "When manually unpausing", NMOConfiguration.INSTANCE.events.pauseCancelled);
 			this.addEventSummaryToStatusBox(statusBox, "When pause auto-expires", NMOConfiguration.INSTANCE.events.pauseExpired);
@@ -1590,9 +1627,15 @@ public class MainDialog extends Application
 		}
 
 		long noww = System.currentTimeMillis();
+		long zombieWeightDiff;
 		if (now > noww)
 		{
 			triggerEvent("Clock went backwards by " + (now - noww) + "ms!", null);
+			zombieWeightDiff = 0;
+		}
+		else
+		{
+			zombieWeightDiff = noww - now;
 		}
 		now = noww;
 		boolean paused = pausedUntil > now;
@@ -1807,6 +1850,8 @@ public class MainDialog extends Application
 		if (paused)
 		{
 			resetActivityTimer(PAUSE_ACTIVITY_SOURCE);
+			zombieDetectionPenaltyWait = 0;
+			zombieDetectionPenalty = 0;
 		}
 		if (pendingTimer != null)
 		{
@@ -1814,6 +1859,8 @@ public class MainDialog extends Application
 			{
 				resetActivityTimer(TIMER_ACTIVITY_SOURCE);
 				this.setNextActivityWarningForTimer(pendingTimer, 0);
+				zombieDetectionPenaltyWait = 0;
+				zombieDetectionPenalty = 0;
 			}
 			pendingTimer = null;
 		}
@@ -1840,15 +1887,30 @@ public class MainDialog extends Application
 					if (nextActivityWarningID == 1)
 					{
 						triggerEvent(pros + "(" + nextActivityWarningID + "): No activity detected for " + nawtd + " seconds", NMOConfiguration.INSTANCE.events.activityWarning1);
+						if (timer.zombiePenaltyLimit > 0)
+						{
+							zombieDetectionPenalty += timer.zombiePenaltyForFirstWarning * 1000;
+							zombieDetectionPenaltyWait += timer.secondsForFirstWarning * 1000;
+						}
 					}
 					else if (nextActivityWarningID >= NMOConfiguration.INSTANCE.oversleepWarningThreshold && !oversleepWarningTriggered)
 					{
 						triggerEvent(pros + "(" + nextActivityWarningID + "): No activity detected for " + nawtd + " seconds", NMOConfiguration.INSTANCE.events.oversleepWarning);
+						if (timer.zombiePenaltyLimit > 0)
+						{
+							zombieDetectionPenalty += timer.zombiePenaltyForOversleepWarning * 1000;
+							zombieDetectionPenaltyWait += timer.secondsForSubsequentWarnings * 1000;
+						}
 						oversleepWarningTriggered = true;
 					}
 					else
 					{
 						triggerEvent(pros + "(" + nextActivityWarningID + "): No activity detected for " + nawtd + " seconds", NMOConfiguration.INSTANCE.events.activityWarning2);
+						if (timer.zombiePenaltyLimit > 0)
+						{
+							zombieDetectionPenalty += timer.zombiePenaltyForOtherWarnings * 1000;
+							zombieDetectionPenaltyWait += timer.secondsForSubsequentWarnings * 1000;
+						}
 					}
 				}
 				catch (Exception e)
@@ -1858,8 +1920,52 @@ public class MainDialog extends Application
 			}
 			String humanlyReadableTimeDiff = String.format("%.3f", timeDiff / 1000.0);
 			timeDiffString.set("Time difference: " + humanlyReadableTimeDiff + "s (next warning: " + nawtd + "s)");
+
+			if (timer.zombiePenaltyLimit > 0)
+			{
+				zombieDetectionPenaltyWait -= zombieWeightDiff;
+				if (zombieDetectionPenaltyWait < 0)
+				{
+					zombieDetectionPenalty = Math.max(0, zombieDetectionPenalty + zombieDetectionPenaltyWait);
+					zombieDetectionPenaltyWait = 0;
+				}
+				if (zombieDetectionPenalty >= (timer.zombiePenaltyLimit*1000))
+				{
+					triggerEvent("Zombie penalty limit was reached", NMOConfiguration.INSTANCE.events.zombiePenaltyLimitReached);
+					zombieDetectionPenalty = timer.zombiePenaltyLimit*1000 - 1;
+				}
+			}
+			else
+			{
+				zombieDetectionPenalty = 0;
+				zombieDetectionPenaltyWait = 0;
+			}
 		}
 		activeTimerString.set("Active timer:   " + timer.name + " (" + timer.secondsForFirstWarning + "s/" + timer.secondsForSubsequentWarnings + "s)");
+		if (timer.zombiePenaltyLimit > 0)
+		{
+			zombiePenaltyEnableLabel.setTextFill(Color.LIME);
+			zombiePenaltyEnableString.set("ENABLED");
+			String humanlyReadablePenalty = String.format("%.3f", zombieDetectionPenalty / 1000.0);
+			zombiePenaltyAccruedString.set("Current penalty: " + humanlyReadablePenalty + "s");
+			zombiePenaltyAccruedString2.set("   (allowed limit is " + timer.zombiePenaltyLimit + "s)");
+			String humanlyReadablePenaltyWait = String.format("%.3f", zombieDetectionPenaltyWait / 1000.0);
+			zombiePenaltyWaitString.set("Penalty reduction starts in " + humanlyReadablePenaltyWait + "s");
+			zombiePenaltyValString1.set("First warning gives " + timer.zombiePenaltyForFirstWarning + "s penalty");
+			zombiePenaltyValString2.set("Oversleep warning gives " + timer.zombiePenaltyForOversleepWarning + "s penalty");
+			zombiePenaltyValString3.set("Other warnings give " + timer.zombiePenaltyForOtherWarnings + "s penalty");
+		}
+		else
+		{
+			zombiePenaltyEnableLabel.setTextFill(Color.RED);
+			zombiePenaltyEnableString.set("DISABLED");
+			zombiePenaltyAccruedString.set("");
+			zombiePenaltyAccruedString2.set("");
+			zombiePenaltyWaitString.set("");
+			zombiePenaltyValString1.set("");
+			zombiePenaltyValString2.set("");
+			zombiePenaltyValString3.set("");
+		}
 
 		if (NMOConfiguration.INSTANCE.integrations.pavlok.enabled)
 		{

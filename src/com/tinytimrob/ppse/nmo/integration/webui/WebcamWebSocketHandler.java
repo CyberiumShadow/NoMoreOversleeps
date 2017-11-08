@@ -87,7 +87,7 @@ public class WebcamWebSocketHandler implements Runnable
 		if (NMOConfiguration.INSTANCE.integrations.webUI.readProxyForwardingHeaders)
 		{
 			String xff = session.getUpgradeRequest().getHeader("X-Forwarded-For");
-			if (!xff.isEmpty())
+			if (xff != null && !xff.isEmpty())
 			{
 				this.connectionIP = "/" + xff.split("\\Q, \\E")[0];
 			}

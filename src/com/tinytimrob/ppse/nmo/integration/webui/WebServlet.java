@@ -64,6 +64,9 @@ public class WebServlet extends HttpServlet
 
 		@Expose
 		public String ha_state;
+
+		@Expose
+		public String zombie_state;
 	}
 
 	private static final long serialVersionUID = 6713485873809808119L;
@@ -232,6 +235,7 @@ public class WebServlet extends HttpServlet
 		ActivitySource lastSource = MainDialog.lastActivitySourceObject;
 		data.activity = isPaused ? "Disabled while paused" : CommonUtils.convertTimestamp(lastSource.time) + " (" + String.format("%.3f", (now - lastSource.time) / 1000.0) + "s ago from " + lastSource.type + ")";
 		data.active_timer = MainDialog.timer == null ? "null" : MainDialog.timer.name + " (" + MainDialog.timer.secondsForFirstWarning + "s/" + MainDialog.timer.secondsForSubsequentWarnings + "s)";
+		data.active_timer += "<br/>with oversleep warning on warning #" + NMOConfiguration.INSTANCE.oversleepWarningThreshold;
 		if (isPaused)
 		{
 			data.pause_state = "PAUSED for \"" + MainDialog.pauseReason + "\" until " + CommonUtils.dateFormatter.format(MainDialog.pausedUntil);
@@ -286,6 +290,14 @@ public class WebServlet extends HttpServlet
 			data.schedule_name += "<br/>Started: " + CommonUtils.dateFormatter.format(NMOStatistics.INSTANCE.scheduleStartedOn) + "<br/>(" + FormattingHelper.formatTimeElapsedWithDays(now, NMOStatistics.INSTANCE.scheduleStartedOn) + " ago)";
 		}
 		data.schedule = MainDialog.scheduleStatus;
+		if (MainDialog.timer.zombiePenaltyLimit == 0)
+		{
+			data.zombie_state = "<b>DISABLED</b>";
+		}
+		else
+		{
+			data.zombie_state = "<b>ENABLED</b> - " + MainDialog.timer.secondsForFirstWarning + "s for first warning, " + MainDialog.timer.zombiePenaltyForOversleepWarning + "s for oversleep warning, " + MainDialog.timer.zombiePenaltyForOtherWarnings + "s for other warnings<br/>Penalty limit: " + MainDialog.timer.zombiePenaltyLimit + "s<br/>Current penalty: " + String.format("%.3f", MainDialog.zombieDetectionPenalty / 1000.0f) + "s<br/>Penalty reduction starts in " + String.format("%.3f", MainDialog.zombieDetectionPenaltyWait / 1000.0f) + "s";
+		}
 		response.getWriter().append(CommonUtils.GSON.toJson(data));
 	}
 
@@ -307,7 +319,7 @@ public class WebServlet extends HttpServlet
 						if (NMOConfiguration.INSTANCE.integrations.webUI.readProxyForwardingHeaders)
 						{
 							String xff = request.getHeader("X-Forwarded-For");
-							if (!xff.isEmpty())
+							if (xff != null && !xff.isEmpty())
 							{
 								requestIP = xff.split("\\Q, \\E")[0];
 							}

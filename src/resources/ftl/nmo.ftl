@@ -219,6 +219,10 @@ fieldset[disabled] .btn-nmo-purp.active {
         <td id="nmo_activity">?</td>
       </tr>
       <tr>
+        <td style="width:230px;"><strong>Zombie trapper</strong></td>
+        <td id="nmo_zombie_state">?</td>
+      </tr>
+      <tr>
         <td style="width:230px;"><strong>Camera sockets open</strong></td>
         <td id="nmo_conn_count">?</td>
       </tr>
@@ -325,6 +329,7 @@ fieldset[disabled] .btn-nmo-purp.active {
                     $('#nmo_schedule_name').html(json.schedule_name);
                     $('#nmo_noise_state').html(json.noise_state);
                     $('#nmo_ha_state').html(json.ha_state);
+                    $('#nmo_zombie_state').html(json.zombie_state);
                 }
             });
             

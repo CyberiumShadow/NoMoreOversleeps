@@ -126,7 +126,7 @@ public class IntegrationWemo extends Integration
 				@Override
 				public boolean isHiddenFromFrontend()
 				{
-					return false;
+					return entry.hidden;
 				}
 
 				@Override

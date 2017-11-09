@@ -671,7 +671,7 @@ public class MainDialog extends Application
 			unpauseButton.disableProperty().bind(isCurrentlyPaused.not());
 			pauseControlBox.getChildren().add(unpauseButton);
 			pauseControlBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
-			
+
 			VBox azhVbox = new VBox();
 			azhVbox.setSpacing(1);
 			final Label azhLabel1 = JavaFxHelper.createLabel("Zombie Trapper", Color.WHITE, "-fx-font-weight: bold; -fx-font-size: 12pt;");
@@ -698,7 +698,7 @@ public class MainDialog extends Application
 			final Label azhLabel6 = JavaFxHelper.createLabel("", Color.WHITE, "");
 			azhLabel6.textProperty().bind(zombiePenaltyValString3);
 			azhVbox.getChildren().add(azhLabel6);
-			
+
 			hbox.getChildren().add(pauseControlBox);
 
 			hbox.getChildren().add(new Separator(Orientation.VERTICAL));
@@ -1929,10 +1929,10 @@ public class MainDialog extends Application
 					zombieDetectionPenalty = Math.max(0, zombieDetectionPenalty + zombieDetectionPenaltyWait);
 					zombieDetectionPenaltyWait = 0;
 				}
-				if (zombieDetectionPenalty >= (timer.zombiePenaltyLimit*1000))
+				if (zombieDetectionPenalty >= (timer.zombiePenaltyLimit * 1000))
 				{
 					triggerEvent("Zombie penalty limit was reached", NMOConfiguration.INSTANCE.events.zombiePenaltyLimitReached);
-					zombieDetectionPenalty = timer.zombiePenaltyLimit*1000 - 1;
+					zombieDetectionPenalty = timer.zombiePenaltyLimit * 1000 - 1;
 				}
 			}
 			else

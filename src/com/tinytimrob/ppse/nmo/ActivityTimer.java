@@ -15,7 +15,7 @@ public class ActivityTimer
 
 	@Expose
 	public long zombiePenaltyForFirstWarning = 0;
-	
+
 	@Expose
 	public long zombiePenaltyForOversleepWarning = 0;
 

@@ -49,56 +49,18 @@ public class IntegrationPhilipsHue extends Integration
 		{
 			final String bulbName = NMOConfiguration.INSTANCE.integrations.philipsHue.lights[i];
 			this.lightStates.put(bulbName, -1);
-			this.actions.put("/philipsHue/" + i + "/on", new Action()
-			{
-				@Override
-				public void onAction() throws Exception
-				{
-					IntegrationPhilipsHue.this.toggle(bulbName, true);
-				}
-
-				@Override
-				public String getName()
-				{
-					return "TURN ON " + bulbName;
-				}
-
-				@Override
-				public String getDescription()
-				{
-					return "Turns on Philips Hue light source '" + bulbName + "'.";
-				}
-
-				@Override
-				public boolean isHiddenFromFrontend()
-				{
-					return false;
-				}
-
-				@Override
-				public boolean isHiddenFromWebUI()
-				{
-					return false;
-				}
-
-				@Override
-				public boolean isBlockedFromWebUI()
-				{
-					return false;
-				}
-			});
 			this.actions.put("/philipsHue/" + i + "/off", new Action()
 			{
 				@Override
 				public void onAction() throws Exception
 				{
-					IntegrationPhilipsHue.this.toggle(bulbName, false);
+					IntegrationPhilipsHue.this.setBrightness(bulbName, 0);
 				}
 
 				@Override
 				public String getName()
 				{
-					return "TURN OFF " + bulbName;
+					return "SET " + bulbName + " TO OFF";
 				}
 
 				@Override
@@ -125,12 +87,165 @@ public class IntegrationPhilipsHue extends Integration
 					return false;
 				}
 			});
+			this.actions.put("/philipsHue/" + i + "/25", new Action()
+			{
+				@Override
+				public void onAction() throws Exception
+				{
+					IntegrationPhilipsHue.this.setBrightness(bulbName, 63);
+				}
+
+				@Override
+				public String getName()
+				{
+					return "SET " + bulbName + " TO 25%";
+				}
+
+				@Override
+				public String getDescription()
+				{
+					return "Turns on Philips Hue light source '" + bulbName + "' and sets brightness to 25%.";
+				}
+
+				@Override
+				public boolean isHiddenFromFrontend()
+				{
+					return false;
+				}
+
+				@Override
+				public boolean isHiddenFromWebUI()
+				{
+					return false;
+				}
+
+				@Override
+				public boolean isBlockedFromWebUI()
+				{
+					return false;
+				}
+			});
+			this.actions.put("/philipsHue/" + i + "/50", new Action()
+			{
+				@Override
+				public void onAction() throws Exception
+				{
+					IntegrationPhilipsHue.this.setBrightness(bulbName, 127);
+				}
+
+				@Override
+				public String getName()
+				{
+					return "SET " + bulbName + " TO 50%";
+				}
+
+				@Override
+				public String getDescription()
+				{
+					return "Turns on Philips Hue light source '" + bulbName + "' and sets brightness to 50%.";
+				}
+
+				@Override
+				public boolean isHiddenFromFrontend()
+				{
+					return false;
+				}
+
+				@Override
+				public boolean isHiddenFromWebUI()
+				{
+					return false;
+				}
+
+				@Override
+				public boolean isBlockedFromWebUI()
+				{
+					return false;
+				}
+			});
+			this.actions.put("/philipsHue/" + i + "/75", new Action()
+			{
+				@Override
+				public void onAction() throws Exception
+				{
+					IntegrationPhilipsHue.this.setBrightness(bulbName, 190);
+				}
+
+				@Override
+				public String getName()
+				{
+					return "SET " + bulbName + " TO 75%";
+				}
+
+				@Override
+				public String getDescription()
+				{
+					return "Turns on Philips Hue light source '" + bulbName + "' and sets brightness to 75%.";
+				}
+
+				@Override
+				public boolean isHiddenFromFrontend()
+				{
+					return false;
+				}
+
+				@Override
+				public boolean isHiddenFromWebUI()
+				{
+					return false;
+				}
+
+				@Override
+				public boolean isBlockedFromWebUI()
+				{
+					return false;
+				}
+			});
+			this.actions.put("/philipsHue/" + i + "/100", new Action()
+			{
+				@Override
+				public void onAction() throws Exception
+				{
+					IntegrationPhilipsHue.this.setBrightness(bulbName, 254);
+				}
+
+				@Override
+				public String getName()
+				{
+					return "SET " + bulbName + " TO 100%";
+				}
+
+				@Override
+				public String getDescription()
+				{
+					return "Turns on Philips Hue light source '" + bulbName + "' and sets brightness to 100%.";
+				}
+
+				@Override
+				public boolean isHiddenFromFrontend()
+				{
+					return false;
+				}
+
+				@Override
+				public boolean isHiddenFromWebUI()
+				{
+					return false;
+				}
+
+				@Override
+				public boolean isBlockedFromWebUI()
+				{
+					return false;
+				}
+			});
 			this.actions.put("/philipsHue/" + i + "/toggle", new Action()
 			{
 				@Override
 				public void onAction() throws Exception
 				{
-					IntegrationPhilipsHue.this.toggle(bulbName, IntegrationPhilipsHue.this.lightStates.get(bulbName) == -1);
+					boolean isOff = IntegrationPhilipsHue.this.lightStates.get(bulbName) == -1;
+					IntegrationPhilipsHue.this.setBrightness(bulbName, isOff ? 254 : 0);
 				}
 
 				@Override
@@ -282,16 +397,16 @@ public class IntegrationPhilipsHue extends Integration
 		// TODO Auto-generated method stub
 	}
 
-	public void toggle(String name, boolean state) throws IOException
+	public void setBrightness(String name, int brightness) throws IOException
 	{
 		PHLight light = this.lights.get(name);
 		if (light == null)
 			throw new IOException("No such light: " + name);
 		PHLightState lightState = new PHLightState();
-		lightState.setOn(state);
-		if (state)
+		lightState.setOn(brightness > 0);
+		if (brightness > 0)
 		{
-			lightState.setBrightness(Integer.MAX_VALUE, true);
+			lightState.setBrightness(brightness, true);
 		}
 		this.activeBridge.updateLightState(light, lightState);
 	}

@@ -31,6 +31,7 @@ public class TPLinkDevice
 	protected String send(String command) throws IOException
 	{
 		Socket socket = new Socket(this.ipAddress, 9999);
+		socket.setSoTimeout(1000);
 		OutputStream outputStream = socket.getOutputStream();
 		outputStream.write(this.encrypt(command));
 		InputStream inputStream = socket.getInputStream();

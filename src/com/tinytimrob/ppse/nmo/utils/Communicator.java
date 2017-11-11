@@ -42,10 +42,10 @@ public class Communicator
 
 		try
 		{
-			System.out.println("try connection to " + path);
+			log.info("Trying connection to " + path);
 			connection = (HttpURLConnection) new URL(path).openConnection();
-			connection.setConnectTimeout(15000);
-			connection.setReadTimeout(15000);
+			connection.setConnectTimeout(2000);
+			connection.setReadTimeout(2000);
 			connection.setUseCaches(false);
 			connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36"); //"NoMoreOversleeps/" + Main.VERSION.replace(" ", ""));
 			if (authorization != null)

@@ -86,7 +86,8 @@ public class IntegrationNoise extends Integration
 				@Override
 				public String getName()
 				{
-					return "PLAY " + noise.name;
+					String durationString = noise.duration == -1 ? "" : " (" + (noise.duration / 60) + ":" + StringUtils.leftPad("" + noise.duration % 60, 2, "0") + ")";
+					return "PLAY " + noise.name + durationString;
 				}
 
 				@Override

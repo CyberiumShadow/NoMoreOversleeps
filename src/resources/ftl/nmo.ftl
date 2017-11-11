@@ -189,7 +189,7 @@ fieldset[disabled] .btn-nmo-purp.active {
 </head>
 <body>
 <div class="container">
-<h1>NoMoreOversleeps WEB UI <small>v${version}</small> <a href="https://github.com/PolyphasicDevTeam/NoMoreOversleeps"><button type="submit" class="btn-sm btn-primary" style="padding:2px; position:relative; top:-4px;">Download source</button></a></h1>
+<h1>${username}'s NMO <small>- NoMoreOversleeps Web UI v${version}</small> <a href="https://github.com/PolyphasicDevTeam/NoMoreOversleeps"><button type="submit" class="btn-sm btn-primary" style="padding:2px; position:relative; top:-4px;">Download source</button></a></h1>
   <div style="clear:both; padding-top:4px;"></div>
   <h4>Status</h4>
   <table class="table table-striped">
@@ -240,6 +240,11 @@ fieldset[disabled] .btn-nmo-purp.active {
       </#if>
     </tbody>
   </table>
+  <hr/>
+  <div>
+  ${message}
+  </div>
+  <hr/>
   <div class="nmo-rhs-pane">
   	<#list webcams as cam>
   	<h4>${cam}</h4>

@@ -9,6 +9,9 @@ public class WebUIConfiguration
 	public boolean enabled = false;
 
 	@Expose
+	public String username = "";
+
+	@Expose
 	public boolean openUiLocally = false;
 
 	@Expose
@@ -25,6 +28,9 @@ public class WebUIConfiguration
 
 	@Expose
 	public boolean readProxyForwardingHeaders = false;
+
+	@Expose
+	public String message = "";
 
 	@Expose
 	public DynDnsUpdateConfiguration ddns = new DynDnsUpdateConfiguration();
@@ -57,6 +63,9 @@ public class WebUIConfiguration
 	{
 		@Expose
 		public boolean enabled = false;
+
+		@Expose
+		public String server = "http://uw.polyphasic.net/";
 
 		@Expose
 		public int framesToAverage = 20;

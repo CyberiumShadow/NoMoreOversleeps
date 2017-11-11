@@ -20,6 +20,7 @@ import com.tinytimrob.ppse.nmo.ActivitySource;
 import com.tinytimrob.ppse.nmo.Integration;
 import com.tinytimrob.ppse.nmo.Main;
 import com.tinytimrob.ppse.nmo.MainDialog;
+import com.tinytimrob.ppse.nmo.SleepEntry;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
 import com.tinytimrob.ppse.nmo.config.NMOStatistics;
 import com.tinytimrob.ppse.nmo.integration.noise.IntegrationNoise;
@@ -160,6 +161,8 @@ public class WebServlet extends HttpServlet
 		model.put("actionButtons", this.determineWebUIButtons());
 		model.put("webcamKey", NMOConfiguration.INSTANCE.integrations.webUI.webcamSecurityKey);
 		model.put("camTotal", WebcamCapture.webcams.length);
+		model.put("message", NMOConfiguration.INSTANCE.integrations.webUI.message);
+		model.put("username", NMOConfiguration.INSTANCE.integrations.webUI.username);
 		String[] cc = new String[WebcamCapture.webcams.length];
 		for (int i = 0; i < WebcamCapture.webcams.length; i++)
 		{
@@ -284,11 +287,20 @@ public class WebServlet extends HttpServlet
 		{
 			sn = "UNKNOWN SCHEDULE";
 		}
-		data.schedule_name = "<b>" + sn + "</b>";
+		data.schedule_name = "<b>" + sn + "</b><ul>";
+		for (SleepEntry se : NMOConfiguration.INSTANCE.schedule)
+		{
+			data.schedule_name += "<li>" + se.describeTime() + " -- " + se.name + "</li>";
+		}
+		data.schedule_name += "</ul>";
 		if (NMOStatistics.INSTANCE.scheduleStartedOn > 0)
 		{
-			data.schedule_name += "<br/>Started: " + CommonUtils.dateFormatter.format(NMOStatistics.INSTANCE.scheduleStartedOn) + "<br/>(" + FormattingHelper.formatTimeElapsedWithDays(now, NMOStatistics.INSTANCE.scheduleStartedOn) + " ago)";
-		}
+			data.schedule_name += "Started on " + CommonUtils.dateFormatter.format(NMOStatistics.INSTANCE.scheduleStartedOn) + " &nbsp; (" + FormattingHelper.formatTimeElapsedWithDays(now, NMOStatistics.INSTANCE.scheduleStartedOn) + " ago)";
+		
+		if (NMOStatistics.INSTANCE.scheduleLastOversleep != NMOStatistics.INSTANCE.scheduleStartedOn)
+		{
+			data.schedule_name += "<br/>Last overslept on " + CommonUtils.dateFormatter.format(NMOStatistics.INSTANCE.scheduleLastOversleep) + " &nbsp; (" + FormattingHelper.formatTimeElapsedWithDays(now, NMOStatistics.INSTANCE.scheduleLastOversleep) + " ago)";
+		}}
 		data.schedule = MainDialog.scheduleStatus;
 		if (MainDialog.timer.zombiePenaltyLimit == 0)
 		{

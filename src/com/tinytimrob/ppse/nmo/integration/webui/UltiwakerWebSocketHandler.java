@@ -132,7 +132,7 @@ public class UltiwakerWebSocketHandler
 				}
 			}
 			int perc = (int) ((positiveMatches / (float) results) * 100);
-			//log.info("Trend: " + positiveMatches + "/" + results + " eyes (" + perc + "%) were located");
+			log.info("Trend: " + positiveMatches + "/" + results + " eyes (" + perc + "%) were located");
 			if (perc >= NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.matchPercentageToResetTimer)
 			{
 				MainDialog.resetActivityTimer(ULTIWAKER_API);

@@ -126,6 +126,10 @@ public class IntegrationWebUI extends Integration
 				return "Disables camera privacy mode.";
 			}
 		});
+		if (NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.enabled)
+		{
+			new UltiwakerRecoveryThread().start();
+		}
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.tinytimrob.ppse.nmo;
 
+import java.util.Map;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
 
 public class ActivityTimerFakeIntegration extends Integration
@@ -38,7 +39,7 @@ public class ActivityTimerFakeIntegration extends Integration
 				this.actions.put("/timer/" + i, new Action()
 				{
 					@Override
-					public void onAction() throws Exception
+					public void onAction(Map<String, String[]> parameters) throws Exception
 					{
 						MainDialog.pendingTimer = timer;
 					}

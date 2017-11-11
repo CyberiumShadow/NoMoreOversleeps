@@ -33,10 +33,10 @@ form {
 	width: 348px !important;
 }
 .nmo-pause-button {
-	width: 128px !important;
+	width: 143px !important;
 }
 .nmo-unpause-button {
-	width: 388px !important;
+	width: 433px !important;
 }
 .btn {
 	padding: 3px !important;
@@ -185,9 +185,61 @@ fieldset[disabled] .btn-nmo-purp.active {
  	text-align: right;
  }
 }
+.btn-basic {
+    background-color: #444;
+    color: white;
+}
+.btn-basic:hover {
+    background-color: #333;
+    color: white;
+}
+.btn-basic:focus {
+    background-color: #333;
+    color: white;
+}
 </style>
 </head>
 <body>
+<!-- Modal -->
+<div class="modal fade" id="nmo-pause-modal" tabindex="-1" role="dialog" aria-labelledby="nmo-pause-modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Pause for <span id="nmo-pause-length-1">DURATION</span></h4>
+      </div>
+      <form data-toggle="validator" id="nmo-pause-form" method="POST" data-js-ajax-form="true" action="" class="form-horizontal" role="form" style="width: 100%">
+      	<div class="modal-body" style="padding: 10px;">
+		    <div style="padding: 10px; background-color: #aa0000; text-align: center;">
+		    	<h1 style="margin: 0; font-weight: bolder; font-size: 48px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="padding-right:22px"></i>STOP AND THINK !!</h1>
+				<h3 style="margin: 10 0 0 0; font-weight: bold; line-height: 36px;">DO YOU REALLY NEED TO PAUSE<br>FOR <span id="nmo-pause-length-2">DURATION</span> ?</h3>
+			</div>
+			<div style="padding: 10px 10px 0px 10px;font-size: 21px;">
+		        <p style="margin: 10px 0px 20px 0px">If you are absolutely sure you need to pause:</p>
+					<div class="form-group">
+						<label class="col-sm-5 control-label" for="reason">Input pause reason:</label>
+						<div class="col-sm-7">
+							<input type="text" class="form-control" id="reason" name="reason" placeholder="" required>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-5 control-label" for="captcha">Solve captcha:</label>
+						<div class="col-sm-4">
+							<img id="captcha-image" src="" width=160 height=50 />
+						</div>
+						<div class="col-sm-3">
+							<input data-remote="/path/to/remote/validator?test=stuff" type="text" class="form-control" id="captcha" name="captcha" placeholder="" required>
+						</div>
+					</div>
+		    </div>
+		</div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-lg btn-primary" style="padding: 10px !important;">Confirm pause</button>
+      </div>
+    </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <div class="container">
 <h1>${username}'s NMO <small>- NoMoreOversleeps Web UI v${version}</small> <a href="https://github.com/PolyphasicDevTeam/NoMoreOversleeps"><button type="submit" class="btn-sm btn-primary" style="padding:2px; position:relative; top:-4px;">Download source</button></a></h1>
   <div style="clear:both; padding-top:4px;"></div>
@@ -253,28 +305,28 @@ fieldset[disabled] .btn-nmo-purp.active {
   </div>
   <#if integration_pause>
   <div class="nmo-rhs-pane" style="margin-top: 10px">
-  	<h4>Pause Controls</h4>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/5"><button type="submit" class="btn btn-basic nmo-pause-button">5m</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/10"><button type="submit" class="btn btn-basic nmo-pause-button">10m</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/15"><button type="submit" class="btn btn-basic nmo-pause-button">15m</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/20"><button type="submit" class="btn btn-basic nmo-pause-button">20m</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/25"><button type="submit" class="btn btn-basic nmo-pause-button">25m</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/30"><button type="submit" class="btn btn-basic nmo-pause-button">30m</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/45"><button type="submit" class="btn btn-basic nmo-pause-button">45m</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/60"><button type="submit" class="btn btn-basic nmo-pause-button">1h</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/90"><button type="submit" class="btn btn-basic nmo-pause-button">1h30m</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/105"><button type="submit" class="btn btn-basic nmo-pause-button">1h45m</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/120"><button type="submit" class="btn btn-basic nmo-pause-button">2h</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/180"><button type="submit" class="btn btn-basic nmo-pause-button">3h</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/240"><button type="submit" class="btn btn-basic nmo-pause-button">4h</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/300"><button type="submit" class="btn btn-basic nmo-pause-button">5h</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/360"><button type="submit" class="btn btn-basic nmo-pause-button">6h</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/420"><button type="submit" class="btn btn-basic nmo-pause-button">7h</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/480"><button type="submit" class="btn btn-basic nmo-pause-button">8h</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/540"><button type="submit" class="btn btn-basic nmo-pause-button">9h</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/600"><button type="submit" class="btn btn-basic nmo-pause-button">10h</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/660"><button type="submit" class="btn btn-basic nmo-pause-button">11h</button></form>
-  	<form method="POST" data-js-ajax-form="true" action="/ui/pause/720"><button type="submit" class="btn btn-basic nmo-pause-button">12h</button></form>
+  	<h4>Pause controls</h4>
+	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(5, '5m');">5m</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(10, '10m');">10m</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(15, '15m');">15m</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(20, '20m');">20m</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(25, '25m');">25m</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(30, '30m');">30m</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(45, '45m');">45m</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(60, '1h');">1h</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(90, '1h30m');">1h30m</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(105, '1h45m');">1h45m</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(120, '2h');">2h</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(180, '3h');">3h</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(240, '4h');">4h</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(300, '5h');">5h</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(360, '6h');">6h</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(420, '7h');">7h</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(480, '8h');">8h</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(540, '9h');">9h</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(600, '10h');">10h</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(660, '11h');">11h</button></form>
+  	<form><button type="button" class="btn btn-basic nmo-pause-button" onclick="clickPauseButton(720, '12h');">12h</button></form>
   	<form method="POST" data-js-ajax-form="true" action="/ui/pause/0"><button type="submit" class="btn btn-basic nmo-unpause-button">UNPAUSE</button></form>
   </div>
   </#if>
@@ -316,6 +368,19 @@ fieldset[disabled] .btn-nmo-purp.active {
 	    return scope;
 	}
 
+	function clickPauseButton(durationValue, durationText)
+	{
+		var seed = "" + Math.floor(Math.random() * 123456789)
+		$('#nmo-pause-length-1').text(durationText);
+		$('#nmo-pause-length-2').text(durationText);
+		$('#reason').val('');
+		$('#captcha').val('');
+		$("#captcha").attr("data-remote", "/validate-captcha?seed=" + seed);
+		$('#captcha-image').attr('src', "/captcha.png?seed=" + seed);
+		$("#nmo-pause-form").attr("action", "/ui/pause/" + durationValue);
+		$('.form-group').removeClass('has-error has-feedback has-danger');
+		$('#nmo-pause-modal').modal('show');
+	}
 
     $(document).ready(function() {
         function pollState() {
@@ -356,24 +421,27 @@ fieldset[disabled] .btn-nmo-purp.active {
         *	(If this data attribute is not provided, nothing will be called.)
         *
         */
-        $("form[data-js-ajax-form]").submit(function(event){
-        	event.preventDefault();
-        	
-        	var form_data = $(this).serialize();
-        	if (form_data != '') {
-           	    form_data += '&';
-        	}
-        	form_data += 'ajax_form=true';
-        	var callback_fun = getFunctionFromString($(this).data('js-ajax-form-callback'));
-        	        	
-        	$.ajax($(this).attr('action'), {
-        	    method: $(this).attr('method'),
-        	    data: form_data
-        	}).done(function(ajax_result) {
-        		if (typeof callback_fun === 'function') {
-        			callback_fun(ajax_result);
-        		}
-        	});
+        $("form[data-js-ajax-form]").validator().on( "submit", function(event){
+        	if (!event.isDefaultPrevented()) {
+	        	event.preventDefault();
+	        	var form_data = $(this).serialize();
+	        	if (form_data != '') {
+	           	    form_data += '&';
+	        	}
+	        	form_data += 'ajax_form=true';
+	        	var callback_fun = getFunctionFromString($(this).data('js-ajax-form-callback'));
+	        	        	
+	        	$.ajax($(this).attr('action'), {
+	        	    method: $(this).attr('method'),
+	        	    data: form_data
+	        	}).done(function(ajax_result) {
+	        		if (typeof callback_fun === 'function') {
+	        			callback_fun(ajax_result);
+	        		}
+	        	});
+	        	
+	        	$('#nmo-pause-modal').modal('hide');
+	        }
         });
 
 		var socket_security = 'ws';

@@ -1,5 +1,6 @@
 package com.tinytimrob.ppse.nmo;
 
+import java.util.Map;
 import com.tinytimrob.ppse.nmo.config.NMOStatistics;
 
 public class ScheduleFakeIntegration extends Integration
@@ -25,7 +26,7 @@ public class ScheduleFakeIntegration extends Integration
 			this.actions.put("/schedule/resetLastOversleep", new Action()
 			{
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					NMOStatistics.INSTANCE.scheduleLastOversleep = System.currentTimeMillis();
 					try

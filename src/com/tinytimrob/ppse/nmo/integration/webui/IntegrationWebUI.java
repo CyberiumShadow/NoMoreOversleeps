@@ -1,6 +1,7 @@
 package com.tinytimrob.ppse.nmo.integration.webui;
 
 import java.net.InetAddress;
+import java.util.Map;
 import org.apache.logging.log4j.Logger;
 import com.tinytimrob.common.CommonUtils;
 import com.tinytimrob.common.LogWrapper;
@@ -53,7 +54,7 @@ public class IntegrationWebUI extends Integration
 		this.actions.put("/webUI/cameraprivacy/on", new Action()
 		{
 			@Override
-			public void onAction() throws Exception
+			public void onAction(Map<String, String[]> parameters) throws Exception
 			{
 				WebcamCapture.privacyMode = true;
 			}
@@ -91,7 +92,7 @@ public class IntegrationWebUI extends Integration
 		this.actions.put("/webUI/cameraprivacy/off", new Action()
 		{
 			@Override
-			public void onAction() throws Exception
+			public void onAction(Map<String, String[]> parameters) throws Exception
 			{
 				WebcamCapture.privacyMode = false;
 			}

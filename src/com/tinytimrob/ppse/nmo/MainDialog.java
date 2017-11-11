@@ -360,7 +360,7 @@ public class MainDialog extends Application
 					try
 					{
 						triggerEvent("<" + clickableButton.getName() + "> from frontend", null);
-						clickableButton.onAction();
+						clickableButton.onAction(null);
 					}
 					catch (Exception e)
 					{
@@ -2134,7 +2134,7 @@ public class MainDialog extends Application
 			{
 				try
 				{
-					aaction.onAction();
+					aaction.onAction(null);
 				}
 				catch (Exception e)
 				{

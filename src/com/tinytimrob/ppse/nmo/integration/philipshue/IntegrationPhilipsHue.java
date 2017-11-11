@@ -3,6 +3,7 @@ package com.tinytimrob.ppse.nmo.integration.philipshue;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.logging.log4j.Logger;
 import com.philips.lighting.hue.sdk.PHAccessPoint;
 import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
@@ -52,7 +53,7 @@ public class IntegrationPhilipsHue extends Integration
 			this.actions.put("/philipsHue/" + i + "/off", new Action()
 			{
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					IntegrationPhilipsHue.this.setBrightness(bulbName, 0);
 				}
@@ -90,7 +91,7 @@ public class IntegrationPhilipsHue extends Integration
 			this.actions.put("/philipsHue/" + i + "/25", new Action()
 			{
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					IntegrationPhilipsHue.this.setBrightness(bulbName, 63);
 				}
@@ -128,7 +129,7 @@ public class IntegrationPhilipsHue extends Integration
 			this.actions.put("/philipsHue/" + i + "/50", new Action()
 			{
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					IntegrationPhilipsHue.this.setBrightness(bulbName, 127);
 				}
@@ -166,7 +167,7 @@ public class IntegrationPhilipsHue extends Integration
 			this.actions.put("/philipsHue/" + i + "/75", new Action()
 			{
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					IntegrationPhilipsHue.this.setBrightness(bulbName, 190);
 				}
@@ -204,7 +205,7 @@ public class IntegrationPhilipsHue extends Integration
 			this.actions.put("/philipsHue/" + i + "/100", new Action()
 			{
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					IntegrationPhilipsHue.this.setBrightness(bulbName, 254);
 				}
@@ -242,7 +243,7 @@ public class IntegrationPhilipsHue extends Integration
 			this.actions.put("/philipsHue/" + i + "/toggle", new Action()
 			{
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					boolean isOff = IntegrationPhilipsHue.this.lightStates.get(bulbName) == -1;
 					IntegrationPhilipsHue.this.setBrightness(bulbName, isOff ? 254 : 0);

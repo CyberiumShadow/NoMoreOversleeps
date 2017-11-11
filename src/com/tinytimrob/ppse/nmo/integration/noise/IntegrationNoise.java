@@ -78,7 +78,7 @@ public class IntegrationNoise extends Integration
 			this.actions.put("/noise/" + i, new Action()
 			{
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					IntegrationNoise.this.play(noise);
 				}
@@ -119,7 +119,7 @@ public class IntegrationNoise extends Integration
 		this.actions.put("/noise/stop", new Action()
 		{
 			@Override
-			public void onAction() throws Exception
+			public void onAction(Map<String, String[]> parameters) throws Exception
 			{
 				PlayingNoise[] noises = PLAYING_NOISES.toArray(new PlayingNoise[0]);
 				for (PlayingNoise noise : noises)

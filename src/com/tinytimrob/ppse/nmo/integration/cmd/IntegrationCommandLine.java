@@ -1,6 +1,7 @@
 package com.tinytimrob.ppse.nmo.integration.cmd;
 
 import java.io.File;
+import java.util.Map;
 import com.tinytimrob.ppse.nmo.Action;
 import com.tinytimrob.ppse.nmo.Integration;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
@@ -29,7 +30,7 @@ public class IntegrationCommandLine extends Integration
 			this.actions.put("/cmd/" + i, new Action()
 			{
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					Process process = new ProcessBuilder(command.command).directory(new File(command.workingDir)).start();
 				}

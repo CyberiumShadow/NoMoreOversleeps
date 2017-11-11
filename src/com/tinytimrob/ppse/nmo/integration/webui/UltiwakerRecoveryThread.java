@@ -8,7 +8,7 @@ import com.tinytimrob.ppse.nmo.utils.Communicator;
 public class UltiwakerRecoveryThread extends Thread
 {
 	private static final Logger log = LogWrapper.getLogger();
-	
+
 	public UltiwakerRecoveryThread()
 	{
 		this.setDaemon(true);
@@ -16,15 +16,16 @@ public class UltiwakerRecoveryThread extends Thread
 	}
 
 	int connectLoop = 105;
+
 	@Override
 	public void run()
 	{
 		while (true)
 		{
-			connectLoop ++;
-			if ((connectLoop % 120) == 0)
+			this.connectLoop++;
+			if ((this.connectLoop % 120) == 0)
 			{
-				connectLoop = 0;		
+				this.connectLoop = 0;
 				try
 				{
 					if (UltiwakerWebSocketHandler.connections.isEmpty())

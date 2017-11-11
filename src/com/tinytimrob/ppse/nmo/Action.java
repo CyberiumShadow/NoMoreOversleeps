@@ -1,13 +1,16 @@
 package com.tinytimrob.ppse.nmo;
 
+import java.util.Map;
+
 public interface Action
 {
 	/** 
 	 * Runs this action
+	 * @param parameters A list of optional parameters
 	 * 
 	 * @throws Exception
 	 */
-	public void onAction() throws Exception;
+	public void onAction(Map<String, String[]> parameters) throws Exception;
 
 	public String getName();
 

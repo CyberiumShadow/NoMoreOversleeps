@@ -34,6 +34,10 @@ import freemarker.core.ParseException;
 import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateNotFoundException;
+import nl.captcha.Captcha;
+import nl.captcha.backgrounds.GradiatedBackgroundProducer;
+import nl.captcha.gimpy.FishEyeGimpyRenderer;
+import nl.captcha.servlet.CaptchaServletUtil;
 
 public class WebServlet extends HttpServlet
 {
@@ -92,6 +96,14 @@ public class WebServlet extends HttpServlet
 		{
 			this.sendMainPage(response);
 		}
+		else if (PATH.equals("/validate-captcha"))
+		{
+			this.sendCaptchaValidation(request, response);
+		}
+		else if (PATH.equals("/captcha.png"))
+		{
+			this.getCaptchaImage(request, response);
+		}
 		else if (PATH.equals("/"))
 		{
 			response.sendRedirect("/ui/");
@@ -99,6 +111,62 @@ public class WebServlet extends HttpServlet
 		else
 		{
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+		}
+	}
+
+	private void getCaptchaImage(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String seed = request.getParameter("seed");
+		if (seed == null || seed.isEmpty())
+		{
+			response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+			return;
+		}
+		int seed_;
+		try
+		{
+			seed_ = Integer.parseInt(seed);
+		}
+		catch (NumberFormatException i)
+		{
+			response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+			return;
+		}
+		PredictableCaptchaTextProducer producer = new PredictableCaptchaTextProducer(seed_);
+		final Captcha captcha = new Captcha.Builder(160, 50).addText(producer).addBackground(new GradiatedBackgroundProducer()).addNoise().gimp(new FishEyeGimpyRenderer()).addBorder().build();
+		CaptchaServletUtil.writeImage(response, captcha.getImage());
+	}
+
+	private void sendCaptchaValidation(HttpServletRequest request, HttpServletResponse response) throws IOException
+	{
+		String seed = request.getParameter("seed");
+		String captcha = request.getParameter("captcha");
+		if (seed == null || captcha == null || seed.isEmpty() || captcha.isEmpty())
+		{
+			response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+			return;
+		}
+		int seed_;
+		try
+		{
+			seed_ = Integer.parseInt(seed);
+		}
+		catch (NumberFormatException i)
+		{
+			response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+			return;
+		}
+		PredictableCaptchaTextProducer producer = new PredictableCaptchaTextProducer(seed_);
+		String expectedCaptcha = producer.getText();
+		if (expectedCaptcha.equals(captcha))
+		{
+			response.sendError(HttpServletResponse.SC_OK);
+			return;
+		}
+		else
+		{
+			response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+			return;
 		}
 	}
 
@@ -296,11 +364,12 @@ public class WebServlet extends HttpServlet
 		if (NMOStatistics.INSTANCE.scheduleStartedOn > 0)
 		{
 			data.schedule_name += "Started on " + CommonUtils.dateFormatter.format(NMOStatistics.INSTANCE.scheduleStartedOn) + " &nbsp; (" + FormattingHelper.formatTimeElapsedWithDays(now, NMOStatistics.INSTANCE.scheduleStartedOn) + " ago)";
-		
-		if (NMOStatistics.INSTANCE.scheduleLastOversleep != NMOStatistics.INSTANCE.scheduleStartedOn)
-		{
-			data.schedule_name += "<br/>Last overslept on " + CommonUtils.dateFormatter.format(NMOStatistics.INSTANCE.scheduleLastOversleep) + " &nbsp; (" + FormattingHelper.formatTimeElapsedWithDays(now, NMOStatistics.INSTANCE.scheduleLastOversleep) + " ago)";
-		}}
+
+			if (NMOStatistics.INSTANCE.scheduleLastOversleep != NMOStatistics.INSTANCE.scheduleStartedOn)
+			{
+				data.schedule_name += "<br/>Last overslept on " + CommonUtils.dateFormatter.format(NMOStatistics.INSTANCE.scheduleLastOversleep) + " &nbsp; (" + FormattingHelper.formatTimeElapsedWithDays(now, NMOStatistics.INSTANCE.scheduleLastOversleep) + " ago)";
+			}
+		}
 		data.schedule = MainDialog.scheduleStatus;
 		if (MainDialog.timer.zombiePenaltyLimit == 0)
 		{
@@ -326,7 +395,7 @@ public class WebServlet extends HttpServlet
 					Action button = integrations.getActions().get(PATH.substring(3));
 					if (button != null && !button.isBlockedFromWebUI())
 					{
-						button.onAction();
+						button.onAction(request.getParameterMap());
 						String requestIP = request.getRemoteAddr();
 						if (NMOConfiguration.INSTANCE.integrations.webUI.readProxyForwardingHeaders)
 						{

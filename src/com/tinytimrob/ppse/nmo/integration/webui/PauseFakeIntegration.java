@@ -1,5 +1,6 @@
 package com.tinytimrob.ppse.nmo.integration.webui;
 
+import java.util.Map;
 import com.tinytimrob.common.CommonUtils;
 import com.tinytimrob.ppse.nmo.Action;
 import com.tinytimrob.ppse.nmo.Integration;
@@ -28,7 +29,7 @@ public class PauseFakeIntegration extends Integration
 		this.actions.put("/pause/0", new Action()
 		{
 			@Override
-			public void onAction() throws Exception
+			public void onAction(Map<String, String[]> parameters) throws Exception
 			{
 				Platform.runLater(new Runnable()
 				{
@@ -36,7 +37,8 @@ public class PauseFakeIntegration extends Integration
 					public void run()
 					{
 						MainDialog.pausedUntil = 0;
-						MainDialog.triggerEvent("Triggered unpause", NMOConfiguration.INSTANCE.events.pauseCancelled);
+						MainDialog.isCurrentlyPaused.set(false);
+						MainDialog.triggerEvent("Unpaused via action trigger", NMOConfiguration.INSTANCE.events.pauseCancelled);
 					}
 				});
 			}
@@ -78,16 +80,29 @@ public class PauseFakeIntegration extends Integration
 			this.actions.put("/pause/" + i, new Action()
 			{
 				@Override
-				public void onAction() throws Exception
+				public void onAction(final Map<String, String[]> parameters) throws Exception
 				{
 					Platform.runLater(new Runnable()
 					{
 						@Override
 						public void run()
 						{
+							if (parameters != null)
+							{
+								for (String k : parameters.keySet())
+								{
+									System.out.println(k + " = " + parameters.get(k)[0]);
+								}
+							}
+							String reason = getName();
+							;
+							if (parameters != null && parameters.containsKey("reason"))
+							{
+								reason = parameters.get("reason")[0];
+							}
 							MainDialog.pausedUntil = MainDialog.now + (j * 60000);
-							MainDialog.pauseReason = getName();
-							MainDialog.triggerEvent("Triggered pause for " + j + " minutes (until " + CommonUtils.dateFormatter.format(MainDialog.pausedUntil) + ")", NMOConfiguration.INSTANCE.events.pauseInitiated);
+							MainDialog.pauseReason = reason;
+							MainDialog.triggerEvent("Triggered pause for " + j + " minutes for \"" + reason + "\" (until " + CommonUtils.dateFormatter.format(MainDialog.pausedUntil) + ")", NMOConfiguration.INSTANCE.events.pauseInitiated);
 						}
 					});
 				}

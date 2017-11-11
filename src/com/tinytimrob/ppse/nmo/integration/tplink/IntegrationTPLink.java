@@ -1,5 +1,6 @@
 package com.tinytimrob.ppse.nmo.integration.tplink;
 
+import java.util.Map;
 import com.tinytimrob.ppse.nmo.Action;
 import com.tinytimrob.ppse.nmo.Integration;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
@@ -30,7 +31,7 @@ public class IntegrationTPLink extends Integration
 			this.actions.put("/tplink/" + i + "/on", new Action()
 			{
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					device.toggle(true);
 				}
@@ -68,7 +69,7 @@ public class IntegrationTPLink extends Integration
 			this.actions.put("/tplink/" + i + "/off", new Action()
 			{
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					device.toggle(false);
 				}
@@ -106,7 +107,7 @@ public class IntegrationTPLink extends Integration
 			this.actions.put("/tplink/" + i + "/toggle", new Action()
 			{
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					device.toggle(!device.isOn());
 				}

@@ -1,5 +1,6 @@
 package com.tinytimrob.ppse.nmo.integration.iterator;
 
+import java.util.Map;
 import com.tinytimrob.ppse.nmo.Action;
 import com.tinytimrob.ppse.nmo.Integration;
 import com.tinytimrob.ppse.nmo.Main;
@@ -32,7 +33,7 @@ public class IntegrationIterator extends Integration
 				String description = null;
 
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					String randPath = iterator.actions[iterator.option];
 					MainDialog.triggerEvent("Iterator " + iterator.name + " fired", new String[] { randPath });
@@ -91,7 +92,7 @@ public class IntegrationIterator extends Integration
 			this.actions.put("/iterator/" + i + "/reset", new Action()
 			{
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					iterator.option = 0;
 				}

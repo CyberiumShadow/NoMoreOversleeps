@@ -1,6 +1,7 @@
 package com.tinytimrob.ppse.nmo.integration.twilio;
 
 import java.net.URI;
+import java.util.Map;
 import org.apache.logging.log4j.Logger;
 import com.tinytimrob.common.LogWrapper;
 import com.tinytimrob.ppse.nmo.Action;
@@ -56,7 +57,7 @@ public class IntegrationTwilio extends Integration
 				}
 
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					IntegrationTwilio.this.call(number);
 				}

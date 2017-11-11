@@ -1,5 +1,6 @@
 package com.tinytimrob.ppse.nmo.integration.discord;
 
+import java.util.Map;
 import com.tinytimrob.common.CommonUtils;
 import com.tinytimrob.ppse.nmo.Action;
 import com.tinytimrob.ppse.nmo.Integration;
@@ -46,7 +47,7 @@ public class IntegrationDiscord extends Integration
 			this.actions.put("/discord/" + i, new Action()
 			{
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					IntegrationDiscord.this.send(message);
 				}

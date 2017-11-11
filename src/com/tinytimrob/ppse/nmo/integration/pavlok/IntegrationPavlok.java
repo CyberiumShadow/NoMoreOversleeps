@@ -1,5 +1,6 @@
 package com.tinytimrob.ppse.nmo.integration.pavlok;
 
+import java.util.Map;
 import org.apache.logging.log4j.Logger;
 import com.tinytimrob.common.LogWrapper;
 import com.tinytimrob.ppse.nmo.Action;
@@ -29,7 +30,7 @@ public class IntegrationPavlok extends Integration
 		this.actions.put("/pavlok/led", new Action()
 		{
 			@Override
-			public void onAction() throws Exception
+			public void onAction(Map<String, String[]> parameters) throws Exception
 			{
 				IntegrationPavlok.this.led(4, "Manually triggered LED flash");
 			}
@@ -67,7 +68,7 @@ public class IntegrationPavlok extends Integration
 		this.actions.put("/pavlok/beep", new Action()
 		{
 			@Override
-			public void onAction() throws Exception
+			public void onAction(Map<String, String[]> parameters) throws Exception
 			{
 				IntegrationPavlok.this.beep(255, "Manually triggered beep");
 			}
@@ -105,7 +106,7 @@ public class IntegrationPavlok extends Integration
 		this.actions.put("/pavlok/vibration", new Action()
 		{
 			@Override
-			public void onAction() throws Exception
+			public void onAction(Map<String, String[]> parameters) throws Exception
 			{
 				IntegrationPavlok.this.vibration(255, "Manually triggered vibration");
 			}
@@ -143,7 +144,7 @@ public class IntegrationPavlok extends Integration
 		this.actions.put("/pavlok/shock", new Action()
 		{
 			@Override
-			public void onAction() throws Exception
+			public void onAction(Map<String, String[]> parameters) throws Exception
 			{
 				IntegrationPavlok.this.shock(255, "Manually triggered shock");
 			}

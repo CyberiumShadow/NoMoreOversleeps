@@ -1,5 +1,6 @@
 package com.tinytimrob.ppse.nmo.integration.randomizer;
 
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import com.tinytimrob.ppse.nmo.Action;
 import com.tinytimrob.ppse.nmo.Integration;
@@ -33,7 +34,7 @@ public class IntegrationRandomizer extends Integration
 				String description = null;
 
 				@Override
-				public void onAction() throws Exception
+				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
 					int option = ThreadLocalRandom.current().nextInt(randomizer.actions.length);
 					String randPath = randomizer.actions[option];

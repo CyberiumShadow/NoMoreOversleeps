@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.logging.log4j.Logger;
 import com.tinytimrob.common.CommonUtils;
 import com.tinytimrob.common.LogWrapper;
+import com.tinytimrob.common.PlatformData;
 import com.tinytimrob.ppse.nmo.Action;
 import com.tinytimrob.ppse.nmo.Integration;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
@@ -35,6 +36,23 @@ public class IntegrationWebUI extends Integration
 		{
 			NMOConfiguration.INSTANCE.integrations.webUI.webcamSecurityKey = CommonUtils.generateAsciiCryptoKey(64);
 			NMOConfiguration.save();
+		}
+		if (CommonUtils.isNullOrEmpty(NMOConfiguration.INSTANCE.integrations.webUI.username))
+		{
+			NMOConfiguration.INSTANCE.integrations.webUI.username = PlatformData.computerName;
+			NMOConfiguration.save();
+		}
+		if (NMOConfiguration.INSTANCE.integrations.webUI.ddns.domain.contains(":"))
+		{
+			throw new RuntimeException("webUI domain not valid: " + NMOConfiguration.INSTANCE.integrations.webUI.ddns.domain);
+		}
+		if (NMOConfiguration.INSTANCE.integrations.webUI.readProxyForwardingHeaders && NMOConfiguration.INSTANCE.integrations.webUI.ddns.enabled)
+		{
+			throw new RuntimeException("webUI ddns must not be enabled at the same time as proxy forwarding headers");
+		}
+		if (NMOConfiguration.INSTANCE.integrations.webUI.readProxyForwardingHeaders && CommonUtils.isNullOrEmpty(NMOConfiguration.INSTANCE.integrations.webUI.ddns.domain))
+		{
+			throw new RuntimeException("webUI domain must be set to proxy server's domain when proxy forwarding headers are enabled");
 		}
 		WebcamCapture.init();
 		WebServer.initialize();

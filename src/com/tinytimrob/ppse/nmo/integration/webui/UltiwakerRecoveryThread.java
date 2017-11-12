@@ -32,11 +32,15 @@ public class UltiwakerRecoveryThread extends Thread
 					{
 						log.info("Ultiwaker is not connected. Attempting recovery");
 						String hostname = NMOConfiguration.INSTANCE.integrations.webUI.ddns.domain;
-						if (hostname == null || hostname.isEmpty())
+						if (hostname == null || hostname.isEmpty() || hostname.contains(":"))
 						{
 							hostname = PortForwarding.getExternalIP();
 						}
 						int port = NMOConfiguration.INSTANCE.integrations.webUI.jettyPort;
+						if (NMOConfiguration.INSTANCE.integrations.webUI.readProxyForwardingHeaders)
+						{
+							port = 443; // override port
+						}
 						String key = NMOConfiguration.INSTANCE.integrations.webUI.webcamSecurityKey;
 						int camID = 0;
 						String url = NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.server + "api/v1/" + hostname + "/" + port + "/" + key + "/" + camID;

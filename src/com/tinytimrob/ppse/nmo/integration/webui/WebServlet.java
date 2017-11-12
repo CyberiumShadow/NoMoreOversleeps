@@ -377,7 +377,7 @@ public class WebServlet extends HttpServlet
 		}
 		else
 		{
-			data.zombie_state = "<b>ENABLED</b> - " + MainDialog.timer.secondsForFirstWarning + "s for first warning, " + MainDialog.timer.zombiePenaltyForOversleepWarning + "s for oversleep warning, " + MainDialog.timer.zombiePenaltyForOtherWarnings + "s for other warnings<br/>Penalty limit: " + MainDialog.timer.zombiePenaltyLimit + "s<br/>Current penalty: " + String.format("%.3f", MainDialog.zombieDetectionPenalty / 1000.0f) + "s<br/>Penalty reduction starts in " + String.format("%.3f", MainDialog.zombieDetectionPenaltyWait / 1000.0f) + "s";
+			data.zombie_state = "<b>ENABLED</b> - " + MainDialog.timer.zombiePenaltyForFirstWarning + "s for first warning, " + MainDialog.timer.zombiePenaltyForOversleepWarning + "s for oversleep warning, " + MainDialog.timer.zombiePenaltyForOtherWarnings + "s for other warnings<br/>Penalty limit: " + MainDialog.timer.zombiePenaltyLimit + "s<br/>Current penalty: " + String.format("%.3f", MainDialog.zombieDetectionPenalty / 1000.0f) + "s<br/>Penalty reduction starts in " + String.format("%.3f", MainDialog.zombieDetectionPenaltyWait / 1000.0f) + "s";
 		}
 		response.getWriter().append(CommonUtils.GSON.toJson(data));
 	}

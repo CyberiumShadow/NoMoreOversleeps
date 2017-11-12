@@ -753,8 +753,15 @@ public class MainDialog extends Application
 				{
 					try
 					{
-						String hostname = NMOConfiguration.INSTANCE.integrations.webUI.openUiLocally ? "127.0.0.1" : !CommonUtils.isNullOrEmpty(NMOConfiguration.INSTANCE.integrations.webUI.ddns.domain) ? NMOConfiguration.INSTANCE.integrations.webUI.ddns.domain : PortForwarding.getExternalIP();
-						DesktopHelper.browse("http://" + hostname + ":" + NMOConfiguration.INSTANCE.integrations.webUI.jettyPort + "/");
+						if (NMOConfiguration.INSTANCE.integrations.webUI.readProxyForwardingHeaders && !NMOConfiguration.INSTANCE.integrations.webUI.openUiLocally)
+						{
+							DesktopHelper.browse("https://" + NMOConfiguration.INSTANCE.integrations.webUI.ddns.domain + "/ui/");
+						}
+						else
+						{
+							String hostname = NMOConfiguration.INSTANCE.integrations.webUI.openUiLocally ? "127.0.0.1" : !CommonUtils.isNullOrEmpty(NMOConfiguration.INSTANCE.integrations.webUI.ddns.domain) ? NMOConfiguration.INSTANCE.integrations.webUI.ddns.domain : PortForwarding.getExternalIP();
+							DesktopHelper.browse("http://" + hostname + ":" + NMOConfiguration.INSTANCE.integrations.webUI.jettyPort + "/ui/");
+						}
 					}
 					catch (Throwable e)
 					{

@@ -48,13 +48,13 @@ public class WemoDevice
 			try
 			{
 				String url = "http://" + this.ipAddress + ":49153/upnp/control/basicevent1";
-				//log.info("Connecting to " + url);
+				log.debug("Connecting to " + url);
 				connection = (HttpURLConnection) new URL(url).openConnection();
 				connection.setConnectTimeout(100);
 				connection.setReadTimeout(100);
 				connection.setUseCaches(false);
 				connection.setRequestProperty("User-Agent", "NoMoreOversleeps/" + Main.VERSION);
-				//log.info("Sending SOAPACTION " + soapAction + " with data: " + datastr);
+				log.debug("Sending SOAPACTION " + soapAction + " with data: " + datastr);
 				byte[] data = datastr.getBytes(CommonUtils.charsetUTF8);
 				connection.setRequestMethod("POST");
 				connection.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
@@ -69,7 +69,7 @@ public class WemoDevice
 				int responseCode = connection.getResponseCode();
 				in = connection.getInputStream();
 				String responseString = IOUtils.toString(in, CommonUtils.charsetUTF8);
-				//log.info("Response " + responseCode + " : " + responseString);
+				log.debug("Response " + responseCode + " : " + responseString);
 				return responseString;
 			}
 			catch (Throwable t)

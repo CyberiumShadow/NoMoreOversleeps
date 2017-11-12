@@ -20,7 +20,6 @@ public class Configuration
 	 * @return The configuration data, loaded into an object of that class
 	 * @throws Exception If loading fails horribly for some reason and the program can't continue
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T> T load(Class<T> clazz, String path) throws Exception
 	{
 		log.info("Loading " + path + " from disk");

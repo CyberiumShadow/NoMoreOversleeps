@@ -60,7 +60,7 @@ public class IntegrationNoise extends Integration
 				{
 					File file = new File(noise.path);
 					AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(file);
-					Map properties = baseFileFormat.properties();
+					Map<String, Object> properties = baseFileFormat.properties();
 					long duration = (Long) properties.get("duration") / 1000000L;
 					noise.duration = duration;
 				}

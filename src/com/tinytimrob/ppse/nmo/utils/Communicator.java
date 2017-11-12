@@ -34,6 +34,7 @@ public class Communicator
 
 	private static final Logger log = LogWrapper.getLogger();
 
+	@SuppressWarnings("unchecked")
 	public static <T> T basicJsonMessage(String humanDesc, String path, Object constructable, Class<T> clazz, boolean returnGineverFailureData, String authorization) throws Exception
 	{
 		HttpURLConnection connection = null;

@@ -60,6 +60,8 @@ public class WebServer
 		{
 			WebSocketServlet websocketServlet1 = new WebSocketServlet()
 			{
+				private static final long serialVersionUID = -6770440329811089355L;
+
 				@Override
 				public void configure(WebSocketServletFactory factory)
 				{

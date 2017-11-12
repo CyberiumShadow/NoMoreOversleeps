@@ -215,6 +215,7 @@ public class WebcamCapture
 		return webcams[0].webcam == null ? "null" : webcams[0].webcam.getName();
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void shutdown()
 	{
 		for (WebcamData data : webcams)

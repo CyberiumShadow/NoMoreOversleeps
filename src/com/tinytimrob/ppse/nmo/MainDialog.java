@@ -776,7 +776,6 @@ public class MainDialog extends Application
 			jfxButtonPortForward.setPadding(new Insets(2, 4, 2, 4));
 			jfxButtonPortForward.setOnAction(new EventHandler<ActionEvent>()
 			{
-				@SuppressWarnings("unchecked")
 				@Override
 				public void handle(ActionEvent arg0)
 				{

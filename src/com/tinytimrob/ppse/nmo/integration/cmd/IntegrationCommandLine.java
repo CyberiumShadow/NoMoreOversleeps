@@ -32,7 +32,7 @@ public class IntegrationCommandLine extends Integration
 				@Override
 				public void onAction(Map<String, String[]> parameters) throws Exception
 				{
-					Process process = new ProcessBuilder(command.command).directory(new File(command.workingDir)).start();
+					new ProcessBuilder(command.command).directory(new File(command.workingDir)).start();
 				}
 
 				@Override

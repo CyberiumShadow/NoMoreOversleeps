@@ -50,8 +50,6 @@ public class IntegrationFileWriter extends Integration
 	public void update()
 	{
 		Calendar calendar = Calendar.getInstance();
-		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		int minute = calendar.get(Calendar.MINUTE);
 		int second = calendar.get(Calendar.SECOND);
 		long now = calendar.getTimeInMillis();
 		if (lastSecond != second)
@@ -77,7 +75,6 @@ public class IntegrationFileWriter extends Integration
 				}
 				if (NMOConfiguration.INSTANCE.integrations.fileWriter.timeToNextSleepBlock)
 				{
-					int currentMinuteOfDay = ((hour * 60) + minute);
 					boolean currentlySleeping = MainDialog.nextSleepBlock == null ? false : MainDialog.nextSleepBlock.containsTimeValue(System.currentTimeMillis());
 					String pros = MainDialog.nextActivityWarningID >= NMOConfiguration.INSTANCE.oversleepWarningThreshold ? "OVERSLEEPING" : MainDialog.nextActivityWarningID > 0 ? "MISSING" : "AWAKE";
 					if (currentlySleeping)

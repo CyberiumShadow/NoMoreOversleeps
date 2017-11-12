@@ -42,9 +42,12 @@ public class UltiwakerRecoveryThread extends Thread
 							port = 443; // override port
 						}
 						String key = NMOConfiguration.INSTANCE.integrations.webUI.webcamSecurityKey;
-						int camID = 0;
-						String url = NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.server + "api/v1/" + hostname + "/" + port + "/" + key + "/" + camID;
-						Communicator.basicJsonMessage("Ultiwaker connect", url, "", null, false, null);
+						for (int c = 0; c < NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.cams.length; c++)
+						{
+							int camID = NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.cams[c];
+							String url = NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.server + "api/v1/" + hostname + "/" + port + "/" + key + "/" + camID;
+							Communicator.basicJsonMessage("Ultiwaker connect for cam " + camID, url, "", null, false, null);
+						}
 					}
 				}
 				catch (Throwable t)

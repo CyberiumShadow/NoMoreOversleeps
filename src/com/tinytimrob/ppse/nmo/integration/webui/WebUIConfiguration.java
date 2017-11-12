@@ -72,5 +72,8 @@ public class WebUIConfiguration
 
 		@Expose
 		public int matchPercentageToResetTimer = 75;
+
+		@Expose
+		public int[] cams = { 0 };
 	}
 }

@@ -32,7 +32,7 @@ public class IntegrationPavlok extends Integration
 			@Override
 			public void onAction(Map<String, String[]> parameters) throws Exception
 			{
-				IntegrationPavlok.this.led(4, "recieved a LED flash from NMO");
+				IntegrationPavlok.this.led(4, "received a LED flash from NMO");
 			}
 
 			@Override
@@ -70,7 +70,7 @@ public class IntegrationPavlok extends Integration
 			@Override
 			public void onAction(Map<String, String[]> parameters) throws Exception
 			{
-				IntegrationPavlok.this.beep(255, "recieved a beep from NMO");
+				IntegrationPavlok.this.beep(255, "received a beep from NMO");
 			}
 
 			@Override
@@ -108,7 +108,7 @@ public class IntegrationPavlok extends Integration
 			@Override
 			public void onAction(Map<String, String[]> parameters) throws Exception
 			{
-				IntegrationPavlok.this.vibration(255, "recieved a vibration from NMO");
+				IntegrationPavlok.this.vibration(255, "received a vibration from NMO");
 			}
 
 			@Override
@@ -146,7 +146,7 @@ public class IntegrationPavlok extends Integration
 			@Override
 			public void onAction(Map<String, String[]> parameters) throws Exception
 			{
-				IntegrationPavlok.this.shock(255, "recieved a zap from NMO");
+				IntegrationPavlok.this.shock(255, "received a zap from NMO");
 			}
 
 			@Override

@@ -188,7 +188,7 @@ public class MainDialog extends Application
 		{
 			try
 			{
-				IntegrationPavlok.INSTANCE.vibration(255, "Connection test");
+				IntegrationPavlok.INSTANCE.vibration(255, "received a vibration from NMO");
 				triggerEvent("<VIBRATE PAVLOK> Connection test", null);
 			}
 			catch (Throwable t)

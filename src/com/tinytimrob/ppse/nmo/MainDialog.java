@@ -1817,6 +1817,7 @@ public class MainDialog extends Application
 		if (!paused && wasPaused)
 		{
 			triggerEvent("Unpaused automatically - time alotted for \"" + pauseReason + "\" has expired", NMOConfiguration.INSTANCE.events.pauseExpired);
+			pauseReason = "";
 		}
 		if (nextSleepBlockDetected != null && nextSleepBlock != nextSleepBlockDetected)
 		{

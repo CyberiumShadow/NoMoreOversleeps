@@ -107,6 +107,8 @@ public class WebcamWebSocketHandler implements Runnable
 		{
 			message.put("image", WebcamCapture.webcams[this.camID].imageBase64);
 			message.put("time", MainDialog.now);
+			message.put("paused", MainDialog.isCurrentlyPaused.get());
+			message.put("pauseReason", MainDialog.pauseReason);
 			try
 			{
 				this.send(message);

@@ -11,6 +11,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import org.apache.commons.lang3.StringUtils;
+import org.mp4parser.IsoFile;
 import com.tinytimrob.common.CommonUtils;
 import com.tinytimrob.ppse.nmo.Action;
 import com.tinytimrob.ppse.nmo.Integration;
@@ -63,6 +64,15 @@ public class IntegrationNoise extends Integration
 					Map<String, Object> properties = baseFileFormat.properties();
 					long duration = (Long) properties.get("duration") / 1000000L;
 					noise.duration = duration;
+				}
+				else if (noise.path.toLowerCase(Locale.ENGLISH).endsWith(".m4a") || noise.path.toLowerCase(Locale.ENGLISH).endsWith(".m4p") || noise.path.toLowerCase(Locale.ENGLISH).endsWith(".aac"))
+				{
+					File file = new File(noise.path);
+					try(IsoFile isoFile = new IsoFile(file))
+					{
+						double lengthInSeconds = (double) isoFile.getMovieBox().getMovieHeaderBox().getDuration() / isoFile.getMovieBox().getMovieHeaderBox().getTimescale();
+						noise.duration = (long) lengthInSeconds;
+					}
 				}
 				else
 				{

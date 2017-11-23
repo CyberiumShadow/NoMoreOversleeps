@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 import org.apache.logging.log4j.Logger;
 import com.philips.lighting.hue.sdk.PHAccessPoint;
 import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
@@ -14,6 +15,7 @@ import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHHueParsingError;
 import com.philips.lighting.model.PHLight;
+import com.philips.lighting.model.PHLight.PHLightColorMode;
 import com.philips.lighting.model.PHLightState;
 import com.tinytimrob.common.LogWrapper;
 import com.tinytimrob.common.PlatformData;
@@ -46,9 +48,10 @@ public class IntegrationPhilipsHue extends Integration
 	@Override
 	public void init()
 	{
-		for (int i = 0; i < NMOConfiguration.INSTANCE.integrations.philipsHue.lights.length; i++)
+		for (int i = 0; i < NMOConfiguration.INSTANCE.integrations.philipsHue.lights.length + NMOConfiguration.INSTANCE.integrations.philipsHue.lightsWithColour.length; i++)
 		{
-			final String bulbName = NMOConfiguration.INSTANCE.integrations.philipsHue.lights[i];
+			final boolean isColouredLight = i >= NMOConfiguration.INSTANCE.integrations.philipsHue.lights.length;
+			final String bulbName = isColouredLight ? NMOConfiguration.INSTANCE.integrations.philipsHue.lightsWithColour[i - NMOConfiguration.INSTANCE.integrations.philipsHue.lights.length] : NMOConfiguration.INSTANCE.integrations.philipsHue.lights[i];
 			this.lightStates.put(bulbName, -1);
 			this.actions.put("/philipsHue/" + i + "/off", new Action()
 			{
@@ -99,7 +102,7 @@ public class IntegrationPhilipsHue extends Integration
 				@Override
 				public String getName()
 				{
-					return "SET " + bulbName + " TO 25%";
+					return "SET " + bulbName + "'s BRIGHTNESS TO 25%";
 				}
 
 				@Override
@@ -137,7 +140,7 @@ public class IntegrationPhilipsHue extends Integration
 				@Override
 				public String getName()
 				{
-					return "SET " + bulbName + " TO 50%";
+					return "SET " + bulbName + "'s BRIGHTNESS TO 50%";
 				}
 
 				@Override
@@ -175,7 +178,7 @@ public class IntegrationPhilipsHue extends Integration
 				@Override
 				public String getName()
 				{
-					return "SET " + bulbName + " TO 75%";
+					return "SET " + bulbName + "'s BRIGHTNESS TO 75%";
 				}
 
 				@Override
@@ -213,7 +216,7 @@ public class IntegrationPhilipsHue extends Integration
 				@Override
 				public String getName()
 				{
-					return "SET " + bulbName + " TO 100%";
+					return "SET " + bulbName + "'s BRIGHTNESS TO 100%";
 				}
 
 				@Override
@@ -240,6 +243,91 @@ public class IntegrationPhilipsHue extends Integration
 					return false;
 				}
 			});
+			if (isColouredLight)
+			{
+				int j = 0;
+				for (final String ck : NMOConfiguration.INSTANCE.integrations.philipsHue.colours.keySet())
+				{
+					final Hue hue = NMOConfiguration.INSTANCE.integrations.philipsHue.colours.get(ck);
+					this.actions.put("/philipsHue/" + i + "/colour/" + j, new Action()
+					{
+						@Override
+						public void onAction(Map<String, String[]> parameters) throws Exception
+						{
+							IntegrationPhilipsHue.this.setHue(bulbName, hue);
+						}
+
+						@Override
+						public String getName()
+						{
+							return "SET " + bulbName + "'s COLOUR TO " + ck;
+						}
+
+						@Override
+						public String getDescription()
+						{
+							return "Changes the colour of the Philips Hue coloured light source '" + bulbName + "' to '" + ck + "' (" + hue.r + "," + hue.g + "," + hue.b + ").";
+						}
+
+						@Override
+						public boolean isHiddenFromFrontend()
+						{
+							return false;
+						}
+
+						@Override
+						public boolean isHiddenFromWebUI()
+						{
+							return false;
+						}
+
+						@Override
+						public boolean isBlockedFromWebUI()
+						{
+							return false;
+						}
+					});
+					j++;
+				}
+				this.actions.put("/philipsHue/" + i + "/colour/random", new Action()
+				{
+					@Override
+					public void onAction(Map<String, String[]> parameters) throws Exception
+					{
+						IntegrationPhilipsHue.this.setHue(bulbName, null);
+					}
+
+					@Override
+					public String getName()
+					{
+						return "SET " + bulbName + "'s COLOUR TO RANDOM";
+					}
+
+					@Override
+					public String getDescription()
+					{
+						return "Changes the colour of the Philips Hue coloured light source '" + bulbName + "' to a random value.";
+					}
+
+					@Override
+					public boolean isHiddenFromFrontend()
+					{
+						return false;
+					}
+
+					@Override
+					public boolean isHiddenFromWebUI()
+					{
+						return false;
+					}
+
+					@Override
+					public boolean isBlockedFromWebUI()
+					{
+						return false;
+					}
+				});
+			}
 			this.actions.put("/philipsHue/" + i + "/toggle", new Action()
 			{
 				@Override
@@ -323,13 +411,16 @@ public class IntegrationPhilipsHue extends Integration
 					List<PHLight> u = bridge.getResourceCache().getAllLights();
 					if (!u.isEmpty())
 					{
-						PHLight light = u.get(0);
-						PHLightState phls = light.getLastKnownLightState();
-						String bulbName = light.getName();
-						int state = phls.isOn() ? phls.getBrightness() : -1;
-						IntegrationPhilipsHue.this.lights.put(bulbName, light);
-						IntegrationPhilipsHue.this.lightStates.put(bulbName, state);
-						log.info("Updating light state: " + bulbName + " = " + state);
+						for (PHLight light : u)
+						{
+							PHLightState phls = light.getLastKnownLightState();
+							String bulbName = light.getName();
+							int state = phls.isOn() ? phls.getBrightness() : -1;
+							Integer hue = phls.getHue();
+							IntegrationPhilipsHue.this.lights.put(bulbName, light);
+							IntegrationPhilipsHue.this.lightStates.put(bulbName, state);
+							log.info("Updating light state: " + bulbName + " = " + state + "," + hue);
+						}
 					}
 				}
 			}
@@ -354,13 +445,16 @@ public class IntegrationPhilipsHue extends Integration
 				List<PHLight> u = bridge.getResourceCache().getAllLights();
 				if (!u.isEmpty())
 				{
-					PHLight light = u.get(0);
-					PHLightState phls = light.getLastKnownLightState();
-					String bulbName = light.getName();
-					int state = phls.isOn() ? phls.getBrightness() : -1;
-					IntegrationPhilipsHue.this.lights.put(bulbName, light);
-					IntegrationPhilipsHue.this.lightStates.put(bulbName, state);
-					log.info("Updating light state: " + bulbName + " = " + state);
+					for (PHLight light : u)
+					{
+						PHLightState phls = light.getLastKnownLightState();
+						String bulbName = light.getName();
+						int state = phls.isOn() ? phls.getBrightness() : -1;
+						Integer hue = phls.getHue();
+						IntegrationPhilipsHue.this.lights.put(bulbName, light);
+						IntegrationPhilipsHue.this.lightStates.put(bulbName, state);
+						log.info("Updating light state: " + bulbName + " = " + state + "," + hue);
+					}
 				}
 			}
 
@@ -405,10 +499,62 @@ public class IntegrationPhilipsHue extends Integration
 			throw new IOException("No such light: " + name);
 		PHLightState lightState = new PHLightState();
 		lightState.setOn(brightness > 0);
-		if (brightness > 0)
+		lightState.setBrightness(brightness, true);
+		this.activeBridge.updateLightState(light, lightState);
+	}
+
+	protected void setHue(String name, Hue hue) throws IOException
+	{
+		// conversion formula taken from https://stackoverflow.com/questions/22564187/rgb-to-philips-hue-hsb
+		PHLight light = this.lights.get(name);
+		if (light == null)
+			throw new IOException("No such light: " + name);
+		float x, y;
+		if (hue == null)
 		{
-			lightState.setBrightness(brightness, true);
+			x = ThreadLocalRandom.current().nextFloat();
+			y = ThreadLocalRandom.current().nextFloat();
 		}
+		else
+		{
+			double r = (hue.r / 255.0);
+			double g = (hue.g / 255.0);
+			double b = (hue.b / 255.0);
+			float red, green, blue;
+			if (r > 0.04045)
+			{
+				red = (float) Math.pow((r + 0.055) / (1.0 + 0.055), 2.4);
+			}
+			else
+			{
+				red = (float) (r / 12.92);
+			}
+			if (g > 0.04045)
+			{
+				green = (float) Math.pow((g + 0.055) / (1.0 + 0.055), 2.4);
+			}
+			else
+			{
+				green = (float) (g / 12.92);
+			}
+			if (b > 0.04045)
+			{
+				blue = (float) Math.pow((b + 0.055) / (1.0 + 0.055), 2.4);
+			}
+			else
+			{
+				blue = (float) (b / 12.92);
+			}
+			float X = (float) (red * 0.649926 + green * 0.103455 + blue * 0.197109);
+			float Y = (float) (red * 0.234327 + green * 0.743075 + blue * 0.022598);
+			float Z = (float) (red * 0.0000000 + green * 0.053077 + blue * 0.935763); // I reduced the blue multiplier a little bit here (from 1.035763) because the white seemed too blue
+			x = X / (X + Y + Z);
+			y = Y / (X + Y + Z);
+		}
+		PHLightState lightState = new PHLightState();
+		lightState.setColorMode(PHLightColorMode.COLORMODE_XY);
+		lightState.setX(x);
+		lightState.setY(y);
 		this.activeBridge.updateLightState(light, lightState);
 	}
 

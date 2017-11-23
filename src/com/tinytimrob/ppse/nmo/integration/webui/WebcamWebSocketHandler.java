@@ -55,9 +55,10 @@ public class WebcamWebSocketHandler implements Runnable
 	{
 		Map<String, List<String>> params = session.getUpgradeRequest().getParameterMap();
 		List<String> keys = params.get("key");
+		this.connectionIP = session.getRemoteAddress().getAddress().toString();
 		if (keys == null || keys.size() != 1 || !keys.get(0).equals(NMOConfiguration.INSTANCE.integrations.webUI.webcamSecurityKey))
 		{
-			throw new AuthenticationException("Not authorized");
+			throw new AuthenticationException("Not authorized from " + this.connectionIP);
 		}
 		int camIDval;
 		List<String> camID = params.get("camID");
@@ -74,16 +75,15 @@ public class WebcamWebSocketHandler implements Runnable
 			}
 			catch (NumberFormatException e)
 			{
-				throw new AuthenticationException("Bad camID");
+				throw new AuthenticationException("Bad camID from " + this.connectionIP);
 			}
 		}
 		if (camIDval < 0 || camIDval >= WebcamCapture.webcams.length)
 		{
-			throw new AuthenticationException("Bad camID");
+			throw new AuthenticationException("Bad camID " + camIDval + " from " + this.connectionIP);
 		}
 		this.camID = camIDval;
 		this.session = session;
-		this.connectionIP = session.getRemoteAddress().getAddress().toString();
 		if (NMOConfiguration.INSTANCE.integrations.webUI.readProxyForwardingHeaders)
 		{
 			String xff = session.getUpgradeRequest().getHeader("X-Forwarded-For");

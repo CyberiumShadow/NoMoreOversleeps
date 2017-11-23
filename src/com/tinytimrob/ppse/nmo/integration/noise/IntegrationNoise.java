@@ -11,8 +11,10 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.Logger;
 import org.mp4parser.IsoFile;
 import com.tinytimrob.common.CommonUtils;
+import com.tinytimrob.common.LogWrapper;
 import com.tinytimrob.ppse.nmo.Action;
 import com.tinytimrob.ppse.nmo.Integration;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
@@ -22,6 +24,8 @@ import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 
 public class IntegrationNoise extends Integration
 {
+	private static final Logger log = LogWrapper.getLogger();
+
 	public IntegrationNoise()
 	{
 		super("noise");
@@ -39,6 +43,7 @@ public class IntegrationNoise extends Integration
 	@Override
 	public void init()
 	{
+		log.info("Loading noises...");
 		for (int i = 0; i < NMOConfiguration.INSTANCE.integrations.noise.noises.length; i++)
 		{
 			final StoredNoise noise = NMOConfiguration.INSTANCE.integrations.noise.noises[i];
@@ -68,7 +73,7 @@ public class IntegrationNoise extends Integration
 				else if (noise.path.toLowerCase(Locale.ENGLISH).endsWith(".m4a") || noise.path.toLowerCase(Locale.ENGLISH).endsWith(".m4p") || noise.path.toLowerCase(Locale.ENGLISH).endsWith(".aac"))
 				{
 					File file = new File(noise.path);
-					try(IsoFile isoFile = new IsoFile(file))
+					try (IsoFile isoFile = new IsoFile(file))
 					{
 						double lengthInSeconds = (double) isoFile.getMovieBox().getMovieHeaderBox().getDuration() / isoFile.getMovieBox().getMovieHeaderBox().getTimescale();
 						noise.duration = (long) lengthInSeconds;
@@ -79,6 +84,7 @@ public class IntegrationNoise extends Integration
 					// format unsupported
 					noise.duration = -1;
 				}
+				log.info("Duration of " + noise.path + " is " + noise.duration + " seconds");
 			}
 			catch (Throwable t)
 			{

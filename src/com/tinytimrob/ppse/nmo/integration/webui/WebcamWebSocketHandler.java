@@ -21,7 +21,13 @@ import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
 @WebSocket
 public class WebcamWebSocketHandler implements Runnable
 {
+	public static enum AuthSource
+	{
+		WEBUI, ULTIWAKER;
+	}
+
 	private static final Logger log = LogWrapper.getLogger();
+	private AuthSource authSource;
 	private Session session;
 	private int camID = -1;
 	public String connectionIP;
@@ -32,7 +38,7 @@ public class WebcamWebSocketHandler implements Runnable
 		{
 			if (this.connectionIP != null)
 			{
-				log.info("WebSocket for cam" + this.camID + " disconnected from " + this.connectionIP);
+				log.info("WebSocket for cam" + this.camID + " disconnected from " + this.authSource + " at " + this.connectionIP);
 			}
 			try
 			{
@@ -56,7 +62,20 @@ public class WebcamWebSocketHandler implements Runnable
 		Map<String, List<String>> params = session.getUpgradeRequest().getParameterMap();
 		List<String> keys = params.get("key");
 		this.connectionIP = session.getRemoteAddress().getAddress().toString();
-		if (keys == null || keys.size() != 1 || !keys.get(0).equals(NMOConfiguration.INSTANCE.integrations.webUI.webcamSecurityKey))
+		if (keys == null || keys.size() != 1)
+		{
+			throw new AuthenticationException("Not authorized from " + this.connectionIP);
+		}
+		String key = keys.get(0);
+		if (key.equals(NMOConfiguration.INSTANCE.integrations.webUI.webcamSecurityKey))
+		{
+			this.authSource = AuthSource.WEBUI;
+		}
+		else if (key.equals(NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI))
+		{
+			this.authSource = AuthSource.ULTIWAKER;
+		}
+		else
 		{
 			throw new AuthenticationException("Not authorized from " + this.connectionIP);
 		}
@@ -80,7 +99,7 @@ public class WebcamWebSocketHandler implements Runnable
 		}
 		if (camIDval < 0 || camIDval >= WebcamCapture.webcams.length)
 		{
-			throw new AuthenticationException("Bad camID " + camIDval + " from " + this.connectionIP);
+			throw new AuthenticationException("Bad camID " + camIDval + " from " + this.authSource + " at " + this.connectionIP);
 		}
 		this.camID = camIDval;
 		this.session = session;
@@ -92,7 +111,7 @@ public class WebcamWebSocketHandler implements Runnable
 				this.connectionIP = "/" + xff.split("\\Q, \\E")[0];
 			}
 		}
-		log.info("WebSocket for cam" + this.camID + " connected from " + this.connectionIP);
+		log.info("WebSocket for cam" + this.camID + " connected from " + this.authSource + " at " + this.connectionIP);
 		WebcamCapture.webcams[this.camID].socketHandlers.add(this);
 		new Thread(this).start();
 	}
@@ -100,15 +119,18 @@ public class WebcamWebSocketHandler implements Runnable
 	@Override
 	public void run()
 	{
-		log.info(">> Started sending cam" + this.camID + " data to " + this.connectionIP);
+		log.info(">> Started sending cam" + this.camID + " data to " + this.authSource + " at " + this.connectionIP);
 		Map<String, Object> message = new HashMap<String, Object>();
 		message.put("type", "image");
 		while (this.session != null)
 		{
 			message.put("image", WebcamCapture.webcams[this.camID].imageBase64);
-			message.put("time", MainDialog.now);
-			message.put("paused", MainDialog.isCurrentlyPaused.get());
-			message.put("pauseReason", MainDialog.pauseReason);
+			if (this.authSource == AuthSource.ULTIWAKER)
+			{
+				message.put("time", MainDialog.now);
+				message.put("paused", MainDialog.isCurrentlyPaused.get());
+				message.put("pauseReason", MainDialog.pauseReason);
+			}
 			try
 			{
 				this.send(message);
@@ -132,7 +154,7 @@ public class WebcamWebSocketHandler implements Runnable
 				e.printStackTrace();
 			}
 		}
-		log.info(">> Stopped sending cam" + this.camID + " data to " + this.connectionIP);
+		log.info(">> Stopped sending cam" + this.camID + " data to " + this.authSource + " at " + this.connectionIP);
 	}
 
 	@OnWebSocketMessage

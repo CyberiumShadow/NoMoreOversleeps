@@ -41,7 +41,7 @@ public class UltiwakerRecoveryThread extends Thread
 						{
 							port = 443; // override port
 						}
-						String key = NMOConfiguration.INSTANCE.integrations.webUI.webcamSecurityKey;
+						String key = NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.apiSecurityKey;
 						for (int c = 0; c < NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.cams.length; c++)
 						{
 							int camID = NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.cams[c];

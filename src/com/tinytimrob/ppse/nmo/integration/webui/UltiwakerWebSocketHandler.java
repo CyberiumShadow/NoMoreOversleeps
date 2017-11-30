@@ -71,7 +71,7 @@ public class UltiwakerWebSocketHandler
 	{
 		Map<String, List<String>> params = session.getUpgradeRequest().getParameterMap();
 		List<String> keys = params.get("key");
-		if (keys == null || keys.size() != 1 || !keys.get(0).equals(NMOConfiguration.INSTANCE.integrations.webUI.webcamSecurityKey))
+		if (keys == null || keys.size() != 1 || !keys.get(0).equals(NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.apiSecurityKey))
 		{
 			throw new AuthenticationException("Not authorized");
 		}

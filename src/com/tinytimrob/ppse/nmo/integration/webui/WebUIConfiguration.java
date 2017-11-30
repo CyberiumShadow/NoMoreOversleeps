@@ -75,5 +75,8 @@ public class WebUIConfiguration
 
 		@Expose
 		public int[] cams = { 0 };
+
+		@Expose
+		public String apiSecurityKey = "";
 	}
 }

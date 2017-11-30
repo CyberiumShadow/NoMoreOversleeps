@@ -37,6 +37,11 @@ public class IntegrationWebUI extends Integration
 			NMOConfiguration.INSTANCE.integrations.webUI.webcamSecurityKey = CommonUtils.generateAsciiCryptoKey(64);
 			NMOConfiguration.save();
 		}
+		if (CommonUtils.isNullOrEmpty(NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.apiSecurityKey))
+		{
+			NMOConfiguration.INSTANCE.integrations.webUI.ultiwakerAPI.apiSecurityKey = CommonUtils.generateAsciiCryptoKey(64);
+			NMOConfiguration.save();
+		}
 		if (CommonUtils.isNullOrEmpty(NMOConfiguration.INSTANCE.integrations.webUI.username))
 		{
 			NMOConfiguration.INSTANCE.integrations.webUI.username = PlatformData.computerName;

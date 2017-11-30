@@ -98,9 +98,18 @@ public class Main
 				}
 				if (!MasterLock.obtain())
 				{
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					JOptionPane.showMessageDialog(null, "NoMoreOversleeps is already running.", "NoMoreOversleeps", JOptionPane.ERROR_MESSAGE);
-					return;
+					if (PlatformData.installationDirectory.getPath().contains("Program Files"))
+					{
+						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+						JOptionPane.showMessageDialog(null, "Don't run NMO from Program Files you idiot!", "NoMoreOversleeps", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					else
+					{
+						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+						JOptionPane.showMessageDialog(null, "NoMoreOversleeps is already running or does not have permission to start.", "NoMoreOversleeps", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 				}
 				Logging.initialize();
 				try

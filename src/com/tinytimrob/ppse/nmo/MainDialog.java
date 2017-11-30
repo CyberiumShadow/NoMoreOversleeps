@@ -127,10 +127,10 @@ public class MainDialog extends Application
 	public static volatile SleepEntry lastSleepBlockWarning = null;
 	public static volatile ScheduleEntryType lastSleepState = null;
 	public static volatile SleepEntry nextSleepBlock = null;
-	public static volatile String scheduleStatus = "No schedule configured";
-	public static volatile String scheduleStatusShort = "UNCONFIGURED";
-	public static volatile SimpleStringProperty scheduleStatusString = new SimpleStringProperty("");
-	public static volatile SimpleStringProperty scheduleNextBlockString = new SimpleStringProperty("");
+	public static volatile String scheduleStatus = "AWAKE";
+	public static volatile String scheduleStatusShort = "AWAKE";
+	public static volatile SimpleStringProperty scheduleStatusString = new SimpleStringProperty("AWAKE");
+	public static volatile SimpleStringProperty scheduleNextBlockString = new SimpleStringProperty("No sleep blocks configured");
 	public static volatile SimpleStringProperty scheduleCountdownString = new SimpleStringProperty("");
 	public static volatile Label ultiwakerConnectivityLabel;
 	public static volatile SimpleStringProperty ultiwakerConnectivityString = new SimpleStringProperty("");
@@ -1785,7 +1785,7 @@ public class MainDialog extends Application
 		}
 		else
 		{
-			scheduleStatusShort = "UNCONFIGURED";
+			scheduleStatusShort = "AWAKE";
 		}
 		if (nextSleepBlock != null && (nextSleepBlock != nextSleepBlockDetected || (nextSleepBlock == nextSleepBlockDetected && currentSleepState == null && lastSleepState != null)))
 		{
@@ -1986,7 +1986,7 @@ public class MainDialog extends Application
 			{
 				state += (!state.isEmpty() ? "\n" : "");
 				int val = IntegrationPhilipsHue.INSTANCE.lightStates.get(key);
-				state += key + ":  " + (val > -1 ? "ON (" + String.format("%,.0f", val / 2.54f) + "%)" : "OFF");
+				state += key + ":  " + (val == -2 ? "DISCONNECTED" : val == -1 ? "OFF" : "ON (" + String.format("%,.0f", val / 2.54f) + "%)");
 			}
 			lightingStateString.set(state);
 		}

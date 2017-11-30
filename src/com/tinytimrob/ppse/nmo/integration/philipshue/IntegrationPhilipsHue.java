@@ -415,7 +415,7 @@ public class IntegrationPhilipsHue extends Integration
 						{
 							PHLightState phls = light.getLastKnownLightState();
 							String bulbName = light.getName();
-							int state = phls.isOn() ? phls.getBrightness() : -1;
+							int state = !phls.isReachable() ? -2 : phls.isOn() ? phls.getBrightness() : -1;
 							Integer hue = phls.getHue();
 							IntegrationPhilipsHue.this.lights.put(bulbName, light);
 							IntegrationPhilipsHue.this.lightStates.put(bulbName, state);
@@ -449,7 +449,7 @@ public class IntegrationPhilipsHue extends Integration
 					{
 						PHLightState phls = light.getLastKnownLightState();
 						String bulbName = light.getName();
-						int state = phls.isOn() ? phls.getBrightness() : -1;
+						int state = !phls.isReachable() ? -2 : phls.isOn() ? phls.getBrightness() : -1;
 						Integer hue = phls.getHue();
 						IntegrationPhilipsHue.this.lights.put(bulbName, light);
 						IntegrationPhilipsHue.this.lightStates.put(bulbName, state);

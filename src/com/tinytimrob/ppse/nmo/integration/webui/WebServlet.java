@@ -328,7 +328,7 @@ public class WebServlet extends HttpServlet
 			{
 				state += (!state.isEmpty() ? "<br/>" : "");
 				int val = IntegrationPhilipsHue.INSTANCE.lightStates.get(key);
-				state += "<b>" + key + "</b>:  " + (val > -1 ? "ON (" + String.format("%,.0f", val / 2.54f) + "%)" : "OFF");
+				state += "<b>" + key + "</b>:  " + (val == -2 ? "DISCONNECTED" : val == -1 ? "OFF" : "ON (" + String.format("%,.0f", val / 2.54f) + "%)");
 			}
 		}
 		if (IntegrationTPLink.INSTANCE.isEnabled())
@@ -355,12 +355,19 @@ public class WebServlet extends HttpServlet
 		{
 			sn = "UNKNOWN SCHEDULE";
 		}
-		data.schedule_name = "<b>" + sn + "</b><ul>";
+		data.schedule_name = "<b>" + sn + "</b>";
+		if (!NMOConfiguration.INSTANCE.schedule.isEmpty())
+		{
+			data.schedule_name += "<ul>";
+		}
 		for (SleepEntry se : NMOConfiguration.INSTANCE.schedule)
 		{
 			data.schedule_name += "<li>" + se.describeTime() + " -- " + se.name + "</li>";
 		}
-		data.schedule_name += "</ul>";
+		if (!NMOConfiguration.INSTANCE.schedule.isEmpty())
+		{
+			data.schedule_name += "</ul>";
+		}
 		if (NMOStatistics.INSTANCE.scheduleStartedOn > 0)
 		{
 			data.schedule_name += "Started on " + CommonUtils.dateFormatter.format(NMOStatistics.INSTANCE.scheduleStartedOn) + " &nbsp; (" + FormattingHelper.formatTimeElapsedWithDays(now, NMOStatistics.INSTANCE.scheduleStartedOn) + " ago)";

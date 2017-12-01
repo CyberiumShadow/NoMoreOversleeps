@@ -1785,7 +1785,10 @@ public class MainDialog extends Application
 		}
 		else
 		{
-			scheduleStatusShort = "AWAKE";
+			String pros = nextActivityWarningID >= NMOConfiguration.INSTANCE.oversleepWarningThreshold ? "OVERSLEEPING" : nextActivityWarningID > 0 ? "MISSING" : "AWAKE";
+			scheduleStatusString.set(pros);
+			scheduleStatus = pros + " (" + nextActivityWarningID + ")";
+			scheduleStatusShort = pros;
 		}
 		if (nextSleepBlock != null && (nextSleepBlock != nextSleepBlockDetected || (nextSleepBlock == nextSleepBlockDetected && currentSleepState == null && lastSleepState != null)))
 		{

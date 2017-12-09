@@ -370,6 +370,10 @@ public class WebServlet extends HttpServlet
 		}
 		if (NMOStatistics.INSTANCE.scheduleStartedOn > 0)
 		{
+			if (NMOConfiguration.INSTANCE.schedule.isEmpty())
+			{
+				data.schedule_name += "<br/>";
+			}
 			data.schedule_name += "Started on " + CommonUtils.dateFormatter.format(NMOStatistics.INSTANCE.scheduleStartedOn) + " &nbsp; (" + FormattingHelper.formatTimeElapsedWithDays(now, NMOStatistics.INSTANCE.scheduleStartedOn) + " ago)";
 
 			if (NMOStatistics.INSTANCE.scheduleLastOversleep != NMOStatistics.INSTANCE.scheduleStartedOn)

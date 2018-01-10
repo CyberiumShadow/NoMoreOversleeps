@@ -1,8 +1,7 @@
-package com.tinytimrob.ppse.nmo.utils;
+package com.tinytimrob.common;
 
 import java.io.File;
 import java.nio.channels.FileLock;
-import com.tinytimrob.common.PlatformData;
 
 public class MasterLock
 {

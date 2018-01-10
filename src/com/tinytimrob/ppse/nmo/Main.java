@@ -11,6 +11,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.logging.log4j.Logger;
 import com.tinytimrob.common.Configuration;
 import com.tinytimrob.common.LogWrapper;
+import com.tinytimrob.common.MasterLock;
 import com.tinytimrob.common.PlatformData;
 import com.tinytimrob.common.PlatformType;
 import com.tinytimrob.ppse.nmo.config.NMOConfiguration;
@@ -36,7 +37,6 @@ import com.tinytimrob.ppse.nmo.integration.wemo.IntegrationWemo;
 import com.tinytimrob.ppse.nmo.utils.AppleHelper;
 import com.tinytimrob.ppse.nmo.utils.JavaFxHelper;
 import com.tinytimrob.ppse.nmo.utils.Logging;
-import com.tinytimrob.ppse.nmo.utils.MasterLock;
 import javafx.scene.control.Dialog;
 import javafx.scene.text.Font;
 
